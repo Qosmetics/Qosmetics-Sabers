@@ -1,0 +1,75 @@
+{
+  "sharedDir": "shared",
+  "dependenciesDir": "extern",
+  "info": {
+    "name": "Qosmetics Whackers",
+    "id": "qosmetics-sabers",
+    "version": "0.1.0",
+    "url": "https://github.com/Qosmetics/Qosmetics-Sabers",
+    "additionalData": {
+      "overrideSoName": "libqosmetics-sabers.so"
+    }
+  },
+  "dependencies": [
+    {
+      "id": "beatsaber-hook",
+      "versionRange": "^3.6.7",
+      "additionalData": {
+        "extraFiles": [
+          "src/inline-hook"
+        ]
+      }
+    },
+    {
+      "id": "codegen",
+      "versionRange": "^0.21.0",
+      "additionalData": {}
+    },
+    {
+      "id": "custom-types",
+      "versionRange": "^0.15.8",
+      "additionalData": {}
+    },
+    {
+      "id": "questui",
+      "versionRange": "^0.13.3",
+      "additionalData": {}
+    },
+    {
+      "id": "modloader",
+      "versionRange": "^1.2.3",
+      "additionalData": {}
+    },
+    {
+      "id": "sombrero",
+      "versionRange": "^0.1.30",
+      "additionalData": {}
+    },
+    {
+      "id": "conditional-dependencies",
+      "versionRange": "^0.2.0",
+      "additionalData": {}
+    },
+    {
+      "id": "fmt",
+      "versionRange": "^8.0.5",
+      "additionalData": {}
+    },
+    {
+      "id": "bs-utils",
+      "versionRange": "^0.7.0",
+      "additionalData": {}
+    },
+    {
+      "id": "paper",
+      "versionRange": "^1.0.5",
+      "additionalData": {}
+    },
+    {
+      "id": "zip",
+      "versionRange": "^1.7.4",
+      "additionalData": {}
+    }
+  ],
+  "additionalData": {}
+}
