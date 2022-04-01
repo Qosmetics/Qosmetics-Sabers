@@ -27,11 +27,11 @@ namespace Qosmetics::Sabers
             ProvideInitialViewControllers(selectionViewController, settingsViewController, previewViewController, nullptr, nullptr);
 
             set_showBackButton(true);
-            SetTitle(il2cpp_utils::newcsstr("Cyoobs"), HMUI::ViewController::AnimationType::In);
+            SetTitle("Whacker", HMUI::ViewController::AnimationType::In);
         }
 
         HMUI::TitleViewController* titleView = Object::FindObjectOfType<HMUI::TitleViewController*>();
-        Qosmetics::Core::UIUtils::SetTitleColor(titleView, UnityEngine::Color::get_blue());
+        Qosmetics::Core::UIUtils::SetTitleColor(titleView, UnityEngine::Color::get_red());
     }
 
     void WhackerFlowCoordinator::BackButtonWasPressed(HMUI::ViewController* topViewController)

@@ -16,6 +16,34 @@
 #define ADD_BOOL(identifier) val.AddMember(#identifier, identifier, allocator)
 #endif
 
+#ifndef GET_DOUBLE
+#define GET_DOUBLE(identifier)                                                     \
+    auto identifier##Itr = value.FindMember(#identifier);                          \
+    if (identifier##Itr != value.MemberEnd() && identifier##Itr->value.IsDouble()) \
+    {                                                                              \
+        identifier = identifier##Itr->value.GetDouble();                           \
+    }
+
+#endif
+
+#ifndef ADD_DOUBLE
+#define ADD_DOUBLE(identifier) val.AddMember(#identifier, identifier, allocator)
+#endif
+
+#ifndef GET_ENUM
+#define GET_ENUM(identifier)                                                    \
+    auto identifier##Itr = value.FindMember(#identifier);                       \
+    if (identifier##Itr != value.MemberEnd() && identifier##Itr->value.IsInt()) \
+    {                                                                           \
+        identifier = (decltype(identifier))identifier##Itr->value.GetInt();     \
+    }
+
+#endif
+
+#ifndef ADD_ENUM
+#define ADD_ENUM(identifier) val.AddMember(#identifier, (int)identifier, allocator)
+#endif
+
 #ifndef CONST_GETTER
 #define CONST_GETTER(identifier) \
     auto get_##identifier() const { return identifier; }

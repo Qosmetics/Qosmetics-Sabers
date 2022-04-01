@@ -11,7 +11,8 @@
 #include "assets.hpp"
 #include "logging.hpp"
 
-/*
+#include "UI/WhackerFlowCoordinator.hpp"
+
 QOSMETICS_FLOWCOORDINATOR_REGISTER(Whackers, Qosmetics::Sabers::WhackerFlowCoordinator*)
 {
     auto inactive_data = SaberIcon_png::getData();
@@ -20,7 +21,6 @@ QOSMETICS_FLOWCOORDINATOR_REGISTER(Whackers, Qosmetics::Sabers::WhackerFlowCoord
     auto active = QuestUI::BeatSaberUI::VectorToSprite(std::vector<uint8_t>(active_data, active_data + SaberIconSelected_png::getLength()));
     return std::make_pair(inactive, active);
 }
-*/
 
 ModInfo modInfo = {MOD_ID, VERSION};
 

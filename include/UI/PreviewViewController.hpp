@@ -13,4 +13,12 @@ DECLARE_CLASS_CODEGEN(Qosmetics::Sabers, PreviewViewController, HMUI::ViewContro
                       DECLARE_OVERRIDE_METHOD_MATCH(void, DidActivate, &HMUI::ViewController::DidActivate, bool firstActivation, bool addedToHierarchy, bool screenSystemEnabling);
                       DECLARE_OVERRIDE_METHOD_MATCH(void, DidDeactivate, &HMUI::ViewController::DidDeactivate, bool removedFromHierarchy, bool screenSystemDisabling);
 
+                      public
+                      :
+
+                      void ShowLoading(bool isLoading = true);
+                      void UpdatePreview(bool reinstantiate = false);
+                      void InstantiatePrefab();
+                      void ClearPrefab();
+
 )

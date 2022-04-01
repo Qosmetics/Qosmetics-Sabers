@@ -11,6 +11,13 @@
 #include "UnityEngine/Material.hpp"
 #include "UnityEngine/MeshRenderer.hpp"
 #include "UnityEngine/Transform.hpp"
+#include "UnityEngine/UI/Text.hpp"
+
+#include "ConstStrings.hpp"
+
+#include "CustomTypes/TrailHandler.hpp"
+#include "CustomTypes/WhackerColorHandler.hpp"
+#include "CustomTypes/WhackerHandler.hpp"
 
 DEFINE_TYPE(Qosmetics::Sabers, SaberModelContainer);
 
@@ -29,6 +36,26 @@ void LegacyFixups(UnityEngine::GameObject* loadedObject)
 
 void AddHandlers(UnityEngine::GameObject* loadedObject)
 {
+    auto t = loadedObject->get_transform();
+    auto leftSaber = t->Find(ConstStrings::LeftSaber());
+    auto rightSaber = t->Find(ConstStrings::LeftSaber());
+
+    leftSaber->get_gameObject()->AddComponent<Qosmetics::Sabers::WhackerHandler*>();
+    leftSaber->get_gameObject()->AddComponent<Qosmetics::Sabers::WhackerColorHandler*>();
+    rightSaber->get_gameObject()->AddComponent<Qosmetics::Sabers::WhackerHandler*>();
+    rightSaber->get_gameObject()->AddComponent<Qosmetics::Sabers::WhackerColorHandler*>();
+
+    auto textObjects = loadedObject->GetComponentsInChildren<UnityEngine::UI::Text*>(true);
+    for (auto obj : textObjects)
+    {
+        auto nameView = static_cast<std::u16string_view>(obj->get_text());
+
+        /// this assumes it's gonna be json, is this the format we want
+        if (nameView.find(u"\"behaviourType\":") && nameView.find(u"trail"))
+        {
+            obj->get_gameObject()->AddComponent<Qosmetics::Sabers::TrailHandler*>();
+        }
+    }
     // TODO: do this
 }
 namespace Qosmetics::Sabers
@@ -123,6 +150,7 @@ namespace Qosmetics::Sabers
         currentSaberObject->set_name(name);
         currentSaberObject->SetActive(false);
 
+        /// TODO: check, Do we need to preload shaders here?
         if (isLegacy)
         {
             DEBUG("Executing legacy object fixups");
