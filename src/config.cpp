@@ -1,7 +1,10 @@
 #include "config.hpp"
 #include "logging.hpp"
 
+#include "CustomTypes/SaberModelContainer.hpp"
+#include "UI/PreviewViewController.hpp"
 #include "UI/SettingsViewController.hpp"
+#include "static-defines.hpp"
 
 #define GET_JSON_STRING(identifier)                                                                                           \
     auto identifier##Itr = member.FindMember(#identifier);                                                                    \
@@ -132,26 +135,24 @@ namespace Qosmetics::Sabers
     {
         // TODO: Saber shenanigans
         Qosmetics::Sabers::SettingsViewController::justChangedProfile = true;
-        /*
-                Qosmetics::Notes::PreviewViewController::justChangedProfile = true;
+        Qosmetics::Sabers::PreviewViewController::justChangedProfile = true;
 
-        auto noteModelContainer = Qosmetics::Notes::NoteModelContainer::get_instance();
-        if (actual_config.lastUsedCyoob == "" || actual_config.lastUsedCyoob == "Default")
+        auto saberModelContainer = Qosmetics::Sabers::SaberModelContainer::get_instance();
+        if (actual_config.lastUsedWhacker == "" || actual_config.lastUsedWhacker == "Default")
         {
-            noteModelContainer->Default();
+            saberModelContainer->Default();
             return;
         }
 
-        std::string filePath = fmt::format("{}/{}.cyoob", cyoob_path, actual_config.lastUsedCyoob);
+        std::string filePath = fmt::format("{}/{}.whacker", whacker_path, actual_config.lastUsedWhacker);
         if (!fileexists(filePath))
         {
-            noteModelContainer->Default();
+            saberModelContainer->Default();
             return;
         }
 
-        auto manifest = Qosmetics::Core::Manifest<Qosmetics::Notes::NoteObjectConfig>(filePath);
-        noteModelContainer->LoadObject(manifest, nullptr);
-        */
+        auto manifest = Qosmetics::Core::Manifest<Qosmetics::Sabers::SaberObjectConfig>(filePath);
+        saberModelContainer->LoadObject(manifest, nullptr);
     }
 
     QOSMETICS_CONFIG_REGISTER(SaberConfigRegistration, "whackerConfig");

@@ -55,10 +55,12 @@ namespace Qosmetics::Sabers
     {
     public:
         SaberObjectConfig() : Qosmetics::Core::BasicConfig(){};
+        SaberObjectConfig(bool hasTrail) : Qosmetics::Core::BasicConfig(), hasTrail(hasTrail), isLegacy(true), isDefault(false){};
         SaberObjectConfig(const rapidjson::Value& value) : Qosmetics::Core::BasicConfig(value)
         {
             GET_BOOL(hasTrail);
             GET_BOOL(isLegacy);
+            isDefault = false;
         }
 
         rapidjson::Value ToJson(rapidjson::Document::AllocatorType& allocator) override
@@ -72,9 +74,11 @@ namespace Qosmetics::Sabers
 
         CONST_GETTER(hasTrail);
         CONST_GETTER(isLegacy);
+        CONST_GETTER(isDefault);
 
     private:
         bool hasTrail = false;
         bool isLegacy = false;
+        bool isDefault = true;
     };
 }

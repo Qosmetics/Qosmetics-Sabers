@@ -10,14 +10,19 @@
 #include "UnityEngine/Coroutine.hpp"
 #include "UnityEngine/Material.hpp"
 #include "UnityEngine/MeshRenderer.hpp"
+#include "UnityEngine/TextAsset.hpp"
 #include "UnityEngine/Transform.hpp"
 #include "UnityEngine/UI/Text.hpp"
 
 #include "ConstStrings.hpp"
 
 #include "CustomTypes/TrailHandler.hpp"
+#include "CustomTypes/TrailTransform.hpp"
 #include "CustomTypes/WhackerColorHandler.hpp"
 #include "CustomTypes/WhackerHandler.hpp"
+#include "Trail/TrailPoint.hpp"
+
+#include "QsaberConversion.hpp"
 
 DEFINE_TYPE(Qosmetics::Sabers, SaberModelContainer);
 
@@ -27,6 +32,32 @@ void SetLayerRecursively(UnityEngine::Transform* obj, int layer)
     int childCount = obj->get_childCount();
     for (int i = 0; i < childCount; i++)
         SetLayerRecursively(obj->GetChild(i), layer);
+}
+
+void LegacyTrailFixups(UnityEngine::GameObject* loadedObject, const std::vector<Qosmetics::Sabers::QsaberConversion::LegacyTrail>& leftTrailConfigs, const std::vector<Qosmetics::Sabers::QsaberConversion::LegacyTrail>& rightTrailConfigs)
+{
+    using namespace Qosmetics::Sabers;
+    auto t = loadedObject->get_transform();
+    auto leftSaber = t->Find("LeftSaber");
+    auto rightSaber = t->Find("RightSaber");
+
+    int trailId = 0;
+    for (const auto& trail : leftTrailConfigs)
+    {
+        auto trailT = leftSaber->Find(trail.name);
+        auto top = trailT->Find("TrailEnd");
+        auto bot = trailT->Find("TrailStart");
+
+        TrailData trailData(trailId, trail);
+        TrailPoint topPoint(trailId, true);
+        TrailPoint bottomPoint(trailId, false);
+
+        trailId++;
+    }
+
+    for (const auto& trail : rightTrailConfigs)
+    {
+    }
 }
 
 void LegacyFixups(UnityEngine::GameObject* loadedObject)
@@ -49,11 +80,13 @@ void AddHandlers(UnityEngine::GameObject* loadedObject)
     for (auto obj : textObjects)
     {
         auto nameView = static_cast<std::u16string_view>(obj->get_text());
-
         /// this assumes it's gonna be json, is this the format we want
-        if (nameView.find(u"\"behaviourType\":") && nameView.find(u"trail"))
+        if (nameView.find(u"\"trailId\":"))
         {
-            obj->get_gameObject()->AddComponent<Qosmetics::Sabers::TrailHandler*>();
+            if (nameView.find(u"\"isTop\":"))
+                obj->get_gameObject()->AddComponent<Qosmetics::Sabers::TrailTransform*>();
+            else
+                obj->get_gameObject()->AddComponent<Qosmetics::Sabers::TrailHandler*>();
         }
     }
     // TODO: do this
@@ -143,6 +176,8 @@ namespace Qosmetics::Sabers
         DEBUG("Loading {}Whacker", isLegacy ? "legacy " : "");
         co_yield custom_types::Helpers::CoroutineHelper::New(Qosmetics::Core::BundleUtils::LoadAssetFromBundleAsync<UnityEngine::GameObject*>(bundle, isLegacy ? "_CustomSaber" : "_Whacker", currentSaberObject));
 
+        if (!currentSaberObject)
+            ERROR("Failed to load whacker from bundle!");
         auto name = currentSaberObject->get_name();
         currentSaberObject = UnityEngine::Object::Instantiate(currentSaberObject, get_transform());
         // TODO: find correct layer
@@ -155,6 +190,19 @@ namespace Qosmetics::Sabers
         {
             DEBUG("Executing legacy object fixups");
             LegacyFixups(currentSaberObject);
+
+            if (currentManifest.get_config().get_hasTrail())
+            {
+                UnityEngine::TextAsset* configText = nullptr;
+                co_yield custom_types::Helpers::CoroutineHelper::New(Qosmetics::Core::BundleUtils::LoadAssetFromBundleAsync<UnityEngine::TextAsset*>(bundle, "config", configText));
+                if (configText)
+                {
+                    rapidjson::Document doc;
+                    doc.Parse(static_cast<std::string>(configText->get_text()));
+                    Qosmetics::Sabers::QsaberConversion::LegacyConfig config(doc);
+                    LegacyTrailFixups(currentSaberObject, config.leftTrails, config.rightTrails);
+                }
+            }
         }
 
         DEBUG("Adding handlers to object");

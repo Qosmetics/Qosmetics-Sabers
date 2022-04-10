@@ -64,11 +64,22 @@ namespace Qosmetics::Sabers
             scrollTransform->set_sizeDelta(Sombrero::FastVector2::zero());
 
             auto containerT = container->get_transform();
+            auto wText = CreateText(containerT, localization->get("QosmeticsWhackers:Settings:WhackerSpecificSettings"));
+            wText->set_alignment(TMPro::TextAlignmentOptions::Center);
             SLIDER(saberWidth, "QosmeticsWhackers:Settings:SaberWidth", 0.05f, globalConfig.saberWidth, 0.05f, 2.0f, 0.2f);
             saberWidthSlider->FormatString = [](auto v) -> std::string
             {
                 return std::to_string(v).substr(0, 4);
             };
+            TOGGLE(enableMenuPointer, "QosmeticsWhackers:Settings:EnableMenuPointer");
+            SLIDER(menuPointerSize, "QosmeticsWhackers:Settings:MenuPointerSize", 0.05f, globalConfig.trailWidth, 0.05f, 5.0f, 0.2f);
+            menuPointerSizeSlider->FormatString = [](auto v) -> std::string
+            {
+                return std::to_string(v).substr(0, 4);
+            };
+
+            auto tText = CreateText(containerT, localization->get("QosmeticsWhackers:Settings:TrailSpecificSettings"));
+            tText->set_alignment(TMPro::TextAlignmentOptions::Center);
             TOGGLE(overrideTrailLength, "QosmeticsWhackers:Settings:OverrideTrailLength");
             SLIDER(trailLength, "QosmeticsWhackers:Settings:TrailLength", 1.0f, globalConfig.trailLength, 0.0f, 30.0f, 0.2f);
             trailLengthSlider->FormatString = [](auto v) -> std::string
@@ -88,12 +99,7 @@ namespace Qosmetics::Sabers
             {
                 return std::to_string(v).substr(0, 4);
             };
-            TOGGLE(enableMenuPointer, "QosmeticsWhackers:Settings:EnableMenuPointer");
-            SLIDER(menuPointerSize, "QosmeticsWhackers:Settings:MenuPointerSize", 0.05f, globalConfig.trailWidth, 0.05f, 5.0f, 0.2f);
-            menuPointerSizeSlider->FormatString = [](auto v) -> std::string
-            {
-                return std::to_string(v).substr(0, 4);
-            };
+
             auto list = List<StringW>::New_ctor();
             list->Add(localization->get(localizationKeys[0]));
             list->Add(localization->get(localizationKeys[1]));
