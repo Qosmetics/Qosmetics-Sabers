@@ -55,10 +55,11 @@ namespace Qosmetics::Sabers
     {
     public:
         SaberObjectConfig() : Qosmetics::Core::BasicConfig(){};
-        SaberObjectConfig(bool hasTrail) : Qosmetics::Core::BasicConfig(), hasTrail(hasTrail), isLegacy(true), isDefault(false){};
+        SaberObjectConfig(bool hasTrail, bool keepFakeGlow) : Qosmetics::Core::BasicConfig(), hasTrail(hasTrail), isLegacy(true), isDefault(false), keepFakeGlow(keepFakeGlow){};
         SaberObjectConfig(const rapidjson::Value& value) : Qosmetics::Core::BasicConfig(value)
         {
             GET_BOOL(hasTrail);
+            GET_BOOL(keepFakeGlow);
             GET_BOOL(isLegacy);
             isDefault = false;
         }
@@ -68,16 +69,19 @@ namespace Qosmetics::Sabers
             rapidjson::Value val;
             val.SetObject();
             ADD_BOOL(hasTrail);
+            ADD_BOOL(keepFakeGlow);
             ADD_BOOL(isLegacy);
             return val;
         }
 
         CONST_GETTER(hasTrail);
+        CONST_GETTER(keepFakeGlow);
         CONST_GETTER(isLegacy);
         CONST_GETTER(isDefault);
 
     private:
         bool hasTrail = false;
+        bool keepFakeGlow = false;
         bool isLegacy = false;
         bool isDefault = true;
     };

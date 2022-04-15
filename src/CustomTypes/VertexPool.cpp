@@ -1,4 +1,5 @@
 #include "CustomTypes/VertexPool.hpp"
+#include "logging.hpp"
 
 #include "UnityEngine/MeshRenderer.hpp"
 #include "UnityEngine/Object.hpp"
@@ -112,6 +113,7 @@ namespace Qosmetics::Sabers
 
     void VertexPool::LateUpdate()
     {
+        INFO("VertexPool lateupdate");
         auto mymesh = get_MyMesh();
         if (!mymesh)
             return;

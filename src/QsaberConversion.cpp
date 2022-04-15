@@ -107,7 +107,7 @@ namespace Qosmetics::Sabers::QsaberConversion
             configDoc.Parse(configText);
             LegacyConfig legacyConfig(configDoc);
             // TODO: make this actually do proper stuff (also legacy config stuff)
-            Qosmetics::Sabers::SaberObjectConfig actualConfig(legacyConfig.hasCustomTrails);
+            Qosmetics::Sabers::SaberObjectConfig actualConfig(legacyConfig.hasCustomTrails, legacyConfig.enableFakeGlow);
 
             INFO("Making package.json...");
             Qosmetics::Core::Manifest manifest(newPath, androidFileName, actualDescriptor, actualConfig);

@@ -33,13 +33,13 @@ namespace Qosmetics::Sabers::QsaberConversion
         {
             name = val["name"].GetString();
             colorType = val["colorType"].GetInt();
-            auto trailColorItr = val["trailColorItr"].GetObject();
+            auto trailColorItr = val["trailColor"].GetObject();
             trailColor = {
                 float(trailColorItr["R"].GetDouble()),
                 float(trailColorItr["G"].GetDouble()),
                 float(trailColorItr["B"].GetDouble()),
                 float(trailColorItr["A"].GetDouble())};
-            auto multiplierColorItr = val["multiplierColorItr"].GetObject();
+            auto multiplierColorItr = val["multiplierColor"].GetObject();
             multiplierColor = {
                 float(multiplierColorItr["R"].GetDouble()),
                 float(multiplierColorItr["G"].GetDouble()),

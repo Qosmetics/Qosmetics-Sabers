@@ -17,6 +17,8 @@ DECLARE_CLASS_CODEGEN(Qosmetics::Sabers, SettingsViewController, HMUI::ViewContr
                       DECLARE_INSTANCE_FIELD(PreviewViewController*, previewViewController);
 
                       DECLARE_INSTANCE_FIELD(QuestUI::SliderSetting*, saberWidthSlider);
+                      DECLARE_INSTANCE_FIELD(UnityEngine::UI::Toggle*, enableMenuPointerToggle);
+                      DECLARE_INSTANCE_FIELD(QuestUI::SliderSetting*, menuPointerSizeSlider);
                       DECLARE_INSTANCE_FIELD(UnityEngine::UI::Toggle*, overrideTrailLengthToggle);
                       DECLARE_INSTANCE_FIELD(QuestUI::SliderSetting*, trailLengthSlider);
                       DECLARE_INSTANCE_FIELD(UnityEngine::UI::Toggle*, whiteTrailToggle);
@@ -24,8 +26,6 @@ DECLARE_CLASS_CODEGEN(Qosmetics::Sabers, SettingsViewController, HMUI::ViewContr
                       DECLARE_INSTANCE_FIELD(QuestUI::SliderSetting*, whiteStepSlider);
                       DECLARE_INSTANCE_FIELD(UnityEngine::UI::Toggle*, overrideTrailWidthToggle);
                       DECLARE_INSTANCE_FIELD(QuestUI::SliderSetting*, trailWidthSlider);
-                      DECLARE_INSTANCE_FIELD(UnityEngine::UI::Toggle*, enableMenuPointerToggle);
-                      DECLARE_INSTANCE_FIELD(QuestUI::SliderSetting*, menuPointerSizeSlider);
                       DECLARE_INSTANCE_FIELD(HMUI::SimpleTextDropdown*, trailTypeDropdown);
 
                       DECLARE_OVERRIDE_METHOD_MATCH(void, DidActivate, &HMUI::ViewController::DidActivate, bool firstActivation, bool addedToHierarchy, bool screenSystemEnabling);

@@ -12,12 +12,12 @@ DECLARE_CLASS_CODEGEN(Qosmetics::Sabers, WhackerHandler, UnityEngine::MonoBehavi
                       DECLARE_INSTANCE_FIELD(ArrayW<TrailHandler*>, trailHandlers);
                       DECLARE_INSTANCE_FIELD(ArrayW<TrailTransform*>, trailTransforms);
 
-                      DECLARE_INSTANCE_METHOD(void, Start);
                       DECLARE_INSTANCE_METHOD(void, SetupTrails);
 
                       public
                       :
 
                       void SetColor(const Sombrero::FastColor& thisColor, const Sombrero::FastColor& thatColor);
+                      void SetSize(float width);
 
 )

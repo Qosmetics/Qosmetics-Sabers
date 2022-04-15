@@ -37,15 +37,14 @@ namespace Qosmetics::Sabers
         }
     }
 
-    void WhackerHandler::Start()
-    {
-        SetupTrails();
-        colorHandler = get_gameObject()->GetComponentInChildren<WhackerColorHandler*>();
-    }
-
     void WhackerHandler::SetColor(const Sombrero::FastColor& thisColor, const Sombrero::FastColor& thatColor)
     {
         if (colorHandler)
             colorHandler->SetColor(thisColor, thatColor);
+    }
+
+    void WhackerHandler::SetSize(float width)
+    {
+        get_transform()->set_localScale({width, width, 1.0f});
     }
 }

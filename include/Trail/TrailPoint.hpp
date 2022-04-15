@@ -23,7 +23,7 @@ namespace Qosmetics::Sabers
         void ParseDoc(rapidjson::Document& doc)
         {
             trailId = doc["trailId"].GetInt();
-            isTop = doc["isTop"].GetInt();
+            isTop = (int)doc["isTop"].GetBool();
         }
 
         rapidjson::Value ToJson(rapidjson::Document::AllocatorType& allocator)

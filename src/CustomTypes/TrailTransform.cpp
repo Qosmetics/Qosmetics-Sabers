@@ -1,6 +1,7 @@
 #include "CustomTypes/TrailTransform.hpp"
 #include "UnityEngine/GameObject.hpp"
 #include "UnityEngine/UI/Text.hpp"
+#include "logging.hpp"
 
 #include "Trail/TrailPoint.hpp"
 
@@ -11,6 +12,7 @@ namespace Qosmetics::Sabers
     void TrailTransform::Init()
     {
         auto text = get_gameObject()->GetComponent<UnityEngine::UI::Text*>();
+        DEBUG("TrailTransform json object: {}", text->get_text());
         rapidjson::Document doc;
         doc.Parse(text->get_text());
 

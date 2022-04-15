@@ -22,9 +22,20 @@
 #include "CustomTypes/WhackerHandler.hpp"
 #include "Trail/TrailPoint.hpp"
 
+#include "MaterialUtils.hpp"
 #include "QsaberConversion.hpp"
 
 DEFINE_TYPE(Qosmetics::Sabers, SaberModelContainer);
+
+std::string JsonValueToString(const rapidjson::Value& val)
+{
+    rapidjson::StringBuffer buffer;
+    buffer.Clear();
+    rapidjson::PrettyWriter<rapidjson::StringBuffer> writer(buffer);
+    val.Accept(writer);
+
+    return std::string(buffer.GetString(), buffer.GetLength());
+}
 
 void SetLayerRecursively(UnityEngine::Transform* obj, int layer)
 {
@@ -51,12 +62,39 @@ void LegacyTrailFixups(UnityEngine::GameObject* loadedObject, const std::vector<
         TrailData trailData(trailId, trail);
         TrailPoint topPoint(trailId, true);
         TrailPoint bottomPoint(trailId, false);
+        rapidjson::Document doc;
+        auto& allocator = doc.GetAllocator();
+
+        auto trailText = trailT->get_gameObject()->AddComponent<UnityEngine::UI::Text*>();
+        trailText->set_text(JsonValueToString(trailData.ToJson(allocator)));
+        auto topText = top->get_gameObject()->AddComponent<UnityEngine::UI::Text*>();
+        topText->set_text(JsonValueToString(topPoint.ToJson(allocator)));
+        auto botText = bot->get_gameObject()->AddComponent<UnityEngine::UI::Text*>();
+        botText->set_text(JsonValueToString(bottomPoint.ToJson(allocator)));
 
         trailId++;
     }
 
     for (const auto& trail : rightTrailConfigs)
     {
+        auto trailT = rightSaber->Find(trail.name);
+        auto top = trailT->Find("TrailEnd");
+        auto bot = trailT->Find("TrailStart");
+
+        TrailData trailData(trailId, trail);
+        TrailPoint topPoint(trailId, true);
+        TrailPoint bottomPoint(trailId, false);
+        rapidjson::Document doc;
+        auto& allocator = doc.GetAllocator();
+
+        auto trailText = trailT->get_gameObject()->AddComponent<UnityEngine::UI::Text*>();
+        trailText->set_text(JsonValueToString(trailData.ToJson(allocator)));
+        auto topText = top->get_gameObject()->AddComponent<UnityEngine::UI::Text*>();
+        topText->set_text(JsonValueToString(topPoint.ToJson(allocator)));
+        auto botText = bot->get_gameObject()->AddComponent<UnityEngine::UI::Text*>();
+        botText->set_text(JsonValueToString(bottomPoint.ToJson(allocator)));
+
+        trailId++;
     }
 }
 
@@ -80,13 +118,17 @@ void AddHandlers(UnityEngine::GameObject* loadedObject)
     for (auto obj : textObjects)
     {
         auto nameView = static_cast<std::u16string_view>(obj->get_text());
+        DEBUG("Got trail text object: {}", obj->get_text());
         /// this assumes it's gonna be json, is this the format we want
-        if (nameView.find(u"\"trailId\":"))
+        if (nameView.find(u"\"trailId\":") != std::u16string::npos)
         {
-            if (nameView.find(u"\"isTop\":"))
+            if (nameView.find(u"\"isTop\":") != std::u16string::npos)
                 obj->get_gameObject()->AddComponent<Qosmetics::Sabers::TrailTransform*>();
             else
+            {
                 obj->get_gameObject()->AddComponent<Qosmetics::Sabers::TrailHandler*>();
+                obj->get_gameObject()->AddComponent<Qosmetics::Sabers::TrailComponent*>();
+            }
         }
     }
     // TODO: do this
@@ -185,6 +227,9 @@ namespace Qosmetics::Sabers
         currentSaberObject->set_name(name);
         currentSaberObject->SetActive(false);
 
+        // Prewarm all shaders
+        MaterialUtils::PrewarmAllShadersOnObject(currentSaberObject);
+
         /// TODO: check, Do we need to preload shaders here?
         if (isLegacy)
         {
@@ -193,10 +238,12 @@ namespace Qosmetics::Sabers
 
             if (currentManifest.get_config().get_hasTrail())
             {
+                DEBUG("Object used to have trails, going to load config for that");
                 UnityEngine::TextAsset* configText = nullptr;
                 co_yield custom_types::Helpers::CoroutineHelper::New(Qosmetics::Core::BundleUtils::LoadAssetFromBundleAsync<UnityEngine::TextAsset*>(bundle, "config", configText));
                 if (configText)
                 {
+                    DEBUG("Got config text, parsing and fixing up trails");
                     rapidjson::Document doc;
                     doc.Parse(static_cast<std::string>(configText->get_text()));
                     Qosmetics::Sabers::QsaberConversion::LegacyConfig config(doc);

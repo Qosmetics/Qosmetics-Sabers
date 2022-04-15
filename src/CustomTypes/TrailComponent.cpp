@@ -51,7 +51,7 @@ namespace Qosmetics::Sabers
         if (elemPool.get_count() == 0 && snapshotList.size() == 0)
             elemPool.Reserve(TrailLength);
         if (!vertexPool)
-            vertexPool = *il2cpp_utils::New<VertexPool*>(MyMaterial, this);
+            vertexPool = VertexPool::New_ctor(MyMaterial, this);
         snapshotList.reserve(TrailLength);
 
         vertexPool->SetMeshObjectActive(false);

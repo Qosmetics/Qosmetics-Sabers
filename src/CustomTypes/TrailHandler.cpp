@@ -1,6 +1,7 @@
 #include "CustomTypes/TrailHandler.hpp"
 #include "UnityEngine/GameObject.hpp"
 #include "UnityEngine/UI/Text.hpp"
+#include "logging.hpp"
 
 DEFINE_TYPE(Qosmetics::Sabers, TrailHandler);
 
@@ -27,7 +28,12 @@ namespace Qosmetics::Sabers
     void TrailHandler::InitTrail()
     {
         // TODO: Implement override properly
-        trail->Setup({length, whiteStep, trailColor * multiplierColor}, botTransform, topTransform, GetComponent<UnityEngine::Renderer*>()->get_material(), false);
+        auto renderer = GetComponent<UnityEngine::Renderer*>();
+        auto material = renderer ? renderer->get_material() : nullptr;
+        if (trail)
+            trail->Setup({length, whiteStep, trailColor * multiplierColor}, botTransform, topTransform, material, false);
+        else
+            ERROR("No trail component found for TrailHandler with ID {}!", trailId);
     }
 
     void TrailHandler::SetColor(const Sombrero::FastColor& leftColor, const Sombrero::FastColor& rightColor)

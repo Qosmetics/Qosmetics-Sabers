@@ -117,6 +117,8 @@ namespace Qosmetics::Sabers
         {
             justChangedProfile = false;
             saberWidthSlider->set_value(globalConfig.saberWidth);
+            enableMenuPointerToggle->set_isOn(globalConfig.enableMenuPointer);
+            menuPointerSizeSlider->set_value(globalConfig.menuPointerSize);
             overrideTrailLengthToggle->set_isOn(globalConfig.overrideTrailLength);
             trailLengthSlider->set_value(globalConfig.trailLength);
             whiteTrailToggle->set_isOn(globalConfig.whiteTrail);
@@ -124,8 +126,6 @@ namespace Qosmetics::Sabers
             whiteStepSlider->set_value(globalConfig.whiteStep);
             overrideTrailWidthToggle->set_isOn(globalConfig.overrideTrailWidth);
             trailWidthSlider->set_value(globalConfig.trailWidth);
-            enableMenuPointerToggle->set_isOn(globalConfig.enableMenuPointer);
-            menuPointerSizeSlider->set_value(globalConfig.menuPointerSize);
             trailTypeDropdown->set_selectedIndex((int)globalConfig.trailType);
         }
     }
