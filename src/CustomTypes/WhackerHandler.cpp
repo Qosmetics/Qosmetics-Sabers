@@ -1,14 +1,22 @@
 #include "CustomTypes/WhackerHandler.hpp"
 #include "Trail/TrailInitData.hpp"
+#include "logging.hpp"
 
 DEFINE_TYPE(Qosmetics::Sabers, WhackerHandler);
 
 namespace Qosmetics::Sabers
 {
+    void WhackerHandler::GetTrailHandlers()
+    {
+        trailHandlers = GetComponentsInChildren<TrailHandler*>(true);
+        trailTransforms = GetComponentsInChildren<TrailTransform*>(true);
+    }
+
     void WhackerHandler::SetupTrails()
     {
-        trailHandlers = GetComponentsInChildren<TrailHandler*>();
-        trailTransforms = GetComponentsInChildren<TrailTransform*>();
+        if (!trailHandlers)
+            GetTrailHandlers();
+
         for (auto t : trailTransforms)
             t->Init();
 
@@ -43,8 +51,8 @@ namespace Qosmetics::Sabers
             colorHandler->SetColor(thisColor, thatColor);
     }
 
-    void WhackerHandler::SetSize(float width)
+    void WhackerHandler::SetSize(float width, float length)
     {
-        get_transform()->set_localScale({width, width, 1.0f});
+        get_transform()->set_localScale({width, width, length});
     }
 }

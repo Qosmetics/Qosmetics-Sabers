@@ -49,15 +49,15 @@ void LegacyTrailFixups(UnityEngine::GameObject* loadedObject, const std::vector<
 {
     using namespace Qosmetics::Sabers;
     auto t = loadedObject->get_transform();
-    auto leftSaber = t->Find("LeftSaber");
-    auto rightSaber = t->Find("RightSaber");
+    auto leftSaber = t->Find(ConstStrings::LeftSaber());
+    auto rightSaber = t->Find(ConstStrings::RightSaber());
 
     int trailId = 0;
     for (const auto& trail : leftTrailConfigs)
     {
         auto trailT = leftSaber->Find(trail.name);
-        auto top = trailT->Find("TrailEnd");
-        auto bot = trailT->Find("TrailStart");
+        auto top = trailT->Find(ConstStrings::TrailEnd());
+        auto bot = trailT->Find(ConstStrings::TrailStart());
 
         TrailData trailData(trailId, trail);
         TrailPoint topPoint(trailId, true);
@@ -78,8 +78,8 @@ void LegacyTrailFixups(UnityEngine::GameObject* loadedObject, const std::vector<
     for (const auto& trail : rightTrailConfigs)
     {
         auto trailT = rightSaber->Find(trail.name);
-        auto top = trailT->Find("TrailEnd");
-        auto bot = trailT->Find("TrailStart");
+        auto top = trailT->Find(ConstStrings::TrailEnd());
+        auto bot = trailT->Find(ConstStrings::TrailStart());
 
         TrailData trailData(trailId, trail);
         TrailPoint topPoint(trailId, true);
@@ -107,7 +107,7 @@ void AddHandlers(UnityEngine::GameObject* loadedObject)
 {
     auto t = loadedObject->get_transform();
     auto leftSaber = t->Find(ConstStrings::LeftSaber());
-    auto rightSaber = t->Find(ConstStrings::LeftSaber());
+    auto rightSaber = t->Find(ConstStrings::RightSaber());
 
     leftSaber->get_gameObject()->AddComponent<Qosmetics::Sabers::WhackerHandler*>();
     leftSaber->get_gameObject()->AddComponent<Qosmetics::Sabers::WhackerColorHandler*>();
@@ -131,7 +131,6 @@ void AddHandlers(UnityEngine::GameObject* loadedObject)
             }
         }
     }
-    // TODO: do this
 }
 namespace Qosmetics::Sabers
 {
@@ -222,15 +221,14 @@ namespace Qosmetics::Sabers
             ERROR("Failed to load whacker from bundle!");
         auto name = currentSaberObject->get_name();
         currentSaberObject = UnityEngine::Object::Instantiate(currentSaberObject, get_transform());
-        // TODO: find correct layer
-        SetLayerRecursively(currentSaberObject->get_transform(), 8);
+
+        SetLayerRecursively(currentSaberObject->get_transform(), 12);
         currentSaberObject->set_name(name);
         currentSaberObject->SetActive(false);
 
         // Prewarm all shaders
         MaterialUtils::PrewarmAllShadersOnObject(currentSaberObject);
 
-        /// TODO: check, Do we need to preload shaders here?
         if (isLegacy)
         {
             DEBUG("Executing legacy object fixups");

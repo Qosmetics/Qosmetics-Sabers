@@ -66,6 +66,7 @@ namespace Qosmetics::Sabers
             auto containerT = container->get_transform();
             auto wText = CreateText(containerT, localization->get("QosmeticsWhackers:Settings:WhackerSpecificSettings"));
             wText->set_alignment(TMPro::TextAlignmentOptions::Center);
+            SLIDER(saberLength, "QosmeticsWhackers:Settings:SaberLength", 0.05f, globalConfig.saberLength, 0.05f, 2.0f, 0.2f);
             SLIDER(saberWidth, "QosmeticsWhackers:Settings:SaberWidth", 0.05f, globalConfig.saberWidth, 0.05f, 2.0f, 0.2f);
             saberWidthSlider->FormatString = [](auto v) -> std::string
             {
@@ -116,6 +117,7 @@ namespace Qosmetics::Sabers
         else if (justChangedProfile)
         {
             justChangedProfile = false;
+            saberLengthSlider->set_value(globalConfig.saberLength);
             saberWidthSlider->set_value(globalConfig.saberWidth);
             enableMenuPointerToggle->set_isOn(globalConfig.enableMenuPointer);
             menuPointerSizeSlider->set_value(globalConfig.menuPointerSize);

@@ -16,6 +16,7 @@
 DECLARE_CLASS_CODEGEN(Qosmetics::Sabers, SettingsViewController, HMUI::ViewController,
                       DECLARE_INSTANCE_FIELD(PreviewViewController*, previewViewController);
 
+                      DECLARE_INSTANCE_FIELD(QuestUI::SliderSetting*, saberLengthSlider);
                       DECLARE_INSTANCE_FIELD(QuestUI::SliderSetting*, saberWidthSlider);
                       DECLARE_INSTANCE_FIELD(UnityEngine::UI::Toggle*, enableMenuPointerToggle);
                       DECLARE_INSTANCE_FIELD(QuestUI::SliderSetting*, menuPointerSizeSlider);

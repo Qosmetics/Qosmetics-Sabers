@@ -73,6 +73,7 @@ namespace Qosmetics::Sabers::QsaberConversion
             if (!fileexists(oldPath))
             {
                 ERROR("{} did not exist, continuing...", oldPath);
+                continue;
             }
             UnityEngine::AssetBundle* bundle = nullptr;
             INFO("Loading bundle...");
@@ -91,22 +92,30 @@ namespace Qosmetics::Sabers::QsaberConversion
             UnityEngine::TextAsset* descriptorAsset = nullptr;
             INFO("Getting descriptor...");
             co_yield coro(Qosmetics::Core::BundleUtils::LoadAssetFromBundleAsync(bundle, "descriptor", descriptorAsset));
-            std::string descriptorText = descriptorAsset->get_text();
-            rapidjson::Document descriptorDoc;
-            descriptorDoc.Parse(descriptorText);
-            LegacyDescriptor legacyDescriptor(descriptorDoc);
+            LegacyDescriptor legacyDescriptor("---", std::string(Qosmetics::Core::FileUtils::GetFileName(oldPath, true)), "-- legacy file --");
+            if (descriptorAsset) // REALLY old qsabers don't have descriptors or configs, gotta make default values for those
+            {
+                std::string descriptorText = descriptorAsset->get_text();
+                rapidjson::Document descriptorDoc;
+                descriptorDoc.Parse(descriptorText);
+                legacyDescriptor = LegacyDescriptor(descriptorDoc);
+            }
 
-            Qosmetics::Core::Descriptor actualDescriptor(legacyDescriptor.authorName, std::string(Qosmetics::Core::FileUtils::GetFileName(oldPath, true)), legacyDescriptor.description, newPath, "thumbnail.png");
+            Qosmetics::Core::Descriptor actualDescriptor(legacyDescriptor.authorName, legacyDescriptor.objectName, legacyDescriptor.description, newPath, "thumbnail.png");
 
             /// load config
             UnityEngine::TextAsset* configAsset = nullptr;
             INFO("Getting config...");
             co_yield coro(Qosmetics::Core::BundleUtils::LoadAssetFromBundleAsync(bundle, "config", configAsset));
-            std::string configText = configAsset->get_text();
-            rapidjson::Document configDoc;
-            configDoc.Parse(configText);
-            LegacyConfig legacyConfig(configDoc);
-            // TODO: make this actually do proper stuff (also legacy config stuff)
+            LegacyConfig legacyConfig = {};
+            if (configAsset)
+            {
+                std::string configText = configAsset->get_text();
+                rapidjson::Document configDoc;
+                configDoc.Parse(configText);
+                legacyConfig = LegacyConfig(configDoc);
+            }
+
             Qosmetics::Sabers::SaberObjectConfig actualConfig(legacyConfig.hasCustomTrails, legacyConfig.enableFakeGlow);
 
             INFO("Making package.json...");

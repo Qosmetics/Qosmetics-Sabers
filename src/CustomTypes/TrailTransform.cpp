@@ -12,10 +12,10 @@ namespace Qosmetics::Sabers
     void TrailTransform::Init()
     {
         auto text = get_gameObject()->GetComponent<UnityEngine::UI::Text*>();
-        DEBUG("TrailTransform json object: {}", text->get_text());
         rapidjson::Document doc;
         doc.Parse(text->get_text());
 
+        DEBUG("Trail Point info: {}", text->get_text());
         if (doc.GetParseError() == 0)
         {
             TrailPoint p(doc);
@@ -28,4 +28,5 @@ namespace Qosmetics::Sabers
     {
         return isTop;
     }
+
 }

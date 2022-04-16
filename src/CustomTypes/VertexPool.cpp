@@ -113,7 +113,6 @@ namespace Qosmetics::Sabers
 
     void VertexPool::LateUpdate()
     {
-        INFO("VertexPool lateupdate");
         auto mymesh = get_MyMesh();
         if (!mymesh)
             return;

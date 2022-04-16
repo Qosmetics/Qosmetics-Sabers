@@ -14,8 +14,9 @@ DECLARE_CLASS_CODEGEN(Qosmetics::Sabers, TrailHandler, UnityEngine::MonoBehaviou
                       DECLARE_INSTANCE_FIELD(int, colorType);
                       DECLARE_INSTANCE_FIELD(float, whiteStep);
 
-                      DECLARE_INSTANCE_FIELD(UnityEngine::Transform*, botTransform);
                       DECLARE_INSTANCE_FIELD(UnityEngine::Transform*, topTransform);
+                      DECLARE_INSTANCE_FIELD(UnityEngine::Transform*, botTransform);
+                      DECLARE_INSTANCE_FIELD(UnityEngine::Transform*, customBotTransform);
 
                       DECLARE_INSTANCE_FIELD(Qosmetics::Sabers::TrailComponent*, trail);
                       DECLARE_INSTANCE_METHOD(void, InitData);
@@ -25,5 +26,9 @@ DECLARE_CLASS_CODEGEN(Qosmetics::Sabers, TrailHandler, UnityEngine::MonoBehaviou
                       :
 
                       void SetColor(const Sombrero::FastColor& leftColor, const Sombrero::FastColor& rightColor);
+
+                      UnityEngine::Transform * get_topTransform();
+                      UnityEngine::Transform * get_botTransform();
+                      UnityEngine::Transform * get_customBotTransform();
 
 )

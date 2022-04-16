@@ -13,6 +13,7 @@ namespace Qosmetics::Sabers::QsaberConversion
         std::string objectName;
         std::string description;
 
+        LegacyDescriptor(const std::string& authorName = "", const std::string& objectName = "", const std::string& description = "") : authorName(authorName), objectName(objectName), description(description) {}
         LegacyDescriptor(const rapidjson::Document& doc)
         {
             authorName = doc["authorName"].GetString();
@@ -52,11 +53,12 @@ namespace Qosmetics::Sabers::QsaberConversion
 
     struct LegacyConfig
     {
-        bool enableFakeGlow;
-        bool hasCustomTrails;
+        bool enableFakeGlow = false;
+        bool hasCustomTrails = false;
         std::vector<LegacyTrail> leftTrails;
         std::vector<LegacyTrail> rightTrails;
 
+        LegacyConfig(){};
         LegacyConfig(const rapidjson::Document& doc)
         {
             enableFakeGlow = doc["enableFakeGlow"].GetBool();

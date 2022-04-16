@@ -1,8 +1,12 @@
 <resources>
+    <string name="QosmeticsWhackers:Preview:Default">Default Whacker (no preview)</string>
+    
     <string name="QosmeticsWhackers:Settings:Settings">Whacker Settings</string>
     <string name="QosmeticsWhackers:Settings:WhackerSpecificSettings">-- Whacker Specific Settings --</string>
     <string name="QosmeticsWhackers:Settings:TrailSpecificSettings">-- Trail Specific Settings --</string>
-    <string name="QosmeticsWhackers:Settings:SaberWidth">Whacker Size</string>
+    <string name="QosmeticsWhackers:Settings:SaberLength">Whacker Length</string>
+    <string name="QosmeticsWhackers:Settings:SaberLengthHoverHint">Make the saber longer (or shorter) to your liking</string>
+    <string name="QosmeticsWhackers:Settings:SaberWidth">Whacker Thickness</string>
     <string name="QosmeticsWhackers:Settings:SaberWidthHoverHint">Make the saber thinner (or thicker) to your liking</string>
     <string name="QosmeticsWhackers:Settings:OverrideTrailLength">Override Trail Length</string>
     <string name="QosmeticsWhackers:Settings:OverrideTrailLengthHoverHint">Change the length of the trail that's on your whacker</string>

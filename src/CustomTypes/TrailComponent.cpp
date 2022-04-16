@@ -30,6 +30,7 @@ namespace Qosmetics::Sabers
     void TrailComponent::Setup(const TrailInitData& initData, UnityEngine::Transform* pointStart, UnityEngine::Transform* pointEnd, UnityEngine::Material* material, bool editor)
     {
         INFO("setup");
+
         PointStart = pointStart;
         PointEnd = pointEnd;
         MyMaterial = material;
@@ -39,6 +40,16 @@ namespace Qosmetics::Sabers
         // if it's size is not at least 4 it breaks
         TrailLength = initData.TrailLength;
         WhiteStep = initData.Whitestep;
+
+        DEBUG("Trail data:\n"
+              "\tlength: {}\n"
+              "\twhitestep: {}\n"
+              "\tgranularity: {}\n"
+              "\tcolor: {}, {}, {}, {}\n",
+              TrailLength,
+              WhiteStep,
+              Granularity,
+              MyColor.r, MyColor.g, MyColor.b, MyColor.a);
 
         get_gameObject()->set_layer(12);
         if (editor)
@@ -201,20 +212,19 @@ namespace Qosmetics::Sabers
             FastVector3 mul = FastVector3::Normalize(spline.InterpolateNormalByLen(uvSegment)) * get_TrailWidth(); //(NormalizeVal(spline.InterpolateNormalByLen(uvSegment)), get_TrailWidth());
 
             // offset half a trail width from pos
-            pool->Vertices->values[baseIdx] = pos + mul;
-            ;
-            pool->UVs->values[baseIdx].x = 0.0f;
+            pool->Vertices[baseIdx] = pos + mul;
+            pool->UVs[baseIdx].x = 0.0f;
 
             // center
-            pool->Vertices->values[baseIdx + 1] = pos;
-            pool->UVs->values[baseIdx + 1].x = 0.5f;
+            pool->Vertices[baseIdx + 1] = pos;
+            pool->UVs[baseIdx + 1].x = 0.5f;
 
             // offset half a trail width from pos
-            pool->Vertices->values[baseIdx + 2] = pos - mul;
-            pool->UVs->values[baseIdx + 2].x = 1.0f;
+            pool->Vertices[baseIdx + 2] = pos - mul;
+            pool->UVs[baseIdx + 2].x = 1.0f;
 
-            pool->Colors->values[baseIdx] = pool->Colors->values[baseIdx + 1] = pool->Colors->values[baseIdx + 2] = color;
-            pool->UVs->values[baseIdx].y = pool->UVs->values[baseIdx + 1].y = pool->UVs->values[baseIdx + 2].y = uvSegment;
+            pool->Colors[baseIdx] = pool->Colors[baseIdx + 1] = pool->Colors[baseIdx + 2] = color;
+            pool->UVs[baseIdx].y = pool->UVs[baseIdx + 1].y = pool->UVs[baseIdx + 2].y = uvSegment;
         }
 
         vertexSegment.Pool->UVChanged = true;

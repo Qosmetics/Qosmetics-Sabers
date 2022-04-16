@@ -95,6 +95,7 @@ namespace Qosmetics::Sabers
     {
         INFO("Saving config...");
         SET_JSON_STRING(lastUsedWhacker);
+        SET_JSON_DOUBLE(saberLength);
         SET_JSON_DOUBLE(saberWidth);
         SET_JSON_BOOL(overrideTrailLength);
         SET_JSON_DOUBLE(trailLength);
@@ -114,6 +115,7 @@ namespace Qosmetics::Sabers
         bool foundEverything = true;
         INFO("Loading config...");
         GET_JSON_STRING(lastUsedWhacker);
+        GET_JSON_DOUBLE(saberLength);
         GET_JSON_DOUBLE(saberWidth);
         GET_JSON_BOOL(overrideTrailLength);
         GET_JSON_DOUBLE(trailLength);
@@ -133,7 +135,6 @@ namespace Qosmetics::Sabers
 
     void SaberConfigRegistration::OnProfileSwitched() const
     {
-        // TODO: Saber shenanigans
         Qosmetics::Sabers::SettingsViewController::justChangedProfile = true;
         Qosmetics::Sabers::PreviewViewController::justChangedProfile = true;
 

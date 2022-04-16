@@ -18,6 +18,7 @@ namespace Qosmetics::Sabers
         float whiteStep;
 
         TrailData(){};
+        TrailData(int trailId, int colorType, Sombrero::FastColor trailColor, Sombrero::FastColor multiplierColor, int length, float whiteStep) : trailId(trailId), colorType(colorType), trailColor(trailColor), multiplierColor(multiplierColor), length(length), whiteStep(whiteStep){};
         TrailData(int trailId, const QsaberConversion::LegacyTrail& legacyTrail) : trailId(trailId), colorType(legacyTrail.colorType), trailColor(legacyTrail.trailColor), multiplierColor(legacyTrail.multiplierColor), length(legacyTrail.length), whiteStep(legacyTrail.whiteStep){};
         TrailData(rapidjson::Document& doc)
         {
