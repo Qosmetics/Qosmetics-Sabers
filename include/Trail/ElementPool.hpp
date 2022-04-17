@@ -19,7 +19,7 @@ public:
         {
             while (stack.size() < count)
             {
-                stack.emplace();
+                stack.emplace(std::make_unique<Element>());
             }
         }
     }
