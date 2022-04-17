@@ -1,7 +1,7 @@
 #include "GlobalNamespace/Saber.hpp"
 #include "GlobalNamespace/SaberModelContainer.hpp"
 #include "GlobalNamespace/SaberModelController.hpp"
-#include "qosmetics-core/shared/SaberModelFactoryRegister.hpp"
+#include "qosmetics-core/shared/SaberModelControllerRegister.hpp"
 
 #include "UnityEngine/GameObject.hpp"
 #include "UnityEngine/Object.hpp"

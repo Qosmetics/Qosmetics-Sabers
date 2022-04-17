@@ -40,15 +40,15 @@ DECLARE_CLASS_CODEGEN(Qosmetics::Sabers, TrailComponent, UnityEngine::MonoBehavi
                       float WhiteStep = 0.2f;
                       Sombrero::FastColor MyColor = Sombrero::FastColor::white();
                       static bool CapFps;
-                      Sombrero::FastVector3 get_CurHeadPos();
+                      Sombrero::FastVector3 get_CurHeadPos() const;
                       void Setup(const TrailInitData& initData, UnityEngine::Transform* pointStart, UnityEngine::Transform* pointEnd, UnityEngine::Material* material, bool editor);
                       void SetColor(Sombrero::FastColor color);
                       void Collapse();
                       static float trailIntensity;
-                      bool get_inited();
+                      bool get_inited() const;
 
                       private
-                      : float get_TrailWidth();
+                      : float get_TrailWidth() const;
                       std::vector<std::unique_ptr<Element>> snapshotList;
                       ElementPool elemPool;
                       Spline spline;
@@ -61,7 +61,7 @@ DECLARE_CLASS_CODEGEN(Qosmetics::Sabers, TrailComponent, UnityEngine::MonoBehavi
                       void UpdateTrailData();
                       void RefreshSpline();
                       void UpdateVertex();
-                      void UpdateIndices();
+                      void UpdateIndices() const;
                       void UpdateHeadElem();
                       void RecordCurElem();
 

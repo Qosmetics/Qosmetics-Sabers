@@ -1,4 +1,6 @@
 #include "CustomTypes/SaberModelContainer.hpp"
+
+#include <utility>
 #include "config.hpp"
 #include "logging.hpp"
 #include "qosmetics-core/shared/Utils/BundleUtils.hpp"
@@ -164,7 +166,6 @@ namespace Qosmetics::Sabers
         if (!fileexists(filePath))
             return;
         currentManifest = Qosmetics::Core::Manifest<SaberObjectConfig>(filePath);
-        currentManifest.get_descriptor();
         INFO("Loading Saber Object {}", currentManifest.get_descriptor().get_name());
         StartCoroutine(custom_types::Helpers::CoroutineHelper::New(LoadBundleRoutine(nullptr)));
     }
@@ -176,7 +177,7 @@ namespace Qosmetics::Sabers
         if (manifest.get_filePath() == currentManifest.get_filePath())
             return false;
         currentManifest = manifest;
-        StartCoroutine(custom_types::Helpers::CoroutineHelper::New(LoadBundleRoutine(onFinished)));
+        StartCoroutine(custom_types::Helpers::CoroutineHelper::New(LoadBundleRoutine(std::move(onFinished))));
         return true;
     }
 
@@ -188,7 +189,7 @@ namespace Qosmetics::Sabers
             return false;
         INFO("Loading Saber Object {}", descriptor.get_name());
         currentManifest = Qosmetics::Core::Manifest<SaberObjectConfig>(descriptor.get_filePath());
-        StartCoroutine(custom_types::Helpers::CoroutineHelper::New(LoadBundleRoutine(onFinished)));
+        StartCoroutine(custom_types::Helpers::CoroutineHelper::New(LoadBundleRoutine(std::move(onFinished))));
         return true;
     }
 

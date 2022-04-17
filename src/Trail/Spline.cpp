@@ -9,15 +9,12 @@ Spline::Spline(int preCount)
     Reserve(preCount);
 }
 
-void Spline::Reserve(int count)
-{
-    if (controlPoints.size() < count)
-        controlPoints.reserve(count);
-    if (segments.size() < count)
-        segments.reserve(count);
+void Spline::Reserve(int count) {
+    controlPoints.reserve(count);
+    segments.reserve(count);
 }
 
-SplineControlPoint* Spline::operator[](int index)
+SplineControlPoint const* Spline::operator[](int index)
 {
     if (index > -1 && index < segments.size())
         return segments[index].get();
@@ -29,58 +26,58 @@ std::vector<std::shared_ptr<SplineControlPoint>>& Spline::get_ControlPoints()
     return controlPoints;
 }
 
-SplineControlPoint* Spline::NextControlPoint(SplineControlPoint* controlPoint)
+SplineControlPoint* Spline::NextControlPoint(SplineControlPoint const &controlPoint)
 {
-    if (controlPoints.size() == 0)
+    if (controlPoints.empty())
         return nullptr;
 
-    int i = controlPoint->ControlPointIndex + 1;
+    int i = controlPoint.ControlPointIndex + 1;
     if (i >= controlPoints.size())
         return nullptr;
     return controlPoints.at(i).get();
 }
 
-SplineControlPoint* Spline::PreviousControlPoint(SplineControlPoint* controlPoint)
+SplineControlPoint* Spline::PreviousControlPoint(SplineControlPoint const &controlPoint)
 {
-    if (controlPoints.size() == 0)
+    if (controlPoints.empty())
         return nullptr;
 
-    int i = controlPoint->ControlPointIndex - 1;
+    int i = controlPoint.ControlPointIndex - 1;
     if (i < 0)
         return nullptr;
     return controlPoints.at(i).get();
 }
 
-FastVector3 Spline::NextPosition(SplineControlPoint* controlPoint)
+FastVector3 const & Spline::NextPosition(SplineControlPoint const &controlPoint)
 {
-    int i = controlPoint->ControlPointIndex + 1;
+    int i = controlPoint.ControlPointIndex + 1;
     if (i >= controlPoints.size())
-        return controlPoint->Position;
-    return controlPoints.at(i).get()->Position;
+        return controlPoint.Position;
+    return controlPoints.at(i)->Position;
 }
 
-FastVector3 Spline::PreviousPosition(SplineControlPoint* controlPoint)
+FastVector3 const & Spline::PreviousPosition(SplineControlPoint const &controlPoint)
 {
-    int i = controlPoint->ControlPointIndex - 1;
+    int i = controlPoint.ControlPointIndex - 1;
     if (i < 0)
-        return controlPoint->Position;
-    return controlPoints.at(i).get()->Position;
+        return controlPoint.Position;
+    return controlPoints.at(i)->Position;
 }
 
-FastVector3 Spline::NextNormal(SplineControlPoint* controlPoint)
+FastVector3 const & Spline::NextNormal(SplineControlPoint const &controlPoint)
 {
-    int i = controlPoint->ControlPointIndex + 1;
+    int i = controlPoint.ControlPointIndex + 1;
     if (i >= controlPoints.size())
-        return controlPoint->Normal;
-    return controlPoints.at(i).get()->Normal;
+        return controlPoint.Normal;
+    return controlPoints.at(i)->Normal;
 }
 
-FastVector3 Spline::PreviousNormal(SplineControlPoint* controlPoint)
+FastVector3 const & Spline::PreviousNormal(SplineControlPoint const &controlPoint)
 {
-    int i = controlPoint->ControlPointIndex - 1;
+    int i = controlPoint.ControlPointIndex - 1;
     if (i < 0)
-        return controlPoint->Normal;
-    return controlPoints.at(i).get()->Normal;
+        return controlPoint.Normal;
+    return controlPoints.at(i)->Normal;
 }
 
 SplineControlPoint* Spline::LenToSegment(float t, float& localF)
@@ -91,7 +88,7 @@ SplineControlPoint* Spline::LenToSegment(float t, float& localF)
     float len = Sombrero::Clamp01(t) * segments.back()->Dist;
 
     int index = 0;
-    for (auto test : segments)
+    for (const auto& test : segments)
     {
         if (test->Dist >= len)
         {
@@ -147,7 +144,7 @@ FastVector3 Spline::CatmulRom(const FastVector3& T0, const FastVector3& P0, cons
     float FY = (float)(((FAY * f + FBY) * f + FCY) * f + FDY);
     float FZ = (float)(((FAZ * f + FBZ) * f + FCZ) * f + FDZ);
 
-    return FastVector3(FX, FY, FZ);
+    return {FX, FY, FZ};
 }
 
 FastVector3 Spline::InterpolateByLen(float tl)
@@ -187,7 +184,7 @@ void Spline::Clear()
 
 void Spline::RefreshDistance()
 {
-    if (segments.size() < 1)
+    if (segments.empty())
         return;
 
     segments.at(0)->Dist = 0.0f;
@@ -203,7 +200,7 @@ void Spline::RefreshSpline()
 {
     segments.clear();
     int size = 0;
-    for (auto point : controlPoints)
+    for (const auto& point : controlPoints)
     {
         if (point->IsValid())
         {
@@ -213,9 +210,4 @@ void Spline::RefreshSpline()
     }
 
     RefreshDistance();
-}
-
-Spline::~Spline()
-{
-    Clear();
 }

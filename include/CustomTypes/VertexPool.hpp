@@ -49,9 +49,9 @@ DECLARE_CLASS_CODEGEN(Qosmetics::Sabers, VertexPool, Il2CppObject,
                       float ElapsedTime;
 
                       void RecalculateBounds();
-                      UnityEngine::Mesh * get_MyMesh();
-                      void SetMeshObjectActive(bool flag);
-                      void Destroy();
+                      UnityEngine::Mesh * get_MyMesh() const;
+                      void SetMeshObjectActive(bool flag) const;
+                      void Destroy() const;
                       VertexSegment GetVertices(int vcount, int icount);
                       void EnlargeArrays(int count, int icount);
                       void LateUpdate();

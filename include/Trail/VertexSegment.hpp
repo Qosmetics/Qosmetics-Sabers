@@ -13,6 +13,6 @@ struct VertexSegment
     int IndexCount = 0;
     Qosmetics::Sabers::VertexPool* Pool = nullptr;
 
-    VertexSegment(int start, int count, int istart, int icount, Qosmetics::Sabers::VertexPool* pool) : VertStart(start), IndexStart(count), VertCount(istart), IndexCount(icount), Pool(pool) {}
-    VertexSegment(){};
+    constexpr VertexSegment(int start, int count, int istart, int icount, Qosmetics::Sabers::VertexPool* pool) : VertStart(start), IndexStart(count), VertCount(istart), IndexCount(icount), Pool(pool) {}
+    constexpr VertexSegment() = default;;
 };

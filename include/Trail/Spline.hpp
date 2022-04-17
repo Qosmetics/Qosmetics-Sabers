@@ -14,22 +14,22 @@ public:
     Spline();
     Spline(int preCount);
 
-    operator bool()
+    constexpr operator bool()
     {
         return !controlPoints.empty() && !segments.empty();
     }
 
     void Reserve(int count);
-    SplineControlPoint* operator[](int index);
+    SplineControlPoint const* operator[](int index);
     std::vector<std::shared_ptr<SplineControlPoint>>& get_ControlPoints();
-    SplineControlPoint* NextControlPoint(SplineControlPoint* controlPoint);
-    SplineControlPoint* PreviousControlPoint(SplineControlPoint* controlPoint);
+    SplineControlPoint* NextControlPoint(SplineControlPoint const &controlPoint);
+    SplineControlPoint* PreviousControlPoint(SplineControlPoint const &controlPoint);
 
-    Sombrero::FastVector3 NextPosition(SplineControlPoint* controlPoint);
-    Sombrero::FastVector3 PreviousPosition(SplineControlPoint* controlPoint);
+    Sombrero::FastVector3 const & NextPosition(SplineControlPoint const &controlPoint);
+    Sombrero::FastVector3 const & PreviousPosition(SplineControlPoint const &controlPoint);
 
-    Sombrero::FastVector3 NextNormal(SplineControlPoint* controlPoint);
-    Sombrero::FastVector3 PreviousNormal(SplineControlPoint* controlPoint);
+    Sombrero::FastVector3 const & NextNormal(SplineControlPoint const &controlPoint);
+    Sombrero::FastVector3 const & PreviousNormal(SplineControlPoint const &controlPoint);
 
     SplineControlPoint* LenToSegment(float t, float& localF);
 
@@ -39,8 +39,6 @@ public:
     SplineControlPoint* AddControlPoint(const Sombrero::FastVector3& pos, const Sombrero::FastVector3& up);
     void Clear();
     void RefreshSpline();
-
-    ~Spline();
 
 private:
     void RefreshDistance();

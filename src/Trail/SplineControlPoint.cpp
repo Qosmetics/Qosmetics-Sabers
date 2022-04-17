@@ -4,42 +4,42 @@
 
 using namespace Sombrero;
 
-SplineControlPoint* SplineControlPoint::NextControlPoint()
+SplineControlPoint* SplineControlPoint::NextControlPoint() const
 {
-    return spline->NextControlPoint(this);
+    return spline->NextControlPoint(*this);
 }
 
-SplineControlPoint* SplineControlPoint::PreviousControlPoint()
+SplineControlPoint* SplineControlPoint::PreviousControlPoint() const
 {
-    return spline->PreviousControlPoint(this);
+    return spline->PreviousControlPoint(*this);
 }
 
-FastVector3 SplineControlPoint::NextPosition()
+FastVector3 const & SplineControlPoint::NextPosition() const
 {
-    return spline->NextPosition(this);
+    return spline->NextPosition(*this);
 }
 
-FastVector3 SplineControlPoint::PreviousPosition()
+FastVector3 const & SplineControlPoint::PreviousPosition() const
 {
-    return spline->PreviousPosition(this);
+    return spline->PreviousPosition(*this);
 }
 
-FastVector3 SplineControlPoint::NextNormal()
+FastVector3 const & SplineControlPoint::NextNormal() const
 {
-    return spline->NextNormal(this);
+    return spline->NextNormal(*this);
 }
 
-FastVector3 SplineControlPoint::PreviousNormal()
+FastVector3 const & SplineControlPoint::PreviousNormal() const
 {
-    return spline->PreviousNormal(this);
+    return spline->PreviousNormal(*this);
 }
 
-bool SplineControlPoint::IsValid()
+bool SplineControlPoint::IsValid() const
 {
     return NextControlPoint();
 }
 
-FastVector3 SplineControlPoint::GetNext2Position()
+FastVector3 const & SplineControlPoint::GetNext2Position() const
 {
     auto cp = NextControlPoint();
     if (cp)
@@ -47,7 +47,7 @@ FastVector3 SplineControlPoint::GetNext2Position()
     return NextPosition();
 }
 
-FastVector3 SplineControlPoint::GetNext2Normal()
+FastVector3 const & SplineControlPoint::GetNext2Normal() const
 {
     auto cp = NextControlPoint();
     if (cp)
@@ -55,12 +55,12 @@ FastVector3 SplineControlPoint::GetNext2Normal()
     return NextNormal();
 }
 
-FastVector3 SplineControlPoint::Interpolate(float localF)
+FastVector3 SplineControlPoint::Interpolate(float localF) const
 {
     return Spline::CatmulRom(PreviousPosition(), Position, NextPosition(), GetNext2Position(), Clamp01(localF));
 }
 
-FastVector3 SplineControlPoint::InterpolateNormal(float localF)
+FastVector3 SplineControlPoint::InterpolateNormal(float localF) const
 {
     return Spline::CatmulRom(PreviousNormal(), Normal, NextNormal(), GetNext2Normal(), Clamp01(localF));
 }

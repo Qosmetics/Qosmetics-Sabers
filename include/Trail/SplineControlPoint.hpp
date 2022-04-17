@@ -15,18 +15,18 @@ public:
     int SegmentIndex = -1;
     Spline* spline;
 
-    SplineControlPoint* NextControlPoint();
-    SplineControlPoint* PreviousControlPoint();
+    [[nodiscard]] SplineControlPoint* NextControlPoint() const;
+    [[nodiscard]] SplineControlPoint* PreviousControlPoint() const;
 
-    Sombrero::FastVector3 NextPosition();
-    Sombrero::FastVector3 PreviousPosition();
-    Sombrero::FastVector3 NextNormal();
-    Sombrero::FastVector3 PreviousNormal();
+    [[nodiscard]] Sombrero::FastVector3 const & NextPosition() const;
+    [[nodiscard]] Sombrero::FastVector3 const & PreviousPosition() const;
+    [[nodiscard]] Sombrero::FastVector3 const & NextNormal() const;
+    [[nodiscard]] Sombrero::FastVector3 const & PreviousNormal() const;
 
-    bool IsValid();
-    Sombrero::FastVector3 GetNext2Position();
-    Sombrero::FastVector3 GetNext2Normal();
-    Sombrero::FastVector3 Interpolate(float localF);
-    Sombrero::FastVector3 InterpolateNormal(float localF);
+    [[nodiscard]] bool IsValid() const;
+    [[nodiscard]] Sombrero::FastVector3 const & GetNext2Position() const;
+    [[nodiscard]] Sombrero::FastVector3 const & GetNext2Normal() const;
+    [[nodiscard]] Sombrero::FastVector3 Interpolate(float localF) const;
+    [[nodiscard]] Sombrero::FastVector3 InterpolateNormal(float localF) const;
     void Init(Spline* owner);
 };
