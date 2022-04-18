@@ -9,12 +9,13 @@ Spline::Spline(int preCount)
     Reserve(preCount);
 }
 
-void Spline::Reserve(int count) {
+void Spline::Reserve(int count)
+{
     controlPoints.reserve(count);
     segments.reserve(count);
 }
 
-SplineControlPoint const* Spline::operator[](int index)
+const SplineControlPoint* Spline::operator[](int index)
 {
     if (index > -1 && index < segments.size())
         return segments[index].get();
@@ -26,7 +27,7 @@ std::vector<std::shared_ptr<SplineControlPoint>>& Spline::get_ControlPoints()
     return controlPoints;
 }
 
-SplineControlPoint* Spline::NextControlPoint(SplineControlPoint const &controlPoint)
+SplineControlPoint* Spline::NextControlPoint(const SplineControlPoint& controlPoint)
 {
     if (controlPoints.empty())
         return nullptr;
@@ -37,7 +38,7 @@ SplineControlPoint* Spline::NextControlPoint(SplineControlPoint const &controlPo
     return controlPoints.at(i).get();
 }
 
-SplineControlPoint* Spline::PreviousControlPoint(SplineControlPoint const &controlPoint)
+SplineControlPoint* Spline::PreviousControlPoint(const SplineControlPoint& controlPoint)
 {
     if (controlPoints.empty())
         return nullptr;
@@ -48,7 +49,7 @@ SplineControlPoint* Spline::PreviousControlPoint(SplineControlPoint const &contr
     return controlPoints.at(i).get();
 }
 
-FastVector3 const & Spline::NextPosition(SplineControlPoint const &controlPoint)
+const FastVector3& Spline::NextPosition(const SplineControlPoint& controlPoint)
 {
     int i = controlPoint.ControlPointIndex + 1;
     if (i >= controlPoints.size())
@@ -56,7 +57,7 @@ FastVector3 const & Spline::NextPosition(SplineControlPoint const &controlPoint)
     return controlPoints.at(i)->Position;
 }
 
-FastVector3 const & Spline::PreviousPosition(SplineControlPoint const &controlPoint)
+const FastVector3& Spline::PreviousPosition(const SplineControlPoint& controlPoint)
 {
     int i = controlPoint.ControlPointIndex - 1;
     if (i < 0)
@@ -64,7 +65,7 @@ FastVector3 const & Spline::PreviousPosition(SplineControlPoint const &controlPo
     return controlPoints.at(i)->Position;
 }
 
-FastVector3 const & Spline::NextNormal(SplineControlPoint const &controlPoint)
+const FastVector3& Spline::NextNormal(const SplineControlPoint& controlPoint)
 {
     int i = controlPoint.ControlPointIndex + 1;
     if (i >= controlPoints.size())
@@ -72,7 +73,7 @@ FastVector3 const & Spline::NextNormal(SplineControlPoint const &controlPoint)
     return controlPoints.at(i)->Normal;
 }
 
-FastVector3 const & Spline::PreviousNormal(SplineControlPoint const &controlPoint)
+const FastVector3& Spline::PreviousNormal(const SplineControlPoint& controlPoint)
 {
     int i = controlPoint.ControlPointIndex - 1;
     if (i < 0)

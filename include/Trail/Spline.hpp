@@ -20,16 +20,16 @@ public:
     }
 
     void Reserve(int count);
-    SplineControlPoint const* operator[](int index);
+    const SplineControlPoint* operator[](int index);
     std::vector<std::shared_ptr<SplineControlPoint>>& get_ControlPoints();
-    SplineControlPoint* NextControlPoint(SplineControlPoint const &controlPoint);
-    SplineControlPoint* PreviousControlPoint(SplineControlPoint const &controlPoint);
+    SplineControlPoint* NextControlPoint(const SplineControlPoint& controlPoint);
+    SplineControlPoint* PreviousControlPoint(const SplineControlPoint& controlPoint);
 
-    Sombrero::FastVector3 const & NextPosition(SplineControlPoint const &controlPoint);
-    Sombrero::FastVector3 const & PreviousPosition(SplineControlPoint const &controlPoint);
+    const Sombrero::FastVector3& NextPosition(const SplineControlPoint& controlPoint);
+    const Sombrero::FastVector3& PreviousPosition(const SplineControlPoint& controlPoint);
 
-    Sombrero::FastVector3 const & NextNormal(SplineControlPoint const &controlPoint);
-    Sombrero::FastVector3 const & PreviousNormal(SplineControlPoint const &controlPoint);
+    const Sombrero::FastVector3& NextNormal(const SplineControlPoint& controlPoint);
+    const Sombrero::FastVector3& PreviousNormal(const SplineControlPoint& controlPoint);
 
     SplineControlPoint* LenToSegment(float t, float& localF);
 

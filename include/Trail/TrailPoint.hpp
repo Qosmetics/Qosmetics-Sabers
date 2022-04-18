@@ -15,12 +15,12 @@ namespace Qosmetics::Sabers
         }
 
         TrailPoint(int trailId, bool isTop) : trailId(trailId), isTop(isTop){};
-        TrailPoint(rapidjson::Document const& doc)
+        TrailPoint(const rapidjson::Document& doc)
         {
             ParseDoc(doc);
         };
 
-        void ParseDoc(rapidjson::Document const& doc)
+        void ParseDoc(const rapidjson::Document& doc)
         {
             trailId = doc["trailId"].GetInt();
             isTop = (int)doc["isTop"].GetBool();

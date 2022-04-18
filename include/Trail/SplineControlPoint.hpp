@@ -18,14 +18,14 @@ public:
     [[nodiscard]] SplineControlPoint* NextControlPoint() const;
     [[nodiscard]] SplineControlPoint* PreviousControlPoint() const;
 
-    [[nodiscard]] Sombrero::FastVector3 const & NextPosition() const;
-    [[nodiscard]] Sombrero::FastVector3 const & PreviousPosition() const;
-    [[nodiscard]] Sombrero::FastVector3 const & NextNormal() const;
-    [[nodiscard]] Sombrero::FastVector3 const & PreviousNormal() const;
+    [[nodiscard]] const Sombrero::FastVector3& NextPosition() const;
+    [[nodiscard]] const Sombrero::FastVector3& PreviousPosition() const;
+    [[nodiscard]] const Sombrero::FastVector3& NextNormal() const;
+    [[nodiscard]] const Sombrero::FastVector3& PreviousNormal() const;
 
     [[nodiscard]] bool IsValid() const;
-    [[nodiscard]] Sombrero::FastVector3 const & GetNext2Position() const;
-    [[nodiscard]] Sombrero::FastVector3 const & GetNext2Normal() const;
+    [[nodiscard]] const Sombrero::FastVector3& GetNext2Position() const;
+    [[nodiscard]] const Sombrero::FastVector3& GetNext2Normal() const;
     [[nodiscard]] Sombrero::FastVector3 Interpolate(float localF) const;
     [[nodiscard]] Sombrero::FastVector3 InterpolateNormal(float localF) const;
     void Init(Spline* owner);

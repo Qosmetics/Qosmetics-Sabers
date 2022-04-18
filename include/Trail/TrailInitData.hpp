@@ -9,7 +9,7 @@ struct TrailInitData
     int Granularity = 80;
 
     constexpr TrailInitData() = default;
-    constexpr TrailInitData(int length, float whiteStep, Sombrero::FastColor const& trailColor)
+    constexpr TrailInitData(int length, float whiteStep, const Sombrero::FastColor& trailColor)
     {
         TrailLength = length;
         Whitestep = whiteStep;

@@ -181,7 +181,7 @@ namespace Qosmetics::Sabers
         }
 
         int index = 0;
-        for (auto const& snap : snapshotList)
+        for (const auto& snap : snapshotList)
         {
             controlPoints[index]->Position = snap->get_pos();
             controlPoints[index]->Normal = snap->pointEnd - snap->pointStart;

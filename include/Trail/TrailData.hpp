@@ -17,15 +17,15 @@ namespace Qosmetics::Sabers
         int length;
         float whiteStep;
 
-        constexpr TrailData() = default;;
-        constexpr TrailData(int trailId, int colorType, Sombrero::FastColor const& trailColor, Sombrero::FastColor const& multiplierColor, int length, float whiteStep) : trailId(trailId), colorType(colorType), trailColor(trailColor), multiplierColor(multiplierColor), length(length), whiteStep(whiteStep){};
+        constexpr TrailData() = default;
+        constexpr TrailData(int trailId, int colorType, const Sombrero::FastColor& trailColor, const Sombrero::FastColor& multiplierColor, int length, float whiteStep) : trailId(trailId), colorType(colorType), trailColor(trailColor), multiplierColor(multiplierColor), length(length), whiteStep(whiteStep){};
         constexpr TrailData(int trailId, const QsaberConversion::LegacyTrail& legacyTrail) : trailId(trailId), colorType(legacyTrail.colorType), trailColor(legacyTrail.trailColor), multiplierColor(legacyTrail.multiplierColor), length(legacyTrail.length), whiteStep(legacyTrail.whiteStep){};
-        constexpr TrailData(rapidjson::Document const& doc)
+        constexpr TrailData(const rapidjson::Document& doc)
         {
             ParseDoc(doc);
         };
 
-        void ParseDoc(rapidjson::Document const& doc)
+        void ParseDoc(const rapidjson::Document& doc)
         {
             trailId = doc["trailId"].GetInt();
             colorType = doc["colorType"].GetInt();
