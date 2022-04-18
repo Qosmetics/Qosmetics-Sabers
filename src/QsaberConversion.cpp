@@ -17,13 +17,15 @@
 
 #include <algorithm>
 
+#include "assets.hpp"
+
 #define coro(...) custom_types::Helpers::CoroutineHelper::New(__VA_ARGS__)
 
 namespace Qosmetics::Sabers::QsaberConversion
 {
-    void ConvertOldQsabers()
+    void ConvertOldQsabers(std::function<void()> onFinished)
     {
-        GlobalNamespace::SharedCoroutineStarter::get_instance()->StartCoroutine(coro(ConvertAllFoundQsabers(GetNonConverted(GetQsaberFiles()))));
+        GlobalNamespace::SharedCoroutineStarter::get_instance()->StartCoroutine(coro(ConvertAllFoundQsabers(GetNonConverted(GetQsaberFiles()), std::move(onFinished))));
     }
 
     std::vector<std::string> GetQsaberFiles()
@@ -38,6 +40,7 @@ namespace Qosmetics::Sabers::QsaberConversion
     std::vector<std::pair<std::string, std::string>> GetNonConverted(std::vector<std::string> filePaths)
     {
         std::vector<std::pair<std::string, std::string>> toConvert;
+        toConvert.reserve(filePaths.size());
         for (auto file : filePaths)
         {
             std::string fileName(Qosmetics::Core::FileUtils::GetFileName(file, true));
@@ -47,14 +50,17 @@ namespace Qosmetics::Sabers::QsaberConversion
 
             if (!fileexists(convertedFilePath))
             {
-                toConvert.emplace_back(std::make_pair(fmt::format("{}/{}", saber_path, file), convertedFilePath));
+                if (fileexists(fmt::format("{}/{}", whacker_path, file)))
+                    toConvert.emplace_back(std::make_pair(fmt::format("{}/{}", whacker_path, file), convertedFilePath));
+                else
+                    toConvert.emplace_back(std::make_pair(fmt::format("{}/{}", saber_path, file), convertedFilePath));
             }
         }
 
         return toConvert;
     }
 
-    custom_types::Helpers::Coroutine ConvertAllFoundQsabers(std::vector<std::pair<std::string, std::string>> oldNewPathPairs)
+    custom_types::Helpers::Coroutine ConvertAllFoundQsabers(std::vector<std::pair<std::string, std::string>> oldNewPathPairs, std::function<void()> onFinished)
     {
         // all pairs should be things to convert
         for (auto& pair : oldNewPathPairs)
@@ -131,7 +137,6 @@ namespace Qosmetics::Sabers::QsaberConversion
             UnityEngine::Texture2D* thumbnail = nullptr;
             INFO("Getting thumbnail...");
             co_yield coro(Qosmetics::Core::BundleUtils::LoadAssetFromBundleAsync(bundle, "thumbnail", thumbnail));
-            auto imageData = UnityEngine::ImageConversion::EncodeToPNG(thumbnail);
 
             int error = 0;
             auto zip = zip_open(newPath.data(), ZIP_CREATE, &error);
@@ -147,14 +152,23 @@ namespace Qosmetics::Sabers::QsaberConversion
             zip_file_add(zip, androidFileName.c_str(), qsaber_buffer, ZIP_FL_ENC_GUESS);
 
             co_yield nullptr;
-            auto thumbnail_buffer = zip_source_buffer_create(imageData.begin(), imageData.size(), 0, &err);
-            zip_file_add(zip, "thumbnail.png", thumbnail_buffer, ZIP_FL_ENC_GUESS);
+            if (thumbnail)
+            {
+                auto imageData = UnityEngine::ImageConversion::EncodeToPNG(thumbnail);
+                zip_source_t* thumbnail_buffer = zip_source_buffer_create(imageData.begin(), imageData.size(), 0, &err);
+                zip_file_add(zip, "thumbnail.png", thumbnail_buffer, ZIP_FL_ENC_GUESS);
+            }
 
             zip_close(zip);
             bundle->Unload(true);
+
+            INFO("Temporarily don't delete for testing");
+            // deletefile(oldPath);
             co_yield nullptr;
         }
 
+        if (onFinished)
+            onFinished();
         co_return;
     }
 }

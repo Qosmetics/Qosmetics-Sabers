@@ -33,7 +33,8 @@ namespace Qosmetics::Sabers
 
             auto localization = Diglett::Localization::get_instance();
             auto defaultObjectBtn = CreateUIButton(buttonHorizontal->get_transform(), localization->get("QosmeticsCore:QosmeticsTable:Default"), std::bind(&SelectionViewController::OnSelectDefault, this));
-            auto refreshBtn = CreateUIButton(buttonHorizontal->get_transform(), localization->get("QosmeticsCore:QosmeticsTable:Refresh"), std::bind(&SelectionViewController::ReloadDescriptorList, this));
+            auto refreshBtn = CreateUIButton(buttonHorizontal->get_transform(), localization->get("QosmeticsCore:QosmeticsTable:Refresh"), [this]()
+                                             { QsaberConversion::ConvertOldQsabers(std::bind(&SelectionViewController::RefreshAfterSaberConversion, this)); });
 
             deletionConfirmationModal = Qosmetics::Core::DeletionConfirmationModal::Create(get_transform());
             descriptorList = CreateScrollableCustomSourceList<Qosmetics::Core::QosmeticObjectTableData*>(vertical->get_transform(), UnityEngine::Vector2(0.0f, 0.0f), UnityEngine::Vector2(100.0f, 76.0f), nullptr);
@@ -43,8 +44,16 @@ namespace Qosmetics::Sabers
             descriptorList->defaultSprite = VectorToSprite(std::vector<uint8_t>(_binary_PlaceholderIcon_png_start, _binary_PlaceholderIcon_png_end));
         }
 
+        QsaberConversion::ConvertOldQsabers(std::bind(&SelectionViewController::RefreshAfterSaberConversion, this));
+    }
+
+    void SelectionViewController::RefreshAfterSaberConversion()
+    {
+        // don't do shit when not enabled
+        if (!get_enabled() || !get_gameObject()->get_activeSelf())
+            return;
+
         ReloadDescriptorList();
-        QsaberConversion::ConvertOldQsabers();
     }
 
     void SelectionViewController::ReloadDescriptorList()
@@ -98,6 +107,7 @@ namespace Qosmetics::Sabers
 
         tableView->ReloadData();
         tableView->RefreshCells(true, true);
+        tableView->ClearSelection();
     }
 
     void SelectionViewController::OnSelectDefault()
@@ -160,5 +170,4 @@ namespace Qosmetics::Sabers
         Qosmetics::Core::Config::SaveConfig();
         previewViewController->UpdatePreview(true);
     }
-
 }

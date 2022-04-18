@@ -2,6 +2,8 @@
 #include "ConstStrings.hpp"
 #include "CustomTypes/SaberModelContainer.hpp"
 #include "CustomTypes/WhackerHandler.hpp"
+#include "Disabling.hpp"
+#include "Trail/TrailPoint.hpp"
 #include "config.hpp"
 #include "logging.hpp"
 
@@ -12,12 +14,16 @@
 #include "sombrero/shared/FastColor.hpp"
 #include "sombrero/shared/FastQuaternion.hpp"
 
+#include "GlobalNamespace/ConditionalMaterialSwitcher.hpp"
+#include "GlobalNamespace/GameplayCoreSceneSetupData.hpp"
+#include "GlobalNamespace/PlayerSpecificSettings.hpp"
+#include "GlobalNamespace/SaberModelContainer.hpp"
 #include "GlobalNamespace/SaberModelController.hpp"
 #include "GlobalNamespace/SaberTrail.hpp"
 #include "GlobalNamespace/SaberTrailRenderer.hpp"
 #include "GlobalNamespace/SaberType.hpp"
 
-#include "Trail/TrailPoint.hpp"
+#include "Zenject/DiContainer.hpp"
 
 DEFINE_TYPE(Qosmetics::Sabers, SaberModelController);
 
@@ -27,6 +33,8 @@ namespace Qosmetics::Sabers
 {
     void SaberModelController::Init(GlobalNamespace::Saber* saber)
     {
+        if (Disabling::GetAnyDisabling())
+            return;
         this->saber = saber;
         auto saberModelContainer = SaberModelContainer::get_instance();
 
@@ -35,6 +43,12 @@ namespace Qosmetics::Sabers
             EditDefaultSaber();
             return;
         }
+
+        auto parentModelContainer = get_gameObject()->GetComponentInParent<GlobalNamespace::SaberModelContainer*>();
+        auto gameplayCoreSceneSetupData = parentModelContainer->dyn__container()->TryResolve<GlobalNamespace::GameplayCoreSceneSetupData*>();
+        auto playerSpecificSettings = gameplayCoreSceneSetupData->dyn_playerSpecificSettings();
+
+        TrailComponent::trailIntensity = playerSpecificSettings->dyn__saberTrailIntensity();
 
         auto& config = saberModelContainer->GetSaberConfig();
         auto& globalConfig = Config::get_config();
@@ -125,6 +139,12 @@ namespace Qosmetics::Sabers
             return;
         basicSaberModel->set_localScale(UnityEngine::Vector3(globalConfig.saberWidth, globalConfig.saberWidth, globalConfig.saberLength));
 
+        auto parentModelContainer = get_gameObject()->GetComponentInParent<GlobalNamespace::SaberModelContainer*>();
+        auto gameplayCoreSceneSetupData = parentModelContainer->dyn__container()->TryResolve<GlobalNamespace::GameplayCoreSceneSetupData*>();
+        auto playerSpecificSettings = gameplayCoreSceneSetupData->dyn_playerSpecificSettings();
+
+        TrailComponent::trailIntensity = playerSpecificSettings->dyn__saberTrailIntensity();
+
         switch (globalConfig.trailType)
         {
         case Config::TrailType::CUSTOM:
@@ -199,9 +219,8 @@ namespace Qosmetics::Sabers
 
         auto saberModelController = GetComponent<GlobalNamespace::SaberModelController*>();
         auto trail = saberModelController->dyn__saberTrail();
-        auto trailRenderer = trail->dyn__trailRenderer();
-        auto actualMeshRenderer = trailRenderer->dyn__meshRenderer();
-        auto material = actualMeshRenderer->get_material();
+        auto materialSwitcher = trail->dyn__trailRendererPrefab()->get_gameObject()->GetComponent<GlobalNamespace::ConditionalMaterialSwitcher*>();
+        auto material = materialSwitcher->dyn__material1();
 
         auto meshRenderer = trailObject->AddComponent<UnityEngine::MeshRenderer*>();
         meshRenderer->set_material(material);

@@ -3,6 +3,7 @@
 
 #include "CustomTypes/SaberModelContainer.hpp"
 #include "UI/PreviewViewController.hpp"
+#include "UI/SelectionViewController.hpp"
 #include "UI/SettingsViewController.hpp"
 #include "static-defines.hpp"
 
@@ -135,6 +136,7 @@ namespace Qosmetics::Sabers
 
     void SaberConfigRegistration::OnProfileSwitched() const
     {
+        INFO("Just Switched profiles!");
         Qosmetics::Sabers::SettingsViewController::justChangedProfile = true;
         Qosmetics::Sabers::PreviewViewController::justChangedProfile = true;
 

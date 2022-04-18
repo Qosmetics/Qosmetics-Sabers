@@ -21,11 +21,12 @@ DECLARE_CLASS_CODEGEN(Qosmetics::Sabers, SelectionViewController, HMUI::ViewCont
 
                       public
                       :
-
+                      
                       void OnDeleteCell(Qosmetics::Core::QosmeticObjectTableCell* cell);
                       void OnSelectDescriptor(Qosmetics::Core::QosmeticObjectTableCell* cell);
                       void OnSelectDefault();
                       void ReloadDescriptorList();
                       void OnObjectLoadFinished();
+                      void RefreshAfterSaberConversion();
 
 )

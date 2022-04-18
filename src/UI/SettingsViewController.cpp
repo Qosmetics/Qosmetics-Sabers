@@ -38,8 +38,8 @@ namespace QuestUI::BeatSaberUI
                                            Qosmetics::Core::Config::SaveConfig();                          \
                                            previewViewController->UpdatePreview(false);                    \
                                        });                                                                 \
-                                                                                                           \
-    AddHoverHint(name##Slider, localization->get(key "HoverHint"));
+    name##Slider->FormatString = [](auto v) -> std::string { return std::to_string(v).substr(0, 4); };     \
+    AddHoverHint(name##Slider, localization->get(key "HoverHint"))
 
 const char* localizationKeys[] = {
     "QosmeticsWhackers:Settings:TrailType:CUSTOM",
@@ -68,38 +68,22 @@ namespace Qosmetics::Sabers
             wText->set_alignment(TMPro::TextAlignmentOptions::Center);
             SLIDER(saberLength, "QosmeticsWhackers:Settings:SaberLength", 0.05f, globalConfig.saberLength, 0.05f, 2.0f, 0.2f);
             SLIDER(saberWidth, "QosmeticsWhackers:Settings:SaberWidth", 0.05f, globalConfig.saberWidth, 0.05f, 2.0f, 0.2f);
-            saberWidthSlider->FormatString = [](auto v) -> std::string
-            {
-                return std::to_string(v).substr(0, 4);
-            };
             TOGGLE(enableMenuPointer, "QosmeticsWhackers:Settings:EnableMenuPointer");
-            SLIDER(menuPointerSize, "QosmeticsWhackers:Settings:MenuPointerSize", 0.05f, globalConfig.trailWidth, 0.05f, 5.0f, 0.2f);
-            menuPointerSizeSlider->FormatString = [](auto v) -> std::string
-            {
-                return std::to_string(v).substr(0, 4);
-            };
+
+            SLIDER(menuPointerSize, "QosmeticsWhackers:Settings:MenuPointerSize", 0.05f, globalConfig.trailWidth, 0.05f, 2.0f, 0.2f);
 
             auto tText = CreateText(containerT, localization->get("QosmeticsWhackers:Settings:TrailSpecificSettings"));
             tText->set_alignment(TMPro::TextAlignmentOptions::Center);
             TOGGLE(overrideTrailLength, "QosmeticsWhackers:Settings:OverrideTrailLength");
-            SLIDER(trailLength, "QosmeticsWhackers:Settings:TrailLength", 1.0f, globalConfig.trailLength, 0.0f, 30.0f, 0.2f);
+            SLIDER(trailLength, "QosmeticsWhackers:Settings:TrailLength", 1.0f, globalConfig.trailLength, 0.0f, 50.0f, 0.2f);
             trailLengthSlider->FormatString = [](auto v) -> std::string
-            {
-                return std::to_string((int)v);
-            };
+            { return std::to_string((int)v); };
+
             TOGGLE(whiteTrail, "QosmeticsWhackers:Settings:WhiteTrail");
             TOGGLE(overrideWhiteStep, "QosmeticsWhackers:Settings:OverrideWhiteStep");
             SLIDER(whiteStep, "QosmeticsWhackers:Settings:WhiteStep", 0.05f, globalConfig.whiteStep, 0.0f, 1.0f, 0.2f);
-            whiteStepSlider->FormatString = [](auto v) -> std::string
-            {
-                return std::to_string(v).substr(0, 4);
-            };
             TOGGLE(overrideTrailWidth, "QosmeticsWhackers:Settings:OverrideTrailWidth");
             SLIDER(trailWidth, "QosmeticsWhackers:Settings:TrailWidth", 0.05f, globalConfig.trailWidth, 0.0f, 1.0f, 0.2f);
-            trailWidthSlider->FormatString = [](auto v) -> std::string
-            {
-                return std::to_string(v).substr(0, 4);
-            };
 
             auto list = List<StringW>::New_ctor();
             list->Add(localization->get(localizationKeys[0]));
@@ -108,9 +92,9 @@ namespace Qosmetics::Sabers
 
             trailTypeDropdown = CreateDropdownInternal(containerT, localization->get("QosmeticsWhackers:Settings:TrailType"), globalConfig.trailType, list, [&](auto _, int index)
                                                        {
-            Config::get_config().trailType = (Config::TrailType)index;
-            Qosmetics::Core::Config::SaveConfig();
-            previewViewController->UpdatePreview(false); });
+                Config::get_config().trailType = (Config::TrailType)index;
+                Qosmetics::Core::Config::SaveConfig();
+                previewViewController->UpdatePreview(false); });
 
             AddHoverHint(trailTypeDropdown, localization->get("QosmeticsWhackers:Settings:TrailTypeHoverHint"));
         }

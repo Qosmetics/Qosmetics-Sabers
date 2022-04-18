@@ -37,7 +37,8 @@ namespace Qosmetics::Sabers
 
         if (trail)
         {
-            trail->Setup({config.overrideTrailLength ? config.trailLength : length, config.overrideWhiteStep ? float(config.whiteStep) : whiteStep, (config.whiteTrail ? Sombrero::FastColor::white() : trailColor) * multiplierColor}, config.overrideTrailWidth ? get_customBotTransform() : get_botTransform(), get_topTransform(), material, false);
+            // 3 + length or overridelength due to length 0, 1, 2, 3 being invisible, and == 0 crashing, this solved it really easily and doesn't take away from the user experience so hurray for sneaky ways of fixing things
+            trail->Setup({3 + (config.overrideTrailLength ? config.trailLength : length), config.overrideWhiteStep ? float(config.whiteStep) : whiteStep, (config.whiteTrail ? Sombrero::FastColor::white() : trailColor) * multiplierColor}, config.overrideTrailWidth ? get_customBotTransform() : get_botTransform(), get_topTransform(), material, false);
         }
         else
             ERROR("No trail component found for TrailHandler with ID {}!", trailId);

@@ -1,7 +1,7 @@
 #include "GlobalNamespace/Saber.hpp"
 #include "GlobalNamespace/SaberModelContainer.hpp"
 #include "GlobalNamespace/SaberModelController.hpp"
-#include "qosmetics-core/shared/SaberModelFactoryRegister.hpp"
+#include "qosmetics-core/shared/SaberModelControllerRegister.hpp"
 
 #include "UnityEngine/GameObject.hpp"
 #include "UnityEngine/Object.hpp"
@@ -14,4 +14,4 @@
 #include "sombrero/shared/FastQuaternion.hpp"
 #include "sombrero/shared/FastVector3.hpp"
 
-SABERMODELFACTORY_REGISTRATION(QosmeticsSabers, 10, Qosmetics::Sabers::SaberModelController*);
+SABERMODELCONTROLLER_REGISTRATION(QosmeticsSabers, 10, Qosmetics::Sabers::SaberModelController*);

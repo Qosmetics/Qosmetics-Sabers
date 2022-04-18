@@ -117,5 +117,6 @@
         "__functional_base_03": "cpp",
         "__memory": "cpp"
     },
-    "editor.formatOnSave": true
+    "editor.formatOnSave": true,
+    "todo-tree.tree.scanMode": "workspace"
 }

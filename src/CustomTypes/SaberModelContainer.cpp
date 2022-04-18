@@ -48,6 +48,7 @@ void SetLayerRecursively(UnityEngine::Transform* obj, int layer)
 void LegacyTrailFixups(UnityEngine::GameObject* loadedObject, const std::vector<Qosmetics::Sabers::QsaberConversion::LegacyTrail>& leftTrailConfigs, const std::vector<Qosmetics::Sabers::QsaberConversion::LegacyTrail>& rightTrailConfigs)
 {
     using namespace Qosmetics::Sabers;
+    DEBUG("Getting saber transforms");
     auto t = loadedObject->get_transform();
     auto leftSaber = t->Find(ConstStrings::LeftSaber());
     auto rightSaber = t->Find(ConstStrings::RightSaber());
@@ -55,9 +56,13 @@ void LegacyTrailFixups(UnityEngine::GameObject* loadedObject, const std::vector<
     int trailId = 0;
     for (const auto& trail : leftTrailConfigs)
     {
+        DEBUG("Making trail {}", trailId);
         auto trailT = leftSaber->Find(trail.name);
         auto top = trailT->Find(ConstStrings::TrailEnd());
         auto bot = trailT->Find(ConstStrings::TrailStart());
+
+        if (!(top && bot))
+            continue;
 
         TrailData trailData(trailId, trail);
         TrailPoint topPoint(trailId, true);
@@ -77,9 +82,13 @@ void LegacyTrailFixups(UnityEngine::GameObject* loadedObject, const std::vector<
 
     for (const auto& trail : rightTrailConfigs)
     {
+        DEBUG("Making trail {}", trailId);
         auto trailT = rightSaber->Find(trail.name);
         auto top = trailT->Find(ConstStrings::TrailEnd());
         auto bot = trailT->Find(ConstStrings::TrailStart());
+
+        if (!(top && bot))
+            continue;
 
         TrailData trailData(trailId, trail);
         TrailPoint topPoint(trailId, true);
@@ -172,9 +181,16 @@ namespace Qosmetics::Sabers
     bool SaberModelContainer::LoadObject(const Qosmetics::Core::Manifest<Qosmetics::Sabers::SaberObjectConfig>& manifest, std::function<void(SaberModelContainer*)> onFinished)
     {
         if (isLoading)
+        {
+            ERROR("Was still loading object, not loading new object...");
             return false;
+        }
         if (manifest.get_filePath() == currentManifest.get_filePath())
+        {
+            ERROR("Tried loading object {} again, not loading new object", manifest.get_filePath());
             return false;
+        }
+
         currentManifest = manifest;
         StartCoroutine(custom_types::Helpers::CoroutineHelper::New(LoadBundleRoutine(onFinished)));
         return true;

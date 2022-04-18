@@ -70,9 +70,9 @@ namespace Qosmetics::Sabers::QsaberConversion
         }
     };
 
-    void ConvertOldQsabers();
+    void ConvertOldQsabers(std::function<void()> onFinished = nullptr);
 
     std::vector<std::string> GetQsaberFiles();
     std::vector<std::pair<std::string, std::string>> GetNonConverted(std::vector<std::string> filePaths);
-    custom_types::Helpers::Coroutine ConvertAllFoundQsabers(std::vector<std::pair<std::string, std::string>> oldNewPathPairs);
+    custom_types::Helpers::Coroutine ConvertAllFoundQsabers(std::vector<std::pair<std::string, std::string>> oldNewPathPairs, std::function<void()> onFinished = nullptr);
 }
