@@ -23,17 +23,23 @@
     {
       "id": "codegen",
       "versionRange": "^0.22.0",
-      "additionalData": {}
+      "additionalData": {
+        "includeQmod": false
+      }
     },
     {
       "id": "custom-types",
       "versionRange": "^0.15.9",
-      "additionalData": {}
+      "additionalData": {
+        "includeQmod": false
+      }
     },
     {
       "id": "questui",
       "versionRange": "^0.13.5",
-      "additionalData": {}
+      "additionalData": {
+        "includeQmod": false
+      }
     },
     {
       "id": "modloader",
@@ -53,11 +59,6 @@
     {
       "id": "fmt",
       "versionRange": "^8.0.5",
-      "additionalData": {}
-    },
-    {
-      "id": "bs-utils",
-      "versionRange": "^0.7.0",
       "additionalData": {}
     },
     {
