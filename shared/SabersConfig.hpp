@@ -1,4 +1,5 @@
 #pragma once
+#include <string>
 
 namespace Qosmetics::Sabers
 {
@@ -40,5 +41,5 @@ namespace Qosmetics::Sabers
         bool enableMenuPointer = false;
         double menuPointerSize = 0.4f;
         TrailType trailType = CUSTOM;
-    }
+    };
 }
