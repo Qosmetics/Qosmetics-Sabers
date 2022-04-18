@@ -162,8 +162,7 @@ namespace Qosmetics::Sabers::QsaberConversion
             zip_close(zip);
             bundle->Unload(true);
 
-            INFO("Temporarily don't delete for testing");
-            // deletefile(oldPath);
+            deletefile(oldPath);
             co_yield nullptr;
         }
 
