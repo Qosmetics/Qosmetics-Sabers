@@ -18,7 +18,7 @@ DECLARE_CLASS_CODEGEN(Qosmetics::Sabers, WhackerHandler, UnityEngine::MonoBehavi
                       public
                       :
 
-                      void SetColor(const Sombrero::FastColor& thisColor, const Sombrero::FastColor& thatColor);
+                      void SetColor(const Sombrero::FastColor& thisColor, const Sombrero::FastColor& thatColor) const;
                       void SetSize(float width, float length);
 
 )

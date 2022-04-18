@@ -35,21 +35,21 @@ namespace Qosmetics::Sabers
             mesh->RecalculateBounds();
     }
 
-    Mesh* VertexPool::get_MyMesh()
+    Mesh* VertexPool::get_MyMesh() const
     {
         if (_meshFilter)
             return _meshFilter->get_sharedMesh();
         return nullptr;
     }
 
-    void VertexPool::SetMeshObjectActive(bool flag)
+    void VertexPool::SetMeshObjectActive(bool flag) const
     {
         if (!_meshFilter)
             return;
         _meshFilter->get_gameObject()->SetActive(flag);
     }
 
-    void VertexPool::Destroy()
+    void VertexPool::Destroy() const
     {
         if (_gameObject)
             UnityEngine::Object::Destroy(_gameObject);

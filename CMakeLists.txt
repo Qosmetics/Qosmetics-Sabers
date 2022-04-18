@@ -9,6 +9,10 @@ project(${COMPILE_ID})
 set(CMAKE_CXX_STANDARD 20)
 set(CMAKE_CXX_STANDARD_REQUIRED 20)
 
+# Enable link time optimization
+# In my experience, this can be highly unstable but it nets a huge size optimization and likely performance
+set(CMAKE_INTERPROCEDURAL_OPTIMIZATION TRUE)
+
 # define that stores the actual source directory
 set(SOURCE_DIR ${CMAKE_CURRENT_SOURCE_DIR}/src)
 set(INCLUDE_DIR ${CMAKE_CURRENT_SOURCE_DIR}/include)

@@ -8,8 +8,8 @@ struct TrailInitData
     Sombrero::FastColor TrailColor = {1.0f, 1.0f, 1.0f, 1.0f};
     int Granularity = 80;
 
-    TrailInitData(){};
-    TrailInitData(int length, float whiteStep, Sombrero::FastColor trailColor)
+    constexpr TrailInitData() = default;
+    constexpr TrailInitData(int length, float whiteStep, Sombrero::FastColor const& trailColor)
     {
         TrailLength = length;
         Whitestep = whiteStep;

@@ -52,7 +52,7 @@ namespace Qosmetics::Sabers
             ERROR("No trail component found for TrailHandler with ID {}!", trailId);
     }
 
-    void TrailHandler::SetColor(const Sombrero::FastColor& leftColor, const Sombrero::FastColor& rightColor)
+    void TrailHandler::SetColor(const Sombrero::FastColor& leftColor, const Sombrero::FastColor& rightColor) const
     {
         if (Config::get_config().whiteTrail)
             return;

@@ -1,4 +1,5 @@
 #include "Element.hpp"
+#include <memory>
 #include <stack>
 
 class ElementPool
@@ -8,9 +9,9 @@ private:
     std::stack<std::unique_ptr<Element>> stack = {};
 
 public:
-    int get_count() { return stack.size(); }
+    [[nodiscard]] int get_count() const { return stack.size(); }
 
-    ElementPool(){};
+    ElementPool() = default;;
 
     void Reserve(int count)
     {
@@ -18,7 +19,7 @@ public:
         {
             while (stack.size() < count)
             {
-                stack.emplace(new Element());
+                stack.emplace(std::make_unique<Element>());
             }
         }
     }
@@ -26,9 +27,9 @@ public:
     std::unique_ptr<Element> Get()
     {
         std::unique_ptr<Element> element;
-        if (stack.size() == 0)
+        if (stack.empty())
         {
-            element.reset(new Element());
+            element = std::make_unique<Element>();
         }
         else
         {

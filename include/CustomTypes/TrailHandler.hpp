@@ -25,7 +25,7 @@ DECLARE_CLASS_CODEGEN(Qosmetics::Sabers, TrailHandler, UnityEngine::MonoBehaviou
                       public
                       :
 
-                      void SetColor(const Sombrero::FastColor& leftColor, const Sombrero::FastColor& rightColor);
+                      void SetColor(const Sombrero::FastColor& leftColor, const Sombrero::FastColor& rightColor) const;
 
                       UnityEngine::Transform * get_topTransform();
                       UnityEngine::Transform * get_botTransform();

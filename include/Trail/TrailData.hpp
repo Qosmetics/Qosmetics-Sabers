@@ -17,15 +17,15 @@ namespace Qosmetics::Sabers
         int length;
         float whiteStep;
 
-        TrailData(){};
-        TrailData(int trailId, int colorType, Sombrero::FastColor trailColor, Sombrero::FastColor multiplierColor, int length, float whiteStep) : trailId(trailId), colorType(colorType), trailColor(trailColor), multiplierColor(multiplierColor), length(length), whiteStep(whiteStep){};
-        TrailData(int trailId, const QsaberConversion::LegacyTrail& legacyTrail) : trailId(trailId), colorType(legacyTrail.colorType), trailColor(legacyTrail.trailColor), multiplierColor(legacyTrail.multiplierColor), length(legacyTrail.length), whiteStep(legacyTrail.whiteStep){};
-        TrailData(rapidjson::Document& doc)
+        constexpr TrailData() = default;;
+        constexpr TrailData(int trailId, int colorType, Sombrero::FastColor const& trailColor, Sombrero::FastColor const& multiplierColor, int length, float whiteStep) : trailId(trailId), colorType(colorType), trailColor(trailColor), multiplierColor(multiplierColor), length(length), whiteStep(whiteStep){};
+        constexpr TrailData(int trailId, const QsaberConversion::LegacyTrail& legacyTrail) : trailId(trailId), colorType(legacyTrail.colorType), trailColor(legacyTrail.trailColor), multiplierColor(legacyTrail.multiplierColor), length(legacyTrail.length), whiteStep(legacyTrail.whiteStep){};
+        constexpr TrailData(rapidjson::Document const& doc)
         {
             ParseDoc(doc);
         };
 
-        void ParseDoc(rapidjson::Document& doc)
+        void ParseDoc(rapidjson::Document const& doc)
         {
             trailId = doc["trailId"].GetInt();
             colorType = doc["colorType"].GetInt();
@@ -43,7 +43,7 @@ namespace Qosmetics::Sabers
             whiteStep = doc["whiteStep"].GetDouble();
         }
 
-        rapidjson::Value ToJson(rapidjson::Document::AllocatorType& allocator)
+        rapidjson::Value ToJson(rapidjson::Document::AllocatorType& allocator) const
         {
             rapidjson::Value val;
             val.SetObject();

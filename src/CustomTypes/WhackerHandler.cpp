@@ -45,7 +45,7 @@ namespace Qosmetics::Sabers
         }
     }
 
-    void WhackerHandler::SetColor(const Sombrero::FastColor& thisColor, const Sombrero::FastColor& thatColor)
+    void WhackerHandler::SetColor(const Sombrero::FastColor& thisColor, const Sombrero::FastColor& thatColor) const
     {
         if (colorHandler)
             colorHandler->SetColor(thisColor, thatColor);

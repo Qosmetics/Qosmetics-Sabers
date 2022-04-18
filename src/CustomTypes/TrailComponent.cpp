@@ -22,7 +22,7 @@ namespace Qosmetics::Sabers
         INFO("ctor");
     }
 
-    bool TrailComponent::get_inited()
+    bool TrailComponent::get_inited() const
     {
         return inited;
     }
@@ -59,7 +59,7 @@ namespace Qosmetics::Sabers
 
         if (!spline)
             spline.Reserve(TrailLength);
-        if (elemPool.get_count() == 0 && snapshotList.size() == 0)
+        if (elemPool.get_count() == 0 && snapshotList.empty())
             elemPool.Reserve(TrailLength);
         if (!vertexPool)
             vertexPool = VertexPool::New_ctor(MyMaterial, this);
@@ -158,12 +158,12 @@ namespace Qosmetics::Sabers
         snapshotList.clear();
     }
 
-    float TrailComponent::get_TrailWidth()
+    float TrailComponent::get_TrailWidth() const
     {
         return ((FastVector3)PointStart->get_position() - (FastVector3)PointEnd->get_position()).Magnitude() * 0.5f;
     }
 
-    Sombrero::FastVector3 TrailComponent::get_CurHeadPos()
+    Sombrero::FastVector3 TrailComponent::get_CurHeadPos() const
     {
         return ((FastVector3)PointStart->get_position() - (FastVector3)PointEnd->get_position()) / 2.0f;
     }
@@ -176,12 +176,12 @@ namespace Qosmetics::Sabers
         // if control points smaller than snapshots, add new control points
         while (diff > 0)
         {
-            spline.AddControlPoint(get_CurHeadPos(), (FastVector3)PointStart->get_position() - (FastVector3)PointEnd->get_position());
+            spline.AddControlPoint(get_CurHeadPos(), PointStart->get_position() - PointEnd->get_position());
             diff--;
         }
 
         int index = 0;
-        for (auto& snap : snapshotList)
+        for (auto const& snap : snapshotList)
         {
             controlPoints[index]->Position = snap->get_pos();
             controlPoints[index]->Normal = snap->pointEnd - snap->pointStart;
@@ -232,7 +232,7 @@ namespace Qosmetics::Sabers
         vertexSegment.Pool->ColorChanged = true;
     }
 
-    void TrailComponent::UpdateIndices()
+    void TrailComponent::UpdateIndices() const
     {
         INFO("Updating indices");
         auto* pool = vertexSegment.Pool;
@@ -313,7 +313,7 @@ namespace Qosmetics::Sabers
     {
         if (!spline)
             spline.Reserve(TrailLength);
-        bool poolExisted = elemPool.get_count() == 0 && snapshotList.size() == 0;
+        bool poolExisted = elemPool.get_count() == 0 && snapshotList.empty();
         if (!poolExisted)
             elemPool.Reserve(TrailLength);
 
@@ -325,7 +325,7 @@ namespace Qosmetics::Sabers
             spline.AddControlPoint(get_CurHeadPos(), (FastVector3)PointStart->get_position() - (FastVector3)PointEnd->get_position());
 
         // if snapshot list contains elements, that is an issue, remove them!
-        if (snapshotList.size() > 0)
+        if (!snapshotList.empty())
         {
             for (auto& snap : snapshotList)
             {
@@ -350,8 +350,8 @@ namespace Qosmetics::Sabers
         }
         else
         {
-            snapshotList.push_back(std::move(std::make_unique<Element>(PointStart->get_position(), PointEnd->get_position())));
-            snapshotList.push_back(std::move(std::make_unique<Element>(PointStart->get_position(), PointEnd->get_position())));
+            snapshotList.emplace_back(std::make_unique<Element>(PointStart->get_position(), PointEnd->get_position()));
+            snapshotList.emplace_back(std::make_unique<Element>(PointStart->get_position(), PointEnd->get_position()));
         }
         // collapse the trail to be basically 0 length
         Collapse();
