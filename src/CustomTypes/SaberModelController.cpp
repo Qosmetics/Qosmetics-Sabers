@@ -14,6 +14,7 @@
 #include "sombrero/shared/FastColor.hpp"
 #include "sombrero/shared/FastQuaternion.hpp"
 
+#include "GlobalNamespace/AvatarPoseController.hpp"
 #include "GlobalNamespace/ConditionalMaterialSwitcher.hpp"
 #include "GlobalNamespace/GameplayCoreSceneSetupData.hpp"
 #include "GlobalNamespace/PlayerSpecificSettings.hpp"
@@ -35,6 +36,10 @@ namespace Qosmetics::Sabers
     {
         if (Disabling::GetAnyDisabling())
             return;
+
+        if (GetComponentInParent<GlobalNamespace::AvatarPoseController*>())
+            return;
+
         this->saber = saber;
         auto saberModelContainer = SaberModelContainer::get_instance();
 

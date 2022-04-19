@@ -86,6 +86,7 @@ SplineControlPoint* Spline::LenToSegment(float t, float& localF)
     // init with first segment to prevent crashes, was inited with nullptr
     SplineControlPoint* seg = nullptr;
 
+    // clamp t to 0 - 1, and get the distance the last segment is for T in a 0 - 1 range then
     float len = Sombrero::Clamp01(t) * segments.back()->Dist;
 
     int index = 0;
@@ -105,10 +106,10 @@ SplineControlPoint* Spline::LenToSegment(float t, float& localF)
         return seg;
     }
 
-    int prevIdx = seg->SegmentIndex - 1;
+    int prevIdx = (seg ? seg->SegmentIndex - 1 : 0);
     auto prevSeg = segments.at(prevIdx);
-    auto prevLen = seg->Dist - prevSeg->Dist;
-    localF = (len - prevSeg->Dist) / prevLen;
+    auto prevLen = (seg ? seg->Dist : 0) - (prevSeg ? prevSeg->Dist : 0);
+    localF = (len - (prevSeg ? prevSeg->Dist : 0)) / prevLen;
     return prevSeg.get();
 }
 

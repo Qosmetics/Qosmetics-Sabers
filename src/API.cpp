@@ -8,6 +8,8 @@
 #include <fmt/core.h>
 
 #include "CustomTypes/SaberModelContainer.hpp"
+#include "CustomTypes/TrailHandler.hpp"
+#include "CustomTypes/WhackerColorHandler.hpp"
 #include "UnityEngine/GameObject.hpp"
 #include "UnityEngine/Transform.hpp"
 
@@ -95,6 +97,28 @@ EXPOSE_API(RegisterSaberDisablingInfo, void, ModInfo info)
 EXPOSE_API(GetSaberFolder, std::string)
 {
     return whacker_path;
+}
+
+// Whacker Color Handler
+EXPOSE_API(WhackerColorHandler_SetColor, void, Qosmetics::Sabers::WhackerColorHandler* self, const Sombrero::FastColor& thisColor, const Sombrero::FastColor& thatColor)
+{
+    self->SetColor(thisColor, thatColor);
+}
+
+// Trail Handler
+EXPOSE_API(TrailHandler_SetColor, void, Qosmetics::Sabers::TrailHandler* self, const Sombrero::FastColor& leftColor, const Sombrero::FastColor& rightColor)
+{
+    self->SetColor(leftColor, rightColor);
+}
+
+EXPOSE_API(TrailHandler_SetTrailActive, void, Qosmetics::Sabers::TrailHandler* self, bool active)
+{
+    self->SetTrailActive(active);
+}
+
+EXPOSE_API(TrailComponent_Reset, void, Qosmetics::Sabers::TrailComponent* self)
+{
+    self->Reset();
 }
 
 #pragma GCC diagnostic pop

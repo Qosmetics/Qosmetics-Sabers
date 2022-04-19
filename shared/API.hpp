@@ -146,3 +146,5 @@ namespace Qosmetics::Sabers::API
         return std::nullopt;
     }
 }
+
+#undef QOSMETICS_SABERS

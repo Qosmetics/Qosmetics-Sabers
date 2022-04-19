@@ -71,6 +71,12 @@ namespace Qosmetics::Sabers
         }
     }
 
+    void TrailHandler::SetTrailActive(bool active) const
+    {
+        if (trail->get_enabled() ^ active)
+            trail->set_enabled(active);
+    }
+
     UnityEngine::Transform* TrailHandler::get_topTransform()
     {
         if (topTransform)

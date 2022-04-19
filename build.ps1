@@ -21,12 +21,15 @@ if (($clean.IsPresent) -or (-not (Test-Path -Path "build")))
 
 $buildType = "Debug"
 if ($release.IsPresent) {
+    echo "Building release binary"
     $buildType = "RelWithDebInfo"
 }
+else {
+    echo "Building debug binary"
+}
 
-cd build
-& cmake -G "Ninja" -DCMAKE_BUILD_TYPE="$buildType" ../
-& cmake --build .
+& cmake -G "Ninja" -DCMAKE_BUILD_TYPE="$buildType" -B build
+& cmake --build ./build
+
 $ExitCode = $LastExitCode
-cd ..
 exit $ExitCode

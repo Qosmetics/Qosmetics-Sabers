@@ -1,6 +1,6 @@
 param (
     [Parameter(Mandatory=$false)]
-    [Switch]$debug_so,
+    [Switch]$release,
     [Parameter(Mandatory=$false)]
     [Switch]$log
 )
@@ -11,10 +11,10 @@ if (-not ($LastExitCode -eq 0)) {
     exit
 }
 
-if ($debug_so.IsPresent) {
-    & adb push build/debug/libqosmetics-sabers.so /sdcard/Android/data/com.beatgames.beatsaber/files/mods/libqosmetics-sabers.so
-} else {
+if ($release.IsPresent) {
     & adb push build/libqosmetics-sabers.so /sdcard/Android/data/com.beatgames.beatsaber/files/mods/libqosmetics-sabers.so
+} else {
+    & adb push build/debug/libqosmetics-sabers.so /sdcard/Android/data/com.beatgames.beatsaber/files/mods/libqosmetics-sabers.so
 }
 
 & adb shell am force-stop com.beatgames.beatsaber

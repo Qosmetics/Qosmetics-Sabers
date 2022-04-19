@@ -82,7 +82,7 @@ namespace Qosmetics::Sabers
         vertexPool->SetMeshObjectActive(true);
 
         /*
-        Reset(false);
+        Reset();
         Collapse();
         */
     }
@@ -122,7 +122,7 @@ namespace Qosmetics::Sabers
 
         if (frameNum == skipFirstFrames + 1)
         {
-            Reset(true);
+            Reset();
             UpdateHeadElem();
             RecordCurElem();
             RefreshSpline();
@@ -294,7 +294,7 @@ namespace Qosmetics::Sabers
         MyColor = color;
     }
 
-    void TrailComponent::Reset(bool addNewElemsToSnap)
+    void TrailComponent::Reset()
     {
         if (!spline)
             spline.Reserve(TrailLength);

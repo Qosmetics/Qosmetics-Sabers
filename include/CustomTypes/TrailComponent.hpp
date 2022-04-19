@@ -25,7 +25,7 @@ DECLARE_CLASS_CODEGEN(Qosmetics::Sabers, TrailComponent, UnityEngine::MonoBehavi
                       DECLARE_INSTANCE_METHOD(void, LateUpdate);
                       DECLARE_INSTANCE_METHOD(void, OnDisable);
                       DECLARE_INSTANCE_METHOD(void, OnEnable);
-                      DECLARE_INSTANCE_METHOD(void, Reset, bool addNewElemsToSnap);
+                      DECLARE_INSTANCE_METHOD(void, Reset);
 
                       DECLARE_CTOR(ctor);
                       DECLARE_SIMPLE_DTOR();
