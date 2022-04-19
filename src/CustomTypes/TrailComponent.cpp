@@ -59,8 +59,8 @@ namespace Qosmetics::Sabers
 
         if (!spline)
             spline.Reserve(TrailLength);
-        if (elemPool.get_count() == 0 && snapshotList.empty())
-            elemPool.Reserve(TrailLength);
+        snapshotList.reserve(TrailLength);
+
         if (!vertexPool)
             vertexPool = VertexPool::New_ctor(MyMaterial, this);
         snapshotList.reserve(TrailLength);
@@ -151,21 +151,17 @@ namespace Qosmetics::Sabers
             vertexPool->Destroy();
 
         // empty snapshot list
-        for (auto& snap : snapshotList)
-        {
-            elemPool.Release(std::move(snap));
-        }
         snapshotList.clear();
     }
 
     float TrailComponent::get_TrailWidth() const
     {
-        return ((FastVector3)PointStart->get_position() - (FastVector3)PointEnd->get_position()).Magnitude() * 0.5f;
+        return ((FastVector3)get_startPos() - (FastVector3)get_endPos()).Magnitude() * 0.5f;
     }
 
     Sombrero::FastVector3 TrailComponent::get_CurHeadPos() const
     {
-        return ((FastVector3)PointStart->get_position() - (FastVector3)PointEnd->get_position()) / 2.0f;
+        return ((FastVector3)get_startPos() - (FastVector3)get_endPos()) / 2.0f;
     }
 
     void TrailComponent::RefreshSpline()
@@ -176,7 +172,7 @@ namespace Qosmetics::Sabers
         // if control points smaller than snapshots, add new control points
         while (diff > 0)
         {
-            spline.AddControlPoint(get_CurHeadPos(), PointStart->get_position() - PointEnd->get_position());
+            spline.AddControlPoint(get_CurHeadPos(), get_startPos() - get_endPos());
             diff--;
         }
 
@@ -266,40 +262,29 @@ namespace Qosmetics::Sabers
     void TrailComponent::UpdateHeadElem()
     {
         // update the first element
-        snapshotList.front()->pointStart = PointStart->get_position();
-        snapshotList.front()->pointEnd = PointEnd->get_position();
+        snapshotList.front()->pointStart = get_startPos();
+        snapshotList.front()->pointEnd = get_endPos();
     }
 
     void TrailComponent::RecordCurElem()
     {
-        // get an element
-        auto elem = elemPool.Get();
-
-        // set it to the current position
-        elem->pointStart = PointStart->get_position();
-        elem->pointEnd = PointEnd->get_position();
-
         // if list is small
         if (snapshotList.size() < TrailLength)
         {
             // add it after the first element
-            auto itr = snapshotList.insert((snapshotList.begin()++), std::make_unique<Element>());
-            *itr = std::move(elem);
+            auto itr = snapshotList.insert((snapshotList.begin()++), std::make_unique<Element>(get_startPos(), get_endPos()));
         }
         // if list too big, just release the back element
         else if (snapshotList.size() > TrailLength)
-        {
-            elemPool.Release(std::move(elem));
-            elemPool.Release(std::move(snapshotList.back()));
             snapshotList.pop_back();
-        }
         // if list exactly right, remove the last list element and put the new element after the first
         else // if (snapshotList.size() == TrailLength)
         {
-            elemPool.Release(std::move(snapshotList.back()));
+            auto backElem = std::move(snapshotList.back());
             snapshotList.pop_back();
-            auto itr = snapshotList.insert((snapshotList.begin()++), std::make_unique<Element>());
-            *itr = std::move(elem);
+            backElem->pointStart = get_startPos();
+            backElem->pointEnd = get_endPos();
+            snapshotList.insert((snapshotList.begin()++), std::move(backElem));
         }
     }
 
@@ -313,54 +298,32 @@ namespace Qosmetics::Sabers
     {
         if (!spline)
             spline.Reserve(TrailLength);
-        bool poolExisted = elemPool.get_count() == 0 && snapshotList.empty();
-        if (!poolExisted)
-            elemPool.Reserve(TrailLength);
 
         spline.Granularity = Granularity;
         spline.Clear();
 
         // make sure the spline contains enough control points for the trail length
         for (int i = 0; i < TrailLength; i++)
-            spline.AddControlPoint(get_CurHeadPos(), (FastVector3)PointStart->get_position() - (FastVector3)PointEnd->get_position());
+            spline.AddControlPoint(get_CurHeadPos(), (FastVector3)get_startPos() - (FastVector3)get_endPos());
 
         // if snapshot list contains elements, that is an issue, remove them!
         if (!snapshotList.empty())
         {
-            for (auto& snap : snapshotList)
-            {
-                elemPool.Release(std::move(snap));
-            }
             snapshotList.clear();
             snapshotList.reserve(TrailLength);
         }
 
         // if hte pool already existed and we dont want to force new elements in, use this
-        if (poolExisted && !addNewElemsToSnap)
-        {
-            auto elem = elemPool.Get();
-            elem->pointStart = PointStart->get_position();
-            elem->pointStart = PointEnd->get_position();
-            snapshotList.push_back(std::move(elem));
-
-            elem = elemPool.Get();
-            elem->pointStart = PointStart->get_position();
-            elem->pointStart = PointEnd->get_position();
-            snapshotList.push_back(std::move(elem));
-        }
-        else
-        {
-            snapshotList.emplace_back(std::make_unique<Element>(PointStart->get_position(), PointEnd->get_position()));
-            snapshotList.emplace_back(std::make_unique<Element>(PointStart->get_position(), PointEnd->get_position()));
-        }
+        snapshotList.emplace_back(std::make_unique<Element>(get_startPos(), get_endPos()));
+        snapshotList.emplace_back(std::make_unique<Element>(get_startPos(), get_endPos()));
         // collapse the trail to be basically 0 length
         Collapse();
     }
 
     void TrailComponent::Collapse()
     {
-        FastVector3 start = PointStart->get_position();
-        FastVector3 end = PointEnd->get_position();
+        FastVector3 start = get_startPos();
+        FastVector3 end = get_endPos();
         // makes all parts of the trail end up at the same place, making it basically 0 length
         for (auto& snap : snapshotList)
         {
@@ -370,4 +333,15 @@ namespace Qosmetics::Sabers
 
         RefreshSpline();
     }
+
+    Sombrero::FastVector3 TrailComponent::get_startPos() const
+    {
+        return PointStart ? PointStart->get_position() : Sombrero::FastVector3::zero();
+    }
+
+    Sombrero::FastVector3 TrailComponent::get_endPos() const
+    {
+        return PointEnd ? PointEnd->get_position() : Sombrero::FastVector3::zero();
+    }
+
 }

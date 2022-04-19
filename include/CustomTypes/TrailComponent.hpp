@@ -2,7 +2,6 @@
 
 #include "CustomTypes/VertexPool.hpp"
 #include "Trail/Element.hpp"
-#include "Trail/ElementPool.hpp"
 #include "Trail/Spline.hpp"
 #include "Trail/SplineControlPoint.hpp"
 #include "Trail/TrailInitData.hpp"
@@ -50,7 +49,6 @@ DECLARE_CLASS_CODEGEN(Qosmetics::Sabers, TrailComponent, UnityEngine::MonoBehavi
                       private
                       : float get_TrailWidth() const;
                       std::vector<std::unique_ptr<Element>> snapshotList;
-                      ElementPool elemPool;
                       Spline spline;
                       VertexSegment vertexSegment;
                       bool inited = false;
@@ -64,5 +62,7 @@ DECLARE_CLASS_CODEGEN(Qosmetics::Sabers, TrailComponent, UnityEngine::MonoBehavi
                       void UpdateIndices() const;
                       void UpdateHeadElem();
                       void RecordCurElem();
+                      Sombrero::FastVector3 get_startPos() const;
+                      Sombrero::FastVector3 get_endPos() const;
 
 )
