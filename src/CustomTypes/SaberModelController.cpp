@@ -2,6 +2,7 @@
 #include "ConstStrings.hpp"
 #include "CustomTypes/SaberModelContainer.hpp"
 #include "CustomTypes/WhackerHandler.hpp"
+#include "CustomTypes/WhackerParent.hpp"
 #include "Disabling.hpp"
 #include "Trail/TrailPoint.hpp"
 #include "config.hpp"
@@ -42,13 +43,13 @@ namespace Qosmetics::Sabers
 
         this->saber = saber;
         auto saberModelContainer = SaberModelContainer::get_instance();
-
         if (!saberModelContainer || !saberModelContainer->currentSaberObject)
         {
             EditDefaultSaber();
             return;
         }
 
+        auto whackerParent = get_gameObject()->AddComponent<Qosmetics::Sabers::WhackerParent*>();
         auto parentModelContainer = get_gameObject()->GetComponentInParent<GlobalNamespace::SaberModelContainer*>();
         auto gameplayCoreSceneSetupData = parentModelContainer->dyn__container()->TryResolve<GlobalNamespace::GameplayCoreSceneSetupData*>();
         auto playerSpecificSettings = gameplayCoreSceneSetupData->dyn_playerSpecificSettings();
@@ -81,6 +82,9 @@ namespace Qosmetics::Sabers
 
         // Make sure all the components on the custom saber are inited
         auto whackerHandler = customSaber->GetComponentInChildren<WhackerHandler*>();
+        whackerHandler->saberType = saberType;
+        whackerParent->whackerHandler = whackerHandler;
+        whackerParent->set_defaultSaber(false);
 
         DEBUG("SaberType: {}", saberType);
         whackerHandler->colorHandler = whackerHandler->get_gameObject()->GetComponentsInChildren<Qosmetics::Sabers::WhackerColorHandler*>().FirstOrDefault();
@@ -163,6 +167,10 @@ namespace Qosmetics::Sabers
             {
                 trail->SetColor(colorManager->ColorForSaberType(0), colorManager->ColorForSaberType(1));
             }
+
+            auto whackerParent = get_gameObject()->AddComponent<Qosmetics::Sabers::WhackerParent*>();
+            whackerParent->set_defaultSaber(true);
+            whackerParent->whackerHandler = whackerHandler;
         }
         case Config::TrailType::NONE:
             DEBUG("Removing default trial");

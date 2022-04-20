@@ -2,6 +2,8 @@
 #include "Trail/TrailInitData.hpp"
 #include "logging.hpp"
 
+#include <map>
+
 DEFINE_TYPE(Qosmetics::Sabers, WhackerHandler);
 
 namespace Qosmetics::Sabers
@@ -45,7 +47,7 @@ namespace Qosmetics::Sabers
         }
     }
 
-    void WhackerHandler::SetColor(const Sombrero::FastColor& thisColor, const Sombrero::FastColor& thatColor) const
+    void WhackerHandler::SetColor(const Sombrero::FastColor& thisColor, const Sombrero::FastColor& thatColor)
     {
         if (colorHandler)
             colorHandler->SetColor(thisColor, thatColor);
