@@ -1,17 +1,19 @@
+#include "CustomTypes/SaberModelController.hpp"
+#include "UI/WhackerFlowCoordinator.hpp"
 #include "hooking.hpp"
+#include "logging.hpp"
 #include "modloader/shared/modloader.hpp"
+#include "qosmetics-core/shared/FlowCoordinatorRegister.hpp"
+#include "qosmetics-core/shared/SaberModelControllerRegister.hpp"
 #include "static-defines.hpp"
 
-#include "qosmetics-core/shared/FlowCoordinatorRegister.hpp"
-#include "questui/shared/BeatSaberUI.hpp"
-
+#include "assets.hpp"
 #include "diglett/shared/Conversions.hpp"
 #include "diglett/shared/Register.hpp"
 
-#include "assets.hpp"
-#include "logging.hpp"
+#include "questui/shared/BeatSaberUI.hpp"
 
-#include "UI/WhackerFlowCoordinator.hpp"
+SABERMODELCONTROLLER_REGISTRATION(QosmeticsSabers, 10, true, Qosmetics::Sabers::SaberModelController*);
 
 QOSMETICS_FLOWCOORDINATOR_REGISTER(Whackers, Qosmetics::Sabers::WhackerFlowCoordinator*)
 {
