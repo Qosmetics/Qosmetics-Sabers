@@ -77,6 +77,17 @@ namespace Qosmetics::Sabers::API
         return std::nullopt;
     }
 
+    /// @brief optionally get a clone of the in-use saber so that it's properly inited, only really useful if GetSaberIsCustom returns a proper value, and nothing is disabling qosmetics sabers from being used
+    /// @param left true for left, false for right
+    /// @return std::nullopt if not installed, nullptr if no sabers on object, if there is sabers a gameobject pointer to a cloned and initialized saber object
+    std::optional<UnityEngine::GameObject*> GetInUseSaberClone(bool left)
+    {
+        static auto function = CondDeps::Find<UnityEngine::GameObject*, bool>(QOSMETICS_SABERS, "GetInUseSaberClone");
+        if (function)
+            return function.value()(left);
+        return std::nullopt;
+    }
+
     /// @brief optionally get a clone of a saber type
     /// @param left true for left, false for right
     /// @return std::nullopt if not installed, nullptr if no sabers on object, if there is sabers a gameobject pointer to a cloned saber object

@@ -8,9 +8,11 @@
 #include <fmt/core.h>
 
 #include "CustomTypes/SaberModelContainer.hpp"
+#include "CustomTypes/SaberModelController.hpp"
 #include "CustomTypes/TrailHandler.hpp"
 #include "CustomTypes/WhackerColorHandler.hpp"
 #include "UnityEngine/GameObject.hpp"
+#include "UnityEngine/Resources.hpp"
 #include "UnityEngine/Transform.hpp"
 
 #pragma GCC diagnostic push
@@ -56,13 +58,30 @@ EXPOSE_API(GetSaberIsCustom, bool)
     return SABERMODELCONTAINER->currentSaberObject != nullptr;
 }
 
-EXPOSE_API(GetSaber, UnityEngine::GameObject*, bool left)
+EXPOSE_API(GetInUseSaberClone, UnityEngine::GameObject*, int saberType)
+{
+    auto saberModelControllers = UnityEngine::Resources::FindObjectsOfTypeAll<Qosmetics::Sabers::SaberModelController*>();
+    for (auto saberModelController : saberModelControllers)
+    {
+        if (saberModelController->saber->get_saberType().value == saberType)
+        {
+            auto saber = UnityEngine::Object::Instantiate(saberModelController->get_gameObject());
+            saber->set_name(saberModelController->get_name());
+            auto modelController = saber->GetComponent<Qosmetics::Sabers::SaberModelController*>();
+            modelController->InitFromClone(saberModelController->saber);
+            return saber->get_gameObject();
+        }
+    }
+    return nullptr;
+}
+
+EXPOSE_API(GetSaber, UnityEngine::GameObject*, int saberType)
 {
     GET_SABERMODELCONTAINER();
 
     if (!saberModelContainer->currentSaberObject)
         return nullptr;
-    return UnityEngine::Object::Instantiate(saberModelContainer->currentSaberObject->get_transform()->Find(left ? ConstStrings::LeftSaber() : ConstStrings::RightSaber())->get_gameObject());
+    return UnityEngine::Object::Instantiate(saberModelContainer->currentSaberObject->get_transform()->Find(saberType == 0 ? ConstStrings::LeftSaber() : ConstStrings::RightSaber())->get_gameObject());
 }
 
 EXPOSE_API(GetPrefabClone, UnityEngine::GameObject*)

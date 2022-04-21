@@ -33,15 +33,50 @@ extern std::string JsonValueToString(const rapidjson::Value& val);
 
 namespace Qosmetics::Sabers
 {
+    void SaberModelController::InitFromClone(GlobalNamespace::Saber* saber)
+    {
+        this->saber = saber;
+        if (Disabling::GetAnyDisabling())
+            return;
+        // TODO: maybe run the normal SaberModelController code as well? with a container?
+
+        auto saberModelContainer = SaberModelContainer::get_instance();
+        auto& config = saberModelContainer->GetSaberConfig();
+        auto& globalConfig = Config::get_config();
+        int saberType = saber->get_saberType().value;
+
+        HideDefaultSaberElements();
+        auto whackerParent = get_gameObject()->GetComponentInChildren<WhackerParent*>();
+        auto whackerHandler = get_gameObject()->GetComponentInChildren<WhackerHandler*>();
+        whackerHandler->saberType = saberType;
+        whackerParent->set_defaultSaber(!get_transform()->Find(saberType == 0 ? ConstStrings::LeftSaber() : ConstStrings::RightSaber()));
+        whackerParent->whackerHandler = whackerHandler;
+
+        const Sombrero::FastColor leftColor(colorManager->ColorForSaberType(0));
+        const Sombrero::FastColor rightColor(colorManager->ColorForSaberType(1));
+
+        const Sombrero::FastColor& thisColor = saberType == 0 ? leftColor : rightColor;
+        const Sombrero::FastColor& thatColor = saberType == 1 ? leftColor : rightColor;
+
+        whackerHandler->colorHandler = whackerHandler->get_gameObject()->GetComponentsInChildren<Qosmetics::Sabers::WhackerColorHandler*>().FirstOrDefault();
+        whackerHandler->SetupTrails();
+        for (auto trailHandler : whackerHandler->trailHandlers)
+            trailHandler->SetColor(leftColor, rightColor);
+    }
+
     void SaberModelController::Init(GlobalNamespace::Saber* saber)
     {
+        this->saber = saber;
         if (Disabling::GetAnyDisabling())
             return;
 
+        // don't do anything on multiplayer avatars, just locally for this user
         if (GetComponentInParent<GlobalNamespace::AvatarPoseController*>())
+        {
+            UnityEngine::Object::Destroy(this);
             return;
+        }
 
-        this->saber = saber;
         auto saberModelContainer = SaberModelContainer::get_instance();
         if (!saberModelContainer || !saberModelContainer->currentSaberObject)
         {
@@ -64,7 +99,9 @@ namespace Qosmetics::Sabers
         DEBUG("Spawning {} prefab", saberName);
         auto prefab = saberModelContainer->currentSaberObject->get_transform()->Find(saberName)->get_gameObject();
 
-        auto customSaber = UnityEngine::Object::Instantiate(prefab, get_transform()->get_parent());
+        auto customSaber = UnityEngine::Object::Instantiate(prefab, saber->get_transform());
+        customSaber->set_name(saberName);
+
         auto customSaberT = customSaber->get_transform();
 
         customSaberT->set_localPosition(Sombrero::FastVector3::zero());
@@ -232,7 +269,12 @@ namespace Qosmetics::Sabers
 
         auto saberModelController = GetComponent<GlobalNamespace::SaberModelController*>();
         auto trail = saberModelController->dyn__saberTrail();
-        auto materialSwitcher = trail->dyn__trailRendererPrefab()->get_gameObject()->GetComponent<GlobalNamespace::ConditionalMaterialSwitcher*>();
+        auto trailRendererPrefab = trail->dyn__trailRendererPrefab();
+
+        INFO("trail Renderer prefab name: ", trailRendererPrefab->get_gameObject()->get_name());
+        INFO("trail Renderer name: ", trail->dyn__trailRenderer()->get_gameObject()->get_name());
+
+        auto materialSwitcher = trailRendererPrefab->get_gameObject()->GetComponent<GlobalNamespace::ConditionalMaterialSwitcher*>();
         auto material = materialSwitcher->dyn__material1();
 
         auto meshRenderer = trailObject->AddComponent<UnityEngine::MeshRenderer*>();

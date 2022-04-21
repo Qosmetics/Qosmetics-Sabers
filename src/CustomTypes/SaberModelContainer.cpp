@@ -1,12 +1,12 @@
 #include "CustomTypes/SaberModelContainer.hpp"
 
-#include <utility>
 #include "config.hpp"
 #include "logging.hpp"
 #include "qosmetics-core/shared/Utils/BundleUtils.hpp"
 #include "qosmetics-core/shared/Utils/FileUtils.hpp"
 #include "qosmetics-core/shared/Utils/ZipUtils.hpp"
 #include "static-defines.hpp"
+#include <utility>
 
 #include "GlobalNamespace/SharedCoroutineStarter.hpp"
 #include "UnityEngine/Coroutine.hpp"
@@ -109,10 +109,8 @@ void LegacyTrailFixups(UnityEngine::GameObject* loadedObject, const std::vector<
     }
 }
 
-void LegacyFixups(UnityEngine::GameObject* loadedObject)
-{
-    // TODO: do this
-}
+// really just unused atm
+void LegacyFixups(UnityEngine::GameObject* loadedObject) {}
 
 void AddHandlers(UnityEngine::GameObject* loadedObject)
 {
