@@ -1,5 +1,5 @@
 #pragma once
-#include "beatsaber-hook/shared/config./rapidjson-utils.hpp"
+#include "beatsaber-hook/shared/config/rapidjson-utils.hpp"
 #include "qosmetics-core/shared/Data/BasicConfig.hpp"
 
 #ifndef GET_BOOL
