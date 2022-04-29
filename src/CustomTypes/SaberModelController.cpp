@@ -64,6 +64,11 @@ namespace Qosmetics::Sabers
             trailHandler->SetColor(leftColor, rightColor);
     }
 
+    // TODO: test this VVVV
+    // FIXME: When changing a trail setting on a super old saber (https://discord.com/channels/691791384922816594/691802328776572938/693486495964856320),
+    // the saber will then have two trails, one with the changed settings, and one that is completely default.
+    // FIXME: Crash when playing a level after selecting Base Game trails on a saber that doesn't use a custom trail.
+    // (applies to default saber as well): https://cdn.discordapp.com/attachments/870515737532465223/968276810020315176/DefaultedDefault.log
     void SaberModelController::Init(GlobalNamespace::Saber* saber)
     {
         this->saber = saber;
@@ -131,17 +136,31 @@ namespace Qosmetics::Sabers
         // Make trails work
         switch (globalConfig.trailType)
         {
-        case Config::TrailType::BASEGAME:
-        default:
-            CreateDefaultTrailCopy(customSaberT, whackerHandler);
         case Config::TrailType::CUSTOM:
+        {
+            if (!config.get_hasTrail())
+                CreateDefaultTrailCopy(customSaberT, whackerHandler);
+
             whackerHandler->SetupTrails();
             for (auto trail : whackerHandler->trailHandlers)
             {
                 trail->SetColor(leftColor, rightColor);
             }
+            break;
+        }
         case Config::TrailType::NONE:
             break;
+        case Config::TrailType::BASEGAME:
+        default:
+        {
+            CreateDefaultTrailCopy(customSaberT, whackerHandler);
+            whackerHandler->SetupTrails();
+            for (auto trail : whackerHandler->trailHandlers)
+            {
+                trail->SetColor(leftColor, rightColor);
+            }
+            break;
+        }
         }
     }
 
@@ -151,14 +170,11 @@ namespace Qosmetics::Sabers
         auto& config = saberModelContainer->GetSaberConfig();
         auto& globalConfig = Config::get_config();
 
-        if (config.get_hasTrail())
-        {
-            DEBUG("Removing default trial");
-            auto saberModelController = GetComponent<GlobalNamespace::SaberModelController*>();
-            auto trail = saberModelController->dyn__saberTrail();
-            trail->set_enabled(false);
-            trail->dyn__trailRenderer()->set_enabled(false);
-        }
+        DEBUG("Removing default trial");
+        auto saberModelController = GetComponent<GlobalNamespace::SaberModelController*>();
+        auto trail = saberModelController->dyn__saberTrail();
+        trail->set_enabled(false);
+        trail->dyn__trailRenderer()->set_enabled(false);
 
         DEBUG("Removing default mesh objects");
         auto filters = get_gameObject()->GetComponentsInChildren<UnityEngine::MeshFilter*>(true);
