@@ -112,7 +112,7 @@ namespace Qosmetics::Sabers
             whiteStepSlider->set_value(globalConfig.whiteStep);
             overrideTrailWidthToggle->set_isOn(globalConfig.overrideTrailWidth);
             trailWidthSlider->set_value(globalConfig.trailWidth);
-            trailTypeDropdown->set_selectedIndex((int)globalConfig.trailType);
+            trailTypeDropdown->SelectCellWithIdx((int)globalConfig.trailType);
         }
     }
 
