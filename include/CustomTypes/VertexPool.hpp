@@ -33,6 +33,8 @@ DECLARE_CLASS_CODEGEN(Qosmetics::Sabers, VertexPool, Il2CppObject,
                       DECLARE_INSTANCE_FIELD(UnityEngine::GameObject*, _gameObject);
 
                       DECLARE_CTOR(ctor, UnityEngine::Material* material, TrailComponent* owner);
+                      DECLARE_SIMPLE_DTOR();
+
                       public
                       :
 

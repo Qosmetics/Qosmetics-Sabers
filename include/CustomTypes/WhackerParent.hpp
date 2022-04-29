@@ -10,6 +10,7 @@ DECLARE_CLASS_CODEGEN(Qosmetics::Sabers, WhackerParent, UnityEngine::MonoBehavio
                       DECLARE_INSTANCE_FIELD(bool, defaultSaber);
                       DECLARE_INSTANCE_FIELD(WhackerHandler*, whackerHandler);
                       DECLARE_INSTANCE_FIELD(GlobalNamespace::SaberModelController*, saberModelController);
+                      DECLARE_SIMPLE_DTOR();
 
                       public
                       :

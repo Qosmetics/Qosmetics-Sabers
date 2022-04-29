@@ -18,6 +18,7 @@ DECLARE_CLASS_CODEGEN(Qosmetics::Sabers, SaberModelContainer, UnityEngine::MonoB
                       DECLARE_INSTANCE_FIELD(UnityEngine::GameObject*, currentSaberObject);
 
                       DECLARE_CTOR(ctor);
+                      DECLARE_SIMPLE_DTOR();
 
                       public
                       :

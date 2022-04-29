@@ -12,6 +12,8 @@ DECLARE_CLASS_CODEGEN(Qosmetics::Sabers, WhackerColorHandler, UnityEngine::MonoB
 
                       DECLARE_INSTANCE_METHOD(void, Awake);
                       DECLARE_INSTANCE_METHOD(void, FetchCCMaterials);
+                      DECLARE_SIMPLE_DTOR();
+                      
                       public
                       :
 

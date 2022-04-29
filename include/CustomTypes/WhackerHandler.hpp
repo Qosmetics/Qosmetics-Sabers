@@ -19,6 +19,7 @@ DECLARE_CLASS_CODEGEN(Qosmetics::Sabers, WhackerHandler, UnityEngine::MonoBehavi
 
                       DECLARE_INSTANCE_METHOD(void, GetTrailHandlers);
                       DECLARE_INSTANCE_METHOD(void, SetupTrails);
+                      DECLARE_SIMPLE_DTOR();
 
                       public
                       :

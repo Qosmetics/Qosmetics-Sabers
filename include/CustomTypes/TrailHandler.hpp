@@ -21,6 +21,7 @@ DECLARE_CLASS_CODEGEN(Qosmetics::Sabers, TrailHandler, UnityEngine::MonoBehaviou
                       DECLARE_INSTANCE_FIELD(Qosmetics::Sabers::TrailComponent*, trail);
                       DECLARE_INSTANCE_METHOD(void, InitData);
                       DECLARE_INSTANCE_METHOD(void, InitTrail);
+                      DECLARE_SIMPLE_DTOR();
 
                       public
                       :

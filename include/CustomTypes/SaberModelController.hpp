@@ -12,5 +12,6 @@ DECLARE_CLASS_CUSTOM(Qosmetics::Sabers, SaberModelController, Qosmetics::Core::S
                      DECLARE_INSTANCE_METHOD(void, EditDefaultSaber);
                      DECLARE_INSTANCE_METHOD(void, HideDefaultSaberElements);
                      DECLARE_INSTANCE_METHOD(void, CreateDefaultTrailCopy, UnityEngine::Transform* parent, WhackerHandler* handler);
+                     DECLARE_SIMPLE_DTOR();
 
 )
