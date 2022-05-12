@@ -201,6 +201,7 @@ namespace Qosmetics::Sabers
             return false;
         if (descriptor.get_filePath() == currentManifest.get_filePath())
             return false;
+        isLoading = true;
         INFO("Loading Saber Object {}", descriptor.get_name());
         currentManifest = Qosmetics::Core::Manifest<SaberObjectConfig>(descriptor.get_filePath());
         StartCoroutine(custom_types::Helpers::CoroutineHelper::New(LoadBundleRoutine(std::move(onFinished))));
@@ -268,10 +269,10 @@ namespace Qosmetics::Sabers
         DEBUG("Adding handlers to object");
         AddHandlers(currentSaberObject);
 
-        isLoading = false;
         if (onFinished)
             onFinished(this);
 
+        isLoading = false;
         co_return;
     }
 

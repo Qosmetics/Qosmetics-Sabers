@@ -139,10 +139,6 @@ namespace Qosmetics::Sabers
                 previewViewController->ClearPrefab();
                 previewViewController->ShowLoading(true);
             }
-            else
-            {
-                previewViewController->UpdatePreview(false);
-            }
         }
     }
     void SelectionViewController::OnDeleteCell(Qosmetics::Core::QosmeticObjectTableCell* cell)
