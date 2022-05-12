@@ -8,6 +8,8 @@
 #include "HMUI/ViewController_AnimationDirection.hpp"
 #include "HMUI/ViewController_AnimationType.hpp"
 
+#include "qosmetics-core/shared/Utils/DateUtils.hpp"
+#include "qosmetics-core/shared/Utils/RainbowUtils.hpp"
 #include "qosmetics-core/shared/Utils/UIUtils.hpp"
 DEFINE_TYPE(Qosmetics::Sabers, WhackerFlowCoordinator);
 
@@ -27,7 +29,7 @@ namespace Qosmetics::Sabers
             ProvideInitialViewControllers(selectionViewController, settingsViewController, previewViewController, nullptr, nullptr);
 
             set_showBackButton(true);
-            SetTitle("Whacker", HMUI::ViewController::AnimationType::In);
+            SetTitle(Qosmetics::Core::DateUtils::isMonth(6) ? Qosmetics::Core::RainbowUtils::gayify("Whacker") : "Whacker", HMUI::ViewController::AnimationType::In);
         }
 
         HMUI::TitleViewController* titleView = Object::FindObjectOfType<HMUI::TitleViewController*>();
