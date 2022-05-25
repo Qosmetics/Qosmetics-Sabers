@@ -76,9 +76,10 @@ namespace Qosmetics::Sabers
             wText->set_alignment(TMPro::TextAlignmentOptions::Center);
             SLIDER(saberLength, "QosmeticsWhackers:Settings:SaberLength", 0.05f, globalConfig.saberLength, 0.05f, 2.0f, 0.2f);
             SLIDER(saberWidth, "QosmeticsWhackers:Settings:SaberWidth", 0.05f, globalConfig.saberWidth, 0.05f, 2.0f, 0.2f);
-            TOGGLE(enableMenuPointer, "QosmeticsWhackers:Settings:EnableMenuPointer");
+            CreateText(containerT, localization->get("QosmeticsWhackers:Settings:RemovedMenuPointers"));
+            // TOGGLE(enableMenuPointer, "QosmeticsWhackers:Settings:EnableMenuPointer");
 
-            SLIDER(menuPointerSize, "QosmeticsWhackers:Settings:MenuPointerSize", 0.05f, globalConfig.trailWidth, 0.05f, 2.0f, 0.2f);
+            // SLIDER(menuPointerSize, "QosmeticsWhackers:Settings:MenuPointerSize", 0.05f, globalConfig.trailWidth, 0.05f, 2.0f, 0.2f);
 
             auto tText = CreateText(containerT, localization->get("QosmeticsWhackers:Settings:TrailSpecificSettings"));
             tText->set_alignment(TMPro::TextAlignmentOptions::Center);
