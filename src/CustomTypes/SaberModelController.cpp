@@ -91,10 +91,10 @@ namespace Qosmetics::Sabers
 
         auto whackerParent = get_gameObject()->AddComponent<Qosmetics::Sabers::WhackerParent*>();
         auto parentModelContainer = get_gameObject()->GetComponentInParent<GlobalNamespace::SaberModelContainer*>();
-        auto gameplayCoreSceneSetupData = parentModelContainer->dyn__container()->TryResolve<GlobalNamespace::GameplayCoreSceneSetupData*>();
-        auto playerSpecificSettings = gameplayCoreSceneSetupData->dyn_playerSpecificSettings();
+        auto gameplayCoreSceneSetupData = parentModelContainer->container->TryResolve<GlobalNamespace::GameplayCoreSceneSetupData*>();
+        auto playerSpecificSettings = gameplayCoreSceneSetupData->playerSpecificSettings;
 
-        TrailComponent::trailIntensity = playerSpecificSettings->dyn__saberTrailIntensity();
+        TrailComponent::trailIntensity = playerSpecificSettings->saberTrailIntensity;
 
         auto& config = saberModelContainer->GetSaberConfig();
         auto& globalConfig = Config::get_config();
@@ -172,9 +172,9 @@ namespace Qosmetics::Sabers
 
         DEBUG("Removing default trial");
         auto saberModelController = GetComponent<GlobalNamespace::SaberModelController*>();
-        auto trail = saberModelController->dyn__saberTrail();
+        auto trail = saberModelController->saberTrail;
         trail->set_enabled(false);
-        trail->dyn__trailRenderer()->set_enabled(false);
+        trail->trailRenderer->set_enabled(false);
 
         DEBUG("Removing default mesh objects");
         auto filters = get_gameObject()->GetComponentsInChildren<UnityEngine::MeshFilter*>(true);
@@ -202,10 +202,10 @@ namespace Qosmetics::Sabers
         basicSaberModel->set_localScale(UnityEngine::Vector3(globalConfig.saberWidth, globalConfig.saberWidth, globalConfig.saberLength));
 
         auto parentModelContainer = get_gameObject()->GetComponentInParent<GlobalNamespace::SaberModelContainer*>();
-        auto gameplayCoreSceneSetupData = parentModelContainer->dyn__container()->TryResolve<GlobalNamespace::GameplayCoreSceneSetupData*>();
-        auto playerSpecificSettings = gameplayCoreSceneSetupData->dyn_playerSpecificSettings();
+        auto gameplayCoreSceneSetupData = parentModelContainer->container->TryResolve<GlobalNamespace::GameplayCoreSceneSetupData*>();
+        auto playerSpecificSettings = gameplayCoreSceneSetupData->playerSpecificSettings;
 
-        TrailComponent::trailIntensity = playerSpecificSettings->dyn__saberTrailIntensity();
+        TrailComponent::trailIntensity = playerSpecificSettings->saberTrailIntensity;
 
         switch (globalConfig.trailType)
         {
@@ -230,11 +230,11 @@ namespace Qosmetics::Sabers
             auto saberModelController = GetComponent<GlobalNamespace::SaberModelController*>();
             if (!saberModelController)
                 break;
-            auto trail = saberModelController->dyn__saberTrail();
+            auto trail = saberModelController->saberTrail;
             if (!trail)
                 break;
             trail->set_enabled(false);
-            trail->dyn__trailRenderer()->set_enabled(false);
+            trail->trailRenderer->set_enabled(false);
         }
     }
 
@@ -284,14 +284,14 @@ namespace Qosmetics::Sabers
         handler->trailTransforms = ArrayW<TrailTransform*>({trailEndTransform, trailStartTransform});
 
         auto saberModelController = GetComponent<GlobalNamespace::SaberModelController*>();
-        auto trail = saberModelController->dyn__saberTrail();
-        auto trailRendererPrefab = trail->dyn__trailRendererPrefab();
+        auto trail = saberModelController->saberTrail;
+        auto trailRendererPrefab = trail->trailRendererPrefab;
 
         INFO("trail Renderer prefab name: ", trailRendererPrefab->get_gameObject()->get_name());
-        INFO("trail Renderer name: ", trail->dyn__trailRenderer()->get_gameObject()->get_name());
+        INFO("trail Renderer name: ", trail->trailRenderer->get_gameObject()->get_name());
 
         auto materialSwitcher = trailRendererPrefab->get_gameObject()->GetComponent<GlobalNamespace::ConditionalMaterialSwitcher*>();
-        auto material = materialSwitcher->dyn__material1();
+        auto material = materialSwitcher->material1;
 
         auto meshRenderer = trailObject->AddComponent<UnityEngine::MeshRenderer*>();
         meshRenderer->set_material(material);

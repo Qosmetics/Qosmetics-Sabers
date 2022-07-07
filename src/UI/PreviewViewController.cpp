@@ -47,14 +47,14 @@ namespace Qosmetics::Sabers
 
             auto imageView = bg->get_gameObject()->GetComponent<HMUI::ImageView*>();
             imageView->set_gradient(true);
-            imageView->dyn__gradientDirection() = 1;
+            imageView->gradientDirection = 1;
             imageView->set_color(Sombrero::FastColor::white());
             auto color = Sombrero::FastColor::get_black();
             color.a = 0.3f;
             imageView->set_color0(color);
             color.a = 0.7f;
             imageView->set_color1(color);
-            imageView->dyn__curvedCanvasSettingsHelper()->Reset();
+            imageView->curvedCanvasSettingsHelper->Reset();
 
             loadingIndicator = Qosmetics::Core::UIUtils::CreateLoadingIndicator(get_transform());
             ShowLoading(true);
