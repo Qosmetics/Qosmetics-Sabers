@@ -13,7 +13,7 @@
   "dependencies": [
     {
       "id": "beatsaber-hook",
-      "versionRange": "^3.7.4",
+      "versionRange": "^3.9.0",
       "additionalData": {
         "extraFiles": [
           "src/inline-hook"
@@ -22,23 +22,25 @@
     },
     {
       "id": "codegen",
-      "versionRange": "^0.22.0",
+      "versionRange": "^0.24.1",
       "additionalData": {
         "includeQmod": false
       }
     },
     {
       "id": "custom-types",
-      "versionRange": "^0.15.9",
+      "versionRange": "^0.15.13",
       "additionalData": {
-        "includeQmod": false
+        "includeQmod": false,
+        "private": true
       }
     },
     {
       "id": "questui",
-      "versionRange": "^0.13.5",
+      "versionRange": "^0.16.1",
       "additionalData": {
-        "includeQmod": false
+        "includeQmod": false,
+        "private": true
       }
     },
     {
@@ -48,8 +50,10 @@
     },
     {
       "id": "sombrero",
-      "versionRange": "^0.1.30",
-      "additionalData": {}
+      "versionRange": "^0.1.32",
+      "additionalData": {
+        "private": true
+      }
     },
     {
       "id": "conditional-dependencies",
@@ -59,22 +63,44 @@
     {
       "id": "fmt",
       "versionRange": "^8.0.5",
-      "additionalData": {}
+      "additionalData": {
+        "private": true
+      }
     },
     {
       "id": "paper",
-      "versionRange": "^1.0.5",
-      "additionalData": {}
+      "versionRange": "^1.2.4",
+      "additionalData": {
+        "private": true
+      }
     },
     {
       "id": "zip",
       "versionRange": "^1.7.4",
-      "additionalData": {}
+      "additionalData": {
+        "private": true
+      }
     },
     {
       "id": "diglett",
       "versionRange": "^2.0.2",
-      "additionalData": {}
+      "additionalData": {
+        "private": true
+      }
+    },
+    {
+      "id": "qosmetics-core",
+      "versionRange": "^0.1.0",
+      "additionalData": {
+        "private": true
+      }
+    },
+    {
+      "id": "chroma",
+      "versionRange": "^2.5.8",
+      "additionalData": {
+        "private": true
+      }
     }
   ],
   "additionalData": {}
