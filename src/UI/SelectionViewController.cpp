@@ -41,7 +41,7 @@ namespace Qosmetics::Sabers
             descriptorList->deletionConfirmationModal = deletionConfirmationModal;
             descriptorList->onSelect = std::bind(reinterpret_cast<void (SelectionViewController::*)(HMUI::TableCell*)>(&SelectionViewController::OnSelectDescriptor), this, std::placeholders::_1);
             descriptorList->onDelete = std::bind(reinterpret_cast<void (SelectionViewController::*)(HMUI::TableCell*)>(&SelectionViewController::OnDeleteCell), this, std::placeholders::_1);
-            descriptorList->defaultSprite = VectorToSprite(std::vector<uint8_t>(_binary_PlaceholderIcon_png_start, _binary_PlaceholderIcon_png_end));
+            descriptorList->defaultSprite = ArrayToSprite(IncludedAssets::PlaceholderIcon_png);
         }
 
         QsaberConversion::ConvertOldQsabers(std::bind(&SelectionViewController::RefreshAfterSaberConversion, this));
