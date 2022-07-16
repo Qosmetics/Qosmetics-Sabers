@@ -77,9 +77,6 @@ namespace Qosmetics::Sabers
             SLIDER(saberLength, "QosmeticsWhackers:Settings:SaberLength", 0.05f, globalConfig.saberLength, 0.05f, 2.0f, 0.2f);
             SLIDER(saberWidth, "QosmeticsWhackers:Settings:SaberWidth", 0.05f, globalConfig.saberWidth, 0.05f, 2.0f, 0.2f);
             CreateText(containerT, localization->get("QosmeticsWhackers:Settings:RemovedMenuPointers"));
-            // TOGGLE(enableMenuPointer, "QosmeticsWhackers:Settings:EnableMenuPointer");
-
-            // SLIDER(menuPointerSize, "QosmeticsWhackers:Settings:MenuPointerSize", 0.05f, globalConfig.trailWidth, 0.05f, 2.0f, 0.2f);
 
             auto tText = CreateText(containerT, localization->get("QosmeticsWhackers:Settings:TrailSpecificSettings"));
             tText->set_alignment(TMPro::TextAlignmentOptions::Center);
@@ -112,8 +109,6 @@ namespace Qosmetics::Sabers
             justChangedProfile = false;
             saberLengthSlider->set_value(globalConfig.saberLength);
             saberWidthSlider->set_value(globalConfig.saberWidth);
-            enableMenuPointerToggle->set_isOn(globalConfig.enableMenuPointer);
-            menuPointerSizeSlider->set_value(globalConfig.menuPointerSize);
             overrideTrailLengthToggle->set_isOn(globalConfig.overrideTrailLength);
             trailLengthSlider->set_value(globalConfig.trailLength);
             whiteTrailToggle->set_isOn(globalConfig.whiteTrail);
