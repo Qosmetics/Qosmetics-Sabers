@@ -31,27 +31,27 @@ namespace Qosmetics::Sabers
     void VertexPool::RecalculateBounds()
     {
         auto mesh = get_MyMesh();
-        if (mesh)
+        if (mesh && mesh->m_CachedPtr.m_value)
             mesh->RecalculateBounds();
     }
 
     Mesh* VertexPool::get_MyMesh() const
     {
-        if (_meshFilter)
+        if (_meshFilter && _meshFilter->m_CachedPtr.m_value)
             return _meshFilter->get_sharedMesh();
         return nullptr;
     }
 
     void VertexPool::SetMeshObjectActive(bool flag) const
     {
-        if (!_meshFilter)
+        if (!_meshFilter || !_meshFilter->m_CachedPtr.m_value)
             return;
         _meshFilter->get_gameObject()->SetActive(flag);
     }
 
     void VertexPool::Destroy() const
     {
-        if (_gameObject)
+        if (_gameObject && _gameObject->m_CachedPtr.m_value)
             UnityEngine::Object::Destroy(_gameObject);
     }
 
@@ -86,22 +86,22 @@ namespace Qosmetics::Sabers
         int length = Vertices->Length();
         auto tempVertices = Vertices;
         Vertices = ArrayW<Sombrero::FastVector3>(il2cpp_array_size_t(length + icount));
-        tempVertices->CopyTo(static_cast<Array<Sombrero::FastVector3>*>(Vertices), 0);
+        memcpy(Vertices.begin(), tempVertices.begin(), tempVertices.Length() * sizeof(Sombrero::FastVector3));
 
         length = UVs->Length();
         auto tempUVs = UVs;
         UVs = ArrayW<Sombrero::FastVector2>(il2cpp_array_size_t(length + icount));
-        tempUVs->CopyTo(static_cast<Array<Sombrero::FastVector2>*>(UVs), 0);
+        memcpy(UVs.begin(), tempUVs.begin(), tempUVs.Length() * sizeof(Sombrero::FastVector2));
 
         length = Colors->Length();
         auto tempColors = Colors;
         Colors = ArrayW<Sombrero::FastColor>(il2cpp_array_size_t(length + icount));
-        tempColors->CopyTo(static_cast<Array<Sombrero::FastColor>*>(Colors), 0);
+        memcpy(Colors.begin(), tempColors.begin(), tempColors.Length() * sizeof(Sombrero::FastColor));
 
         length = Indices->Length();
         auto tempIndices = Indices;
         Indices = ArrayW<int>(il2cpp_array_size_t(length + icount));
-        tempIndices->CopyTo(static_cast<Array<int>*>(Indices), 0);
+        memcpy(Indices.begin(), tempIndices.begin(), tempIndices.Length() * sizeof(int));
 
         vertCountChanged = true;
         IndiceChanged = true;
@@ -114,17 +114,17 @@ namespace Qosmetics::Sabers
     void VertexPool::LateUpdate()
     {
         auto mymesh = get_MyMesh();
-        if (!mymesh)
+        if (!mymesh || !mymesh->m_CachedPtr.m_value)
             return;
 
         if (vertCountChanged)
             mymesh->Clear();
 
-        mymesh->set_vertices(static_cast<ArrayW<Vector3>>(Vertices));
+        mymesh->set_vertices(reinterpret_cast<Array<Vector3>*>(Vertices.convert()));
         if (UVChanged)
-            mymesh->set_uv(static_cast<ArrayW<Vector2>>(UVs));
+            mymesh->set_uv(reinterpret_cast<Array<Vector2>*>(UVs.convert()));
         if (ColorChanged)
-            mymesh->set_colors(static_cast<ArrayW<Color>>(Colors));
+            mymesh->set_colors(reinterpret_cast<Array<Color>*>(Colors.convert()));
         if (IndiceChanged)
             mymesh->set_triangles(Indices);
 

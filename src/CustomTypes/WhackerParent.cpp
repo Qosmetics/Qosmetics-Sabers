@@ -1,4 +1,5 @@
 #include "CustomTypes/WhackerParent.hpp"
+#include "logging.hpp"
 
 #include <map>
 
@@ -23,7 +24,7 @@ namespace Qosmetics::Sabers
         auto callbackOpt = Chroma::SaberAPI::getSaberChangedColorCallbackSafe();
         if (callbackOpt.has_value())
         {
-            auto callback = callbackOpt.value().get();
+            auto& callback = callbackOpt.value().get();
             callback += &WhackerParent::Colorize;
         }
 #endif

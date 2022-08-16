@@ -32,20 +32,19 @@ namespace Qosmetics::Sabers::MaterialUtils
 
         // all shader variant stuff is stripped so resolve icall
         static auto createFunc = reinterpret_cast<function_ptr_t<void, Il2CppObject*>>(il2cpp_functions::resolve_icall("UnityEngine.ShaderVariantCollection::Internal_Create"));
-        static auto addFunc = reinterpret_cast<function_ptr_t<bool, Il2CppObject*, Il2CppObject*, int, ArrayW<Il2CppString*>>>(il2cpp_functions::resolve_icall("UnityEngine.ShaderVariantCollection::AddVariant"));
+        static auto addFunc = reinterpret_cast<function_ptr_t<bool, Il2CppObject*, Il2CppObject*, int, ArrayW<StringW>>>(il2cpp_functions::resolve_icall("UnityEngine.ShaderVariantCollection::AddVariant"));
         static auto warmupFunc = reinterpret_cast<function_ptr_t<void, Il2CppObject*>>(il2cpp_functions::resolve_icall("UnityEngine.ShaderVariantCollection::WarmUp"));
         Il2CppObject* obj = UnityEngine::Object::New_ctor();
         createFunc(obj);
-        std::vector<Il2CppString*> temp;
-        ArrayW<Il2CppString*> stringArr = il2cpp_utils::vectorToArray(temp);
         for (auto renderer : renderers)
         {
             ArrayW<UnityEngine::Material*> materials = renderer->get_materials();
             for (auto material : materials)
             {
-                addFunc(obj, material->get_shader(), 0, stringArr);
+                addFunc(obj, material->get_shader(), 0, material->get_shaderKeywords());
             }
         }
+
         warmupFunc(obj);
     }
 }

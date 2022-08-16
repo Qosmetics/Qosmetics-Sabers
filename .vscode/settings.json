@@ -115,7 +115,10 @@
         "xutility": "cpp",
         "__functional_03": "cpp",
         "__functional_base_03": "cpp",
-        "__memory": "cpp"
+        "__memory": "cpp",
+        "format": "cpp",
+        "source_location": "cpp",
+        "stop_token": "cpp"
     },
     "editor.formatOnSave": true,
     "todo-tree.tree.scanMode": "workspace"

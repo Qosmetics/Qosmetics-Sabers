@@ -10,6 +10,10 @@ set(ASSET_HEADER_PATH "${CMAKE_CURRENT_SOURCE_DIR}/include/assets.hpp")
 # Define a macro which we will use for defining the symbols to access our asset files below
 set(ASSET_HEADER_DATA 
 "#pragma once
+
+#include <string_view>
+#include \"beatsaber-hook/shared/utils/typedefs.h\"
+
 struct IncludedAsset {
 
     IncludedAsset(uint8_t* start, uint8_t* end) : array(reinterpret_cast<Array<uint8_t>*>(start)) {
@@ -63,7 +67,8 @@ if (EXISTS ${ASSETS_DIRECTORY})
         # make a copy of the file with 32 bytes added in the build dir
         add_custom_command(
             OUTPUT ${PREPENDED_ASSETS_DIR}/${ASSET}
-            COMMAND powershell -Command "('                                ' + (Get-Content ${ASSETS_DIRECTORY}/${ASSET} -Raw)) | Set-Content ${PREPENDED_ASSETS_DIR}/${ASSET} -NoNewLine"
+            COMMAND ${CMAKE_COMMAND} -E echo_append "                                " > ${PREPENDED_ASSETS_DIR}/${ASSET}
+            COMMAND ${CMAKE_COMMAND} -E cat ${ASSETS_DIRECTORY}/${ASSET} >> ${PREPENDED_ASSETS_DIR}/${ASSET}
             DEPENDS ${ASSETS_DIRECTORY}/${ASSET}
         )
 

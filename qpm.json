@@ -13,7 +13,7 @@
   "dependencies": [
     {
       "id": "beatsaber-hook",
-      "versionRange": "^3.9.0",
+      "versionRange": "^3.10.0",
       "additionalData": {
         "extraFiles": [
           "src/inline-hook"
@@ -22,14 +22,14 @@
     },
     {
       "id": "codegen",
-      "versionRange": "^0.24.1",
+      "versionRange": "^0.25.0",
       "additionalData": {
         "includeQmod": false
       }
     },
     {
       "id": "custom-types",
-      "versionRange": "^0.15.13",
+      "versionRange": "^0.15.18",
       "additionalData": {
         "includeQmod": false,
         "private": true
@@ -37,7 +37,7 @@
     },
     {
       "id": "questui",
-      "versionRange": "^0.16.1",
+      "versionRange": "^0.16.4",
       "additionalData": {
         "includeQmod": false,
         "private": true
@@ -50,22 +50,15 @@
     },
     {
       "id": "sombrero",
-      "versionRange": "^0.1.32",
+      "versionRange": "^0.1.35",
       "additionalData": {
         "private": true
       }
     },
     {
       "id": "conditional-dependencies",
-      "versionRange": "^0.2.0",
+      "versionRange": "^0.1.0",
       "additionalData": {}
-    },
-    {
-      "id": "fmt",
-      "versionRange": "^8.0.5",
-      "additionalData": {
-        "private": true
-      }
     },
     {
       "id": "paper",
@@ -97,7 +90,7 @@
     },
     {
       "id": "chroma",
-      "versionRange": "^2.5.8",
+      "versionRange": "^2.6.0",
       "additionalData": {
         "private": true
       }

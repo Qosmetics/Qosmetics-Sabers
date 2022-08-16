@@ -1,4 +1,8 @@
 #pragma once
+
+#include <string_view>
+#include "beatsaber-hook/shared/utils/typedefs.h"
+
 struct IncludedAsset {
 
     IncludedAsset(uint8_t* start, uint8_t* end) : array(reinterpret_cast<Array<uint8_t>*>(start)) {
