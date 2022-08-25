@@ -213,4 +213,3 @@ jobs:
           content: "New Release published: `${{ steps.get_tag_version.outputs.TAG }}`"
           username: "${{ github.repository }}"
           avatar-url: "http://github.com/${{ env.CI_ACTOR }}.png"
-          filename: ./build/${{ steps.libname.outputs.NAME }}
