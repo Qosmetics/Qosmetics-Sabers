@@ -6,6 +6,7 @@
 DEFINE_TYPE(Qosmetics::Sabers, WhackerParent);
 
 #if __has_include("chroma/shared/SaberAPI.hpp")
+#include "chroma/shared/CoreAPI.hpp"
 #include "chroma/shared/SaberAPI.hpp"
 #ifndef HAS_CHROMA
 #define HAS_CHROMA
@@ -19,13 +20,16 @@ namespace Qosmetics::Sabers
     {
         defaultSaber = value;
 #ifdef HAS_CHROMA
-        Chroma::SaberAPI::setSaberColorable(saberModelController, !defaultSaber);
-
-        auto callbackOpt = Chroma::SaberAPI::getSaberChangedColorCallbackSafe();
-        if (callbackOpt.has_value())
+        if (Chroma::CoreAPI::isChromaRunning())
         {
-            auto& callback = callbackOpt.value().get();
-            callback += &WhackerParent::Colorize;
+            Chroma::SaberAPI::setSaberColorable(saberModelController, !defaultSaber);
+
+            auto callbackOpt = Chroma::SaberAPI::getSaberChangedColorCallbackSafe();
+            if (callbackOpt.has_value())
+            {
+                auto& callback = callbackOpt.value().get();
+                callback += &WhackerParent::Colorize;
+            }
         }
 #endif
     }
@@ -40,7 +44,10 @@ namespace Qosmetics::Sabers
     {
         saberModelControllerToWhackerParentMap.erase(saberModelController);
 #ifdef HAS_CHROMA
-        Chroma::SaberAPI::setSaberColorable(saberModelController, false);
+        if (Chroma::CoreAPI::isChromaRunning())
+        {
+            Chroma::SaberAPI::setSaberColorable(saberModelController, false);
+        }
 #endif
     }
 
