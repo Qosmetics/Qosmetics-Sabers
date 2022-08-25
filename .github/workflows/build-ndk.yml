@@ -1,0 +1,135 @@
+name: NDK build
+
+on:
+  workflow_dispatch:
+  push:
+    branches:
+      - master
+    paths-ignore:
+      - "**.yml"
+      - "!.github/workflows/build-ndk.yml"
+      - "**.json"
+      - "!qpm.json"
+      - "!mod.template.json"
+      - "**.txt"
+      - "!CMakeLists.txt"
+      - "**.ps1"
+      - "!build.ps1"
+      - "!createqmod.ps1"
+      - "**.md"
+      - ".gitignore"
+  pull_request:
+    branches:
+      - master
+
+env:
+  module_id: qosmetics-sabers
+  qmodName: QosmeticsWhackers
+
+jobs:
+  build:
+    runs-on: ubuntu-latest
+    env:
+      WEBHOOK: ${{ secrets.DISCORD_WEBHOOK }}
+
+    steps:
+      - uses: FranzDiebold/github-env-vars-action@v2
+      - uses: actions/checkout@v2
+        name: Checkout
+        with:
+          submodules: true
+          lfs: true
+
+      - uses: seanmiddleditch/gha-setup-ninja@v3
+
+      - name: Create ndkpath.txt
+        run: |
+          echo "$ANDROID_NDK_LATEST_HOME" > ${GITHUB_WORKSPACE}/ndkpath.txt
+          cat ${GITHUB_WORKSPACE}/ndkpath.txt
+
+      - name: Get QPM
+        if: steps.cache-qpm.outputs.cache-hit != 'true'
+        uses: dawidd6/action-download-artifact@v2
+        with:
+          github_token: ${{secrets.GITHUB_TOKEN}}
+          workflow: cargo-build.yml
+          name: linux-qpm-rust
+          path: QPM
+          repo: RedBrumbler/QuestPackageManager-Rust
+
+      - name: QPM Collapse
+        run: |
+          chmod +x ./QPM/qpm-rust
+          ./QPM/qpm-rust collapse
+
+      - name: QPM Dependencies Cache
+        id: cache-qpm-deps
+        uses: actions/cache@v2
+        env:
+          cache-name: cache-qpm-deps
+        with:
+          path: /home/runner/.local/share/QPM-Rust/cache
+          key: ${{ runner.os }}-build-${{ env.cache-name }}-${{ hashFiles('qpm.json') }}
+          restore-keys: |
+            ${{ runner.os }}-build-${{ env.cache-name }}-
+            ${{ runner.os }}-build-
+            ${{ runner.os }}-
+
+      - name: QPM Restore
+        run: |
+          ./QPM/qpm-rust restore
+
+      - name: List Post Restore
+        run: |
+          echo includes:
+          ls -la ${GITHUB_WORKSPACE}/extern/includes
+          echo libs:
+          ls -la ${GITHUB_WORKSPACE}/extern/libs
+          echo cache:
+          ls -la $HOME/.local/share/QPM-Rust/cache
+
+      - name: Build
+        run: |
+          cd ${GITHUB_WORKSPACE}
+          ./QPM/qpm-rust qmod build
+          pwsh -Command ./build.ps1
+
+      - name: Create Qmod
+        run: |
+          pwsh -Command ./createqmod.ps1 ${{env.qmodName}}
+
+      - name: Get Library Name
+        id: libname
+        run: |
+          cd ./build/
+          pattern="lib${module_id}*.so"
+          files=( $pattern )
+          echo ::set-output name=NAME::"${files[0]}"
+
+      - name: Upload release artifact
+        if: "${{ env.WEBHOOK != '' }}"
+        uses: tsickert/discord-webhook@v3.2.0
+        with:
+          webhook-url: ${{ env.WEBHOOK }}
+          content: "${{ env.CI_SHA_SHORT }} - `${{ github.event.head_commit.message }}`"
+          username: "${{ github.repository }}"
+          avatar-url: "http://github.com/${{ env.CI_ACTOR }}.png"
+          filename: ./build/${{ steps.libname.outputs.NAME }}
+
+      - name: Upload debug artifact
+        if: "${{ env.WEBHOOK != '' }}"
+        uses: tsickert/discord-webhook@v3.2.0
+        with:
+          webhook-url: ${{ env.WEBHOOK }}
+          username: "${{ github.repository }}"
+          avatar-url: "http://github.com/${{ env.CI_ACTOR }}.png"
+          filename: ./build/debug/${{ steps.libname.outputs.NAME }}
+
+      - name: Upload qmod
+        if: "${{ env.WEBHOOK != '' }}"
+        uses: tsickert/discord-webhook@v3.2.0
+        with:
+          webhook-url: ${{ env.WEBHOOK }}
+          username: "${{ github.repository }}"
+          avatar-url: "http://github.com/${{ env.CI_ACTOR }}.png"
+          filename: ./${{ env.qmodName }}.qmod
