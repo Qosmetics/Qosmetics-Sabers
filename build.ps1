@@ -1,34 +1,21 @@
 Param(
-    [Parameter(Mandatory=$false)]
-    [Switch]$clean,
-    [Parameter(Mandatory=$false)]
-    [Switch]$release
+    [Parameter(Mandatory = $false)]
+    [Switch]$clean
 )
 
 # if user specified clean, remove all build files
-if ($clean.IsPresent)
-{
-    if (Test-Path -Path "build")
-    {
+if ($clean.IsPresent) {
+    if (Test-Path -Path "build") {
         remove-item build -R
     }
 }
 
-if (($clean.IsPresent) -or (-not (Test-Path -Path "build")))
-{
-    $out = new-item -Path build -ItemType Directory
+if (($clean.IsPresent) -or (-not (Test-Path -Path "build"))) {
+    new-item -Path build -ItemType Directory
 }
 
-$buildType = "Debug"
-if ($release.IsPresent) {
-    echo "Building release binary"
-    $buildType = "RelWithDebInfo"
-}
-else {
-    echo "Building debug binary"
-}
 
-& cmake -G "Ninja" -DCMAKE_BUILD_TYPE="$buildType" -B build
+& cmake -G "Ninja" -DCMAKE_BUILD_TYPE="RelWithDebInfo" -B build
 & cmake --build ./build
 
 $ExitCode = $LastExitCode
