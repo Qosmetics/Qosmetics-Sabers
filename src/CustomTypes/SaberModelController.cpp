@@ -64,11 +64,6 @@ namespace Qosmetics::Sabers
             trailHandler->SetColor(leftColor, rightColor);
     }
 
-    // TODO: test this VVVV
-    // FIXME: When changing a trail setting on a super old saber (https://discord.com/channels/691791384922816594/691802328776572938/693486495964856320),
-    // the saber will then have two trails, one with the changed settings, and one that is completely default.
-    // FIXME: Crash when playing a level after selecting Base Game trails on a saber that doesn't use a custom trail.
-    // (applies to default saber as well): https://cdn.discordapp.com/attachments/870515737532465223/968276810020315176/DefaultedDefault.log
     void SaberModelController::Init(GlobalNamespace::Saber* saber)
     {
         this->saber = saber;
