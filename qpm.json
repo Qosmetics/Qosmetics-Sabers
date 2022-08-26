@@ -4,11 +4,11 @@
   "info": {
     "name": "Qosmetics Whackers",
     "id": "qosmetics-sabers",
-    "version": "0.0.1",
+    "version": "0.1.0",
     "url": "https://github.com/Qosmetics/Qosmetics-Sabers",
     "additionalData": {
-      "overrideSoName": "libqosmetics-sabers.so",
-      "headersOnly": true
+      "headersOnly": true,
+      "overrideSoName": "libqosmetics-sabers.so"
     }
   },
   "dependencies": [
