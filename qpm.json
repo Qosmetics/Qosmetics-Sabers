@@ -80,7 +80,7 @@
     },
     {
       "id": "qosmetics-core",
-      "versionRange": "^0.1.0",
+      "versionRange": "^2.0.0",
       "additionalData": {
         "private": true
       }

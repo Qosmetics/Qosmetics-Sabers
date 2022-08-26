@@ -8,12 +8,7 @@
     "packageVersion": "1.24.0",
     "coverImage": "cover.png",
     "description": "Qosmetics module that adds Whacker capabilities",
-    "dependencies": [
-        {
-            "version": "^0.1.0",
-            "id": "qosmetics-core"
-        }
-    ],
+    "dependencies": [],
     "modFiles": [],
     "libraryFiles": [],
     "fileCopies": []
