@@ -9,7 +9,8 @@ struct IncludedAsset {
         array->klass = nullptr;
         array->monitor = nullptr;
         array->bounds = nullptr;
-        array->max_length = end - start - 32;
+        array->max_length = end - start - 33;
+        *(end - 1)= '\0';
     }
     
     operator ArrayW<uint8_t>() const {

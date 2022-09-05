@@ -10,13 +10,18 @@ set(ASSET_HEADER_PATH "${CMAKE_CURRENT_SOURCE_DIR}/include/assets.hpp")
 # Define a macro which we will use for defining the symbols to access our asset files below
 set(ASSET_HEADER_DATA 
 "#pragma once
+
+#include <string_view>
+#include \"beatsaber-hook/shared/utils/typedefs.h\"
+
 struct IncludedAsset {
 
     IncludedAsset(uint8_t* start, uint8_t* end) : array(reinterpret_cast<Array<uint8_t>*>(start)) {
         array->klass = nullptr;
         array->monitor = nullptr;
         array->bounds = nullptr;
-        array->max_length = end - start - 32;
+        array->max_length = end - start - 33;
+        *(end - 1)= '\\0';
     }
     
     operator ArrayW<uint8_t>() const {
@@ -65,6 +70,7 @@ if (EXISTS ${ASSETS_DIRECTORY})
             OUTPUT ${PREPENDED_ASSETS_DIR}/${ASSET}
             COMMAND ${CMAKE_COMMAND} -E echo_append "                                " > ${PREPENDED_ASSETS_DIR}/${ASSET}
             COMMAND ${CMAKE_COMMAND} -E cat ${ASSETS_DIRECTORY}/${ASSET} >> ${PREPENDED_ASSETS_DIR}/${ASSET}
+            COMMAND ${CMAKE_COMMAND} -E echo_append " " >> ${PREPENDED_ASSETS_DIR}/${ASSET}
             DEPENDS ${ASSETS_DIRECTORY}/${ASSET}
         )
 
