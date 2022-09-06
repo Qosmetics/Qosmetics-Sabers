@@ -24,6 +24,7 @@
 #include "GlobalNamespace/SaberTrail.hpp"
 #include "GlobalNamespace/SaberTrailRenderer.hpp"
 #include "GlobalNamespace/SaberType.hpp"
+#include "UnityEngine/PrimitiveType.hpp"
 
 #include "Zenject/DiContainer.hpp"
 
@@ -33,15 +34,22 @@ extern std::string JsonValueToString(const rapidjson::Value& val);
 
 namespace Qosmetics::Sabers
 {
+    void SaberModelController::Inject(GlobalNamespace::ColorManager* colorManager, SaberModelContainer* saberModelContainer, Lapiz::Sabers::SaberModelProvider* modelProvider, ::Zenject::DiContainer* container, GlobalNamespace::GameplayCoreSceneSetupData* gameplayCoreSceneSetupData)
+    {
+        DEBUG("Inject");
+        _colorManager = colorManager;
+        _saberModelContainer = saberModelContainer;
+        _modelProvider = modelProvider;
+        _container = container;
+        _gameplayCoreSceneSetupData = gameplayCoreSceneSetupData;
+    }
+
     void SaberModelController::InitFromClone(GlobalNamespace::Saber* saber)
     {
         this->saber = saber;
         if (Disabling::GetAnyDisabling())
             return;
-        // TODO: maybe run the normal SaberModelController code as well? with a container?
-
-        auto saberModelContainer = SaberModelContainer::get_instance();
-        auto& config = saberModelContainer->GetSaberConfig();
+        auto& config = _saberModelContainer->GetSaberConfig();
         auto& globalConfig = Config::get_config();
         int saberType = saber->get_saberType().value;
 
@@ -64,21 +72,20 @@ namespace Qosmetics::Sabers
             trailHandler->SetColor(leftColor, rightColor);
     }
 
-    void SaberModelController::Init(GlobalNamespace::Saber* saber)
+    void SaberModelController::InitOverride(UnityEngine::Transform* parent, GlobalNamespace::Saber* saber)
     {
+        DEBUG("InitOverride");
         this->saber = saber;
-        if (Disabling::GetAnyDisabling())
-            return;
-
+        get_transform()->SetParent(parent);
+        /*
         // don't do anything on multiplayer avatars, just locally for this user
         if (GetComponentInParent<GlobalNamespace::AvatarPoseController*>())
         {
             UnityEngine::Object::Destroy(this);
             return;
         }
-
-        auto saberModelContainer = SaberModelContainer::get_instance();
-        if (!saberModelContainer || !saberModelContainer->currentSaberObject)
+        */
+        if (!_saberModelContainer || !_saberModelContainer->currentSaberObject)
         {
             EditDefaultSaber();
             return;
@@ -91,13 +98,13 @@ namespace Qosmetics::Sabers
 
         TrailComponent::trailIntensity = playerSpecificSettings->saberTrailIntensity;
 
-        auto& config = saberModelContainer->GetSaberConfig();
+        auto& config = _saberModelContainer->GetSaberConfig();
         auto& globalConfig = Config::get_config();
         int saberType = saber->get_saberType().value;
 
         StringW saberName(saberType == 0 ? ConstStrings::LeftSaber() : ConstStrings::RightSaber());
         DEBUG("Spawning {} prefab", saberName);
-        auto prefab = saberModelContainer->currentSaberObject->get_transform()->Find(saberName)->get_gameObject();
+        auto prefab = _saberModelContainer->currentSaberObject->get_transform()->Find(saberName)->get_gameObject();
 
         auto customSaber = UnityEngine::Object::Instantiate(prefab, saber->get_transform());
         customSaber->set_name(saberName);
@@ -161,8 +168,7 @@ namespace Qosmetics::Sabers
 
     void SaberModelController::HideDefaultSaberElements()
     {
-        auto saberModelContainer = SaberModelContainer::get_instance();
-        auto& config = saberModelContainer->GetSaberConfig();
+        auto& config = _saberModelContainer->GetSaberConfig();
         auto& globalConfig = Config::get_config();
 
         DEBUG("Removing default trial");
@@ -185,20 +191,27 @@ namespace Qosmetics::Sabers
 
     void SaberModelController::EditDefaultSaber()
     {
+        DEBUG("EditDefaultSaber");
+        bool left = saber->get_saberType() == GlobalNamespace::SaberType::SaberA;
+        auto base = left ? _modelProvider->_localOriginalLeftPrefab : _modelProvider->_localOriginalRightPrefab;
+        auto p = _container->InstantiatePrefab(base->get_gameObject());
+        auto saberModelController = p->GetComponent<GlobalNamespace::SaberModelController*>();
+        saberModelController->Init(get_transform(), saber);
+
         auto& globalConfig = Config::get_config();
 
         // Saber size
-        auto t = saber->get_transform();
-        if (!t)
-            return;
-        auto basicSaberModel = t->Find(ConstStrings::BasicSaberModelClone());
+        auto basicSaberModel = p->get_transform();
         if (!basicSaberModel)
             return;
+        DEBUG("got basicSaberModel");
         basicSaberModel->set_localScale(UnityEngine::Vector3(globalConfig.saberWidth, globalConfig.saberWidth, globalConfig.saberLength));
+        if (left)
+            basicSaberModel->set_localPosition(UnityEngine::Vector3(-0.20, 0.20, 0));
+        else
+            basicSaberModel->set_localPosition(UnityEngine::Vector3(0.20, 0.20, 0));
 
-        auto parentModelContainer = get_gameObject()->GetComponentInParent<GlobalNamespace::SaberModelContainer*>();
-        auto gameplayCoreSceneSetupData = parentModelContainer->container->TryResolve<GlobalNamespace::GameplayCoreSceneSetupData*>();
-        auto playerSpecificSettings = gameplayCoreSceneSetupData->playerSpecificSettings;
+        auto playerSpecificSettings = _gameplayCoreSceneSetupData->playerSpecificSettings;
 
         TrailComponent::trailIntensity = playerSpecificSettings->saberTrailIntensity;
 
@@ -209,6 +222,7 @@ namespace Qosmetics::Sabers
         default:
         {
             auto whackerHandler = basicSaberModel->get_gameObject()->AddComponent<WhackerHandler*>();
+            // TODO: disable default trail again
             CreateDefaultTrailCopy(basicSaberModel, whackerHandler);
             whackerHandler->SetupTrails();
             for (auto trail : whackerHandler->trailHandlers)
@@ -222,7 +236,6 @@ namespace Qosmetics::Sabers
         }
         case Config::TrailType::NONE:
             DEBUG("Removing default trial");
-            auto saberModelController = GetComponent<GlobalNamespace::SaberModelController*>();
             if (!saberModelController)
                 break;
             auto trail = saberModelController->saberTrail;
@@ -280,6 +293,7 @@ namespace Qosmetics::Sabers
 
         auto saberModelController = GetComponent<GlobalNamespace::SaberModelController*>();
         auto trail = saberModelController->saberTrail;
+
         auto trailRendererPrefab = trail->trailRendererPrefab;
 
         INFO("trail Renderer prefab name: ", trailRendererPrefab->get_gameObject()->get_name());

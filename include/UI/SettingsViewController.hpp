@@ -27,6 +27,7 @@ DECLARE_CLASS_CODEGEN(Qosmetics::Sabers, SettingsViewController, HMUI::ViewContr
                       DECLARE_INSTANCE_FIELD(QuestUI::SliderSetting*, trailWidthSlider);
                       DECLARE_INSTANCE_FIELD(HMUI::SimpleTextDropdown*, trailTypeDropdown);
 
+                      DECLARE_INJECT_METHOD(void, Inject, PreviewViewController* previewViewController);
                       DECLARE_OVERRIDE_METHOD_MATCH(void, DidActivate, &HMUI::ViewController::DidActivate, bool firstActivation, bool addedToHierarchy, bool screenSystemEnabling);
                       DECLARE_OVERRIDE_METHOD_MATCH(void, DidDeactivate, &HMUI::ViewController::DidDeactivate, bool removedFromHierarchy, bool screenSystemDisabling);
 

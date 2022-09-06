@@ -12,7 +12,6 @@
 DECLARE_CLASS_CODEGEN(Qosmetics::Sabers, SaberModelContainer, UnityEngine::MonoBehaviour,
                       DECLARE_INSTANCE_METHOD(void, Start);
                       DECLARE_INSTANCE_METHOD(void, OnDestroy);
-                      DECLARE_INSTANCE_METHOD(void, OnGameRestart);
                       DECLARE_INSTANCE_FIELD(UnityEngine::AssetBundle*, bundle);
                       DECLARE_INSTANCE_FIELD(bool, isLoading);
                       DECLARE_INSTANCE_FIELD(UnityEngine::GameObject*, currentSaberObject);
@@ -36,7 +35,7 @@ DECLARE_CLASS_CODEGEN(Qosmetics::Sabers, SaberModelContainer, UnityEngine::MonoB
                       :
 
                       custom_types::Helpers::Coroutine LoadBundleRoutine(std::function<void(SaberModelContainer*)> onFinished);
-                      void UnloadBundle();
+                      void Unload();
 
                       Manifest currentManifest;
 

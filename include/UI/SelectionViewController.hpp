@@ -13,15 +13,17 @@
 #endif
 
 DECLARE_CLASS_CODEGEN(Qosmetics::Sabers, SelectionViewController, HMUI::ViewController,
+                      DECLARE_INSTANCE_FIELD(SaberModelContainer*, saberModelContainer);
                       DECLARE_INSTANCE_FIELD(PreviewViewController*, previewViewController);
                       DECLARE_INSTANCE_FIELD(Qosmetics::Core::QosmeticObjectTableData*, descriptorList);
                       DECLARE_INSTANCE_FIELD(Qosmetics::Core::DeletionConfirmationModal*, deletionConfirmationModal);
 
+                      DECLARE_INJECT_METHOD(void, Inject, PreviewViewController* previewViewController, SaberModelContainer* saberModelContainer);
                       DECLARE_OVERRIDE_METHOD_MATCH(void, DidActivate, &HMUI::ViewController::DidActivate, bool firstActivation, bool addedToHierarchy, bool screenSystemEnabling);
 
                       public
                       :
-                      
+
                       void OnDeleteCell(Qosmetics::Core::QosmeticObjectTableCell* cell);
                       void OnSelectDescriptor(Qosmetics::Core::QosmeticObjectTableCell* cell);
                       void OnSelectDefault();

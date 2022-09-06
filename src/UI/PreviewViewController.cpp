@@ -24,6 +24,13 @@ using namespace QuestUI::BeatSaberUI;
 namespace Qosmetics::Sabers
 {
     bool PreviewViewController::justChangedProfile = false;
+
+    void PreviewViewController::Inject(SaberModelContainer* saberModelContainer, GlobalNamespace::PlayerDataModel* playerDataModel)
+    {
+        this->saberModelContainer = saberModelContainer;
+        this->playerDataModel = playerDataModel;
+    }
+
     void PreviewViewController::DidDeactivate(bool removedFromHierarchy, bool screenSystemDisabling)
     {
         if (currentPrefab)
@@ -108,11 +115,10 @@ namespace Qosmetics::Sabers
         }
 
         DEBUG("Getting variables");
-        auto noteModelContainer = SaberModelContainer::get_instance();
-        auto config = noteModelContainer->GetSaberConfig();
+        auto config = saberModelContainer->GetSaberConfig();
         auto& globalConfig = Config::get_config();
 
-        auto& descriptor = noteModelContainer->GetDescriptor();
+        auto& descriptor = saberModelContainer->GetDescriptor();
         auto name = descriptor.get_name();
         SetTitleText(name);
 
@@ -137,7 +143,6 @@ namespace Qosmetics::Sabers
     }
     void PreviewViewController::InstantiatePrefab()
     {
-        auto saberModelContainer = SaberModelContainer::get_instance();
         if (saberModelContainer->currentSaberObject)
         {
             DEBUG("Found a new saber object, instantiating it! name: {}", saberModelContainer->currentSaberObject->get_name());

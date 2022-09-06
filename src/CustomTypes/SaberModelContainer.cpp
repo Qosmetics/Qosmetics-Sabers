@@ -146,11 +146,7 @@ namespace Qosmetics::Sabers
     SaberModelContainer* SaberModelContainer::instance = nullptr;
     SaberModelContainer* SaberModelContainer::get_instance()
     {
-        if (instance)
-            return instance;
-        auto go = UnityEngine::GameObject::New_ctor(StringW(___TypeRegistration::get()->name()));
-        UnityEngine::Object::DontDestroyOnLoad(go);
-        return go->AddComponent<SaberModelContainer*>();
+        return instance;
     }
 
     void SaberModelContainer::ctor()
@@ -298,17 +294,10 @@ namespace Qosmetics::Sabers
     void SaberModelContainer::OnDestroy()
     {
         instance = nullptr;
-        UnloadBundle();
+        Unload();
     }
 
-    void SaberModelContainer::UnloadBundle()
-    {
-        if (bundle)
-            bundle->Unload(false);
-        bundle = nullptr;
-    }
-
-    void SaberModelContainer::OnGameRestart()
+    void SaberModelContainer::Unload()
     {
         if (currentSaberObject && currentSaberObject->m_CachedPtr.m_value)
             Object::DestroyImmediate(currentSaberObject);
@@ -316,8 +305,5 @@ namespace Qosmetics::Sabers
         if (bundle && bundle->m_CachedPtr.m_value)
             bundle->Unload(true);
         bundle = nullptr;
-
-        instance = nullptr;
-        UnityEngine::Object::DestroyImmediate(this->get_gameObject());
     }
 }

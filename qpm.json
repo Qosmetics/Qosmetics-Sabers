@@ -91,6 +91,11 @@
       "additionalData": {
         "private": true
       }
+    },
+    {
+      "id": "lapiz",
+      "versionRange": "^0.0.8",
+      "additionalData": {}
     }
   ],
   "additionalData": {}

@@ -11,21 +11,37 @@
 #include "qosmetics-core/shared/Utils/DateUtils.hpp"
 #include "qosmetics-core/shared/Utils/RainbowUtils.hpp"
 #include "qosmetics-core/shared/Utils/UIUtils.hpp"
+
+#include "assets.hpp"
+#include "logging.hpp"
+
 DEFINE_TYPE(Qosmetics::Sabers, WhackerFlowCoordinator);
 
 using namespace QuestUI::BeatSaberUI;
 
 namespace Qosmetics::Sabers
 {
+    void WhackerFlowCoordinator::ctor()
+    {
+        static auto baseKlass = classof(Qosmetics::Core::QosmeticsBaseFlowCoordinator*);
+        custom_types::InvokeBaseCtor(baseKlass, this);
+
+        name = "Whackers";
+        inActiveSprite = ArrayToSprite(IncludedAssets::SaberIcon_png);
+        activeSprite = ArrayToSprite(IncludedAssets::SaberIconSelected_png);
+    }
+
+    void WhackerFlowCoordinator::Inject(PreviewViewController* previewViewController, SelectionViewController* selectionViewController, SettingsViewController* settingsViewController)
+    {
+        this->previewViewController = previewViewController;
+        this->selectionViewController = selectionViewController;
+        this->settingsViewController = settingsViewController;
+    }
+
     void WhackerFlowCoordinator::DidActivate(bool firstActivation, bool addedToHierarchy, bool screenSystemEnabling)
     {
         if (firstActivation)
         {
-            previewViewController = CreateViewController<Qosmetics::Sabers::PreviewViewController*>();
-            settingsViewController = CreateViewController<Qosmetics::Sabers::SettingsViewController*>();
-            reinterpret_cast<Qosmetics::Sabers::SettingsViewController*>(settingsViewController)->previewViewController = reinterpret_cast<Qosmetics::Sabers::PreviewViewController*>(previewViewController);
-            selectionViewController = CreateViewController<Qosmetics::Sabers::SelectionViewController*>();
-            reinterpret_cast<Qosmetics::Sabers::SelectionViewController*>(selectionViewController)->previewViewController = reinterpret_cast<Qosmetics::Sabers::PreviewViewController*>(previewViewController);
             ProvideInitialViewControllers(selectionViewController, settingsViewController, previewViewController, nullptr, nullptr);
 
             set_showBackButton(true);

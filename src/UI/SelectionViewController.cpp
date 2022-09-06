@@ -24,6 +24,12 @@ using namespace QuestUI::BeatSaberUI;
 
 namespace Qosmetics::Sabers
 {
+    void SelectionViewController::Inject(PreviewViewController* previewViewController, SaberModelContainer* saberModelContainer)
+    {
+        this->previewViewController = previewViewController;
+        this->saberModelContainer = saberModelContainer;
+    }
+
     void SelectionViewController::DidActivate(bool firstActivation, bool addedToHierarchy, bool screenSystemEnabling)
     {
         if (firstActivation)
@@ -112,8 +118,6 @@ namespace Qosmetics::Sabers
 
     void SelectionViewController::OnSelectDefault()
     {
-        auto saberModelContainer = SaberModelContainer::get_instance();
-
         // if we do not PROPERLY switch to default, don't clear the preview
         if (saberModelContainer->Default())
         {
@@ -134,7 +138,7 @@ namespace Qosmetics::Sabers
                 return;
             }
 
-            if (SaberModelContainer::get_instance()->LoadObject(descriptor, std::bind(&SelectionViewController::OnObjectLoadFinished, this)))
+            if (saberModelContainer->LoadObject(descriptor, std::bind(&SelectionViewController::OnObjectLoadFinished, this)))
             {
                 previewViewController->ClearPrefab();
                 previewViewController->ShowLoading(true);
@@ -150,7 +154,7 @@ namespace Qosmetics::Sabers
             return;
         }
 
-        if (descriptor.get_filePath() == SaberModelContainer::get_instance()->GetDescriptor().get_filePath())
+        if (descriptor.get_filePath() == saberModelContainer->GetDescriptor().get_filePath())
             OnSelectDefault();
 
         deletefile(descriptor.get_filePath());
@@ -160,8 +164,6 @@ namespace Qosmetics::Sabers
     void SelectionViewController::OnObjectLoadFinished()
     {
         // something to do after we changed the object, like update preview
-        auto saberModelContainer = SaberModelContainer::get_instance();
-
         Qosmetics::Sabers::Config::get_config().lastUsedWhacker = saberModelContainer->GetSaberConfig().get_isDefault() ? "" : Qosmetics::Core::FileUtils::GetFileName(saberModelContainer->GetDescriptor().get_filePath(), true);
         Qosmetics::Core::Config::SaveConfig();
         previewViewController->UpdatePreview(true);

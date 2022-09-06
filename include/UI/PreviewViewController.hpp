@@ -1,9 +1,13 @@
 #pragma once
 
+#include "CustomTypes/SaberModelContainer.hpp"
+#include "GlobalNamespace/PlayerDataModel.hpp"
 #include "HMUI/ViewController.hpp"
 #include "TMPro/TextMeshProUGUI.hpp"
 #include "UnityEngine/GameObject.hpp"
+
 #include "custom-types/shared/macros.hpp"
+#include "lapiz/shared/macros.hpp"
 
 #ifndef DECLARE_OVERRIDE_METHOD_MATCH
 #define DECLARE_OVERRIDE_METHOD_MATCH(retval, name, mptr, ...) \
@@ -11,11 +15,14 @@
 #endif
 
 DECLARE_CLASS_CODEGEN(Qosmetics::Sabers, PreviewViewController, HMUI::ViewController,
+                      DECLARE_INSTANCE_FIELD(SaberModelContainer*, saberModelContainer);
+                      DECLARE_INSTANCE_FIELD(GlobalNamespace::PlayerDataModel*, playerDataModel);
                       DECLARE_INSTANCE_FIELD(TMPro::TextMeshProUGUI*, title);
                       DECLARE_INSTANCE_FIELD(UnityEngine::GameObject*, loadingIndicator);
                       DECLARE_INSTANCE_FIELD(UnityEngine::GameObject*, currentPrefab);
                       DECLARE_INSTANCE_METHOD(void, SetTitleText, StringW text);
 
+                      DECLARE_INJECT_METHOD(void, Inject, SaberModelContainer* saberModelContainer, GlobalNamespace::PlayerDataModel* playerDataModel);
                       DECLARE_OVERRIDE_METHOD_MATCH(void, DidActivate, &HMUI::ViewController::DidActivate, bool firstActivation, bool addedToHierarchy, bool screenSystemEnabling);
                       DECLARE_OVERRIDE_METHOD_MATCH(void, DidDeactivate, &HMUI::ViewController::DidDeactivate, bool removedFromHierarchy, bool screenSystemDisabling);
 
