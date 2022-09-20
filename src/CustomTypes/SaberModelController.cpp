@@ -85,6 +85,9 @@ namespace Qosmetics::Sabers
             return;
         }
         */
+        bool left = saber->get_saberType() == GlobalNamespace::SaberType::SaberA;
+        get_transform()->set_localPosition({0, 0, 0});
+
         if (!_saberModelContainer || !_saberModelContainer->currentSaberObject)
         {
             EditDefaultSaber();
@@ -92,9 +95,7 @@ namespace Qosmetics::Sabers
         }
 
         auto whackerParent = get_gameObject()->AddComponent<Qosmetics::Sabers::WhackerParent*>();
-        auto parentModelContainer = get_gameObject()->GetComponentInParent<GlobalNamespace::SaberModelContainer*>();
-        auto gameplayCoreSceneSetupData = parentModelContainer->container->TryResolve<GlobalNamespace::GameplayCoreSceneSetupData*>();
-        auto playerSpecificSettings = gameplayCoreSceneSetupData->playerSpecificSettings;
+        auto playerSpecificSettings = _gameplayCoreSceneSetupData->playerSpecificSettings;
 
         TrailComponent::trailIntensity = playerSpecificSettings->saberTrailIntensity;
 
@@ -106,17 +107,17 @@ namespace Qosmetics::Sabers
         DEBUG("Spawning {} prefab", saberName);
         auto prefab = _saberModelContainer->currentSaberObject->get_transform()->Find(saberName)->get_gameObject();
 
-        auto customSaber = UnityEngine::Object::Instantiate(prefab, saber->get_transform());
+        // clean up the default saber before we add our custom one
+        HideDefaultSaberElements();
+
+        auto customSaber = UnityEngine::Object::Instantiate(prefab, get_transform());
         customSaber->set_name(saberName);
 
         auto customSaberT = customSaber->get_transform();
 
-        customSaberT->set_localPosition(Sombrero::FastVector3::zero());
+        customSaberT->set_localPosition({0, 0, 0});
         customSaberT->set_localScale(Sombrero::FastVector3(globalConfig.saberWidth, globalConfig.saberWidth, 1.0f));
         customSaberT->set_localRotation(Sombrero::FastQuaternion::identity());
-
-        // custom saber object instantiated! clean up default saber now
-        HideDefaultSaberElements();
 
         const Sombrero::FastColor leftColor(colorManager->ColorForSaberType(0));
         const Sombrero::FastColor rightColor(colorManager->ColorForSaberType(1));
@@ -206,10 +207,7 @@ namespace Qosmetics::Sabers
             return;
         DEBUG("got basicSaberModel");
         basicSaberModel->set_localScale(UnityEngine::Vector3(globalConfig.saberWidth, globalConfig.saberWidth, globalConfig.saberLength));
-        if (left)
-            basicSaberModel->set_localPosition(UnityEngine::Vector3(-0.20, 0.20, 0));
-        else
-            basicSaberModel->set_localPosition(UnityEngine::Vector3(0.20, 0.20, 0));
+        basicSaberModel->set_localPosition({0, 0, 0});
 
         auto playerSpecificSettings = _gameplayCoreSceneSetupData->playerSpecificSettings;
 
