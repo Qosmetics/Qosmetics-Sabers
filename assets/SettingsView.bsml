@@ -1,0 +1,94 @@
+<bg xmlns:xsi='http://www.w3.org/2001/XMLSchema-instance'
+    xsi:noNamespaceSchemaLocation='https://raw.githubusercontent.com/RedBrumbler/Quest-BSML-Docs/gh-pages/schema.xsd'>
+    <!-- Header -->
+    <stack background="title-gradient" pref-width='90' pref-height='10' vertical-fit="PreferredSize"
+        horizontal-fit="PreferredSize"
+        background-color0="#FF0000FF" background-color1="#FF000000" ignore-layout="true"
+        anchor-pos-y="45">
+        <macro.if value='!gay'>
+            <text text='Whacker Settings' align="Center" font-size="8" />
+        </macro.if>
+        <macro.if value='gay'>
+            <text text='Whacker Settings' align="Center" font-size="8" />
+        </macro.if>
+    </stack>
+    <scrollable-settings-container size-delta-y="0">
+        <horizontal pref-height="6" vertical-fit="PreferredSize">
+            <text text='-- Whacker Specific Settings --' align="Center" />
+        </horizontal>
+        <slider-setting
+            text='Whacker Length'
+            value='saberLength'
+            increment='0.05'
+            min='0.05'
+            max='2.0'
+            apply-on-change='true'
+            hover-hint='Make the saber longer (or shorter) to your liking' />
+        <slider-setting
+            text='Whacker Thickness'
+            value='saberWidth'
+            increment='0.05'
+            min='0.05'
+            max='2.0'
+            apply-on-change='true'
+            hover-hint='Make the saber thinner (or thicker) to your liking' />
+        <horizontal pref-height="6" vertical-fit="PreferredSize">
+            <text text='Menu Pointers have been removed for now' align='Center' />
+        </horizontal>
+        <horizontal pref-height="6" vertical-fit="PreferredSize">
+            <text text='-- Trail Specific Settings --' align="Center" />
+        </horizontal>
+        <toggle-setting
+            text='Override Trail Length'
+            value='overrideTrailLength'
+            apply-on-change='true'
+            hover-hint="Change the length of the trail that's on your whacker" />
+        <slider-setting
+            text='Trail Length'
+            value='trailLength'
+            increment='1'
+            min='0.0'
+            max='50'
+            digits='0'
+            integer-only="true"
+            apply-on-change='true'
+            hover-hint='The length that your trail will be when override trail length is enabled' />
+        <toggle-setting
+            text='White Trail'
+            value='whiteTrail'
+            apply-on-change='true'
+            hover-hint="Makes the trail use the color white instead of any other color you may have configured as trail color" />
+        <toggle-setting
+            text='Override White Step'
+            value='overrideWhiteStep'
+            apply-on-change='true'
+            hover-hint="Override the length of the whitestep that the trail uses" />
+        <slider-setting
+            text='White Step'
+            value='whiteStep'
+            increment='0.05'
+            min='0.0'
+            max='1.0'
+            apply-on-change='true'
+            hover-hint="The actual length over which the whitestep applies" />
+        <toggle-setting
+            text='Override Trail Width'
+            value='overrideTrailWidth'
+            apply-on-change='true'
+            hover-hint="Change the width of the trail to be smaller than configured, effectively shrinking the trail" />
+        <slider-setting
+            text='Trail Width'
+            value='trailWidth'
+            increment='0.05'
+            min='0.0'
+            max='1.0'
+            apply-on-change='true'
+            hover-hint="The size in fraction of the full trail width" />
+        <dropdown-list-setting
+            text='Trail Type'
+            value='trailType'
+            options='trailTypes'
+            apply-on-change='true'
+            hover-hint="The trail type to use" />
+    </scrollable-settings-container>
+</bg>

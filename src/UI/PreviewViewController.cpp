@@ -1,14 +1,11 @@
 #include "UI/PreviewViewController.hpp"
 #include "CustomTypes/SaberModelContainer.hpp"
+#include "assets.hpp"
 #include "config.hpp"
-#include "diglett/shared/Localization.hpp"
-#include "diglett/shared/Util.hpp"
 #include "logging.hpp"
 #include "qosmetics-core/shared/Utils/DateUtils.hpp"
 #include "qosmetics-core/shared/Utils/RainbowUtils.hpp"
 #include "qosmetics-core/shared/Utils/UIUtils.hpp"
-#include "questui/shared/BeatSaberUI.hpp"
-#include "questui/shared/CustomTypes/Components/Backgroundable.hpp"
 #include "sombrero/shared/FastColor.hpp"
 #include "sombrero/shared/FastVector3.hpp"
 
@@ -17,35 +14,41 @@
 #include "HMUI/CurvedCanvasSettingsHelper.hpp"
 #include "HMUI/ImageView.hpp"
 
-DEFINE_TYPE(Qosmetics::Sabers, PreviewViewController);
+#include "bsml/shared/BSML.hpp"
+#include "bsml/shared/BSML/Components/Backgroundable.hpp"
 
-using namespace QuestUI::BeatSaberUI;
+DEFINE_TYPE(Qosmetics::Sabers, PreviewViewController);
 
 namespace Qosmetics::Sabers
 {
     bool PreviewViewController::justChangedProfile = false;
+
+    void PreviewViewController::Inject(SaberModelContainer* saberModelContainer, GlobalNamespace::PlayerDataModel* playerDataModel)
+    {
+        this->saberModelContainer = saberModelContainer;
+        this->playerDataModel = playerDataModel;
+    }
+
     void PreviewViewController::DidDeactivate(bool removedFromHierarchy, bool screenSystemDisabling)
     {
         if (currentPrefab)
             currentPrefab->SetActive(false);
     }
 
+    bool PreviewViewController::get_gay()
+    {
+        return Qosmetics::Core::DateUtils::isMonth(6);
+    }
+
     void PreviewViewController::DidActivate(bool firstActivation, bool addedToHierarchy, bool screenSystemEnabling)
     {
         if (firstActivation)
         {
-            title = Qosmetics::Core::UIUtils::AddHeader(get_transform(), "", Sombrero::FastColor::red());
-            reinterpret_cast<UnityEngine::RectTransform*>(title->get_transform()->get_parent()->get_parent())->set_anchoredPosition({0.0f, 30.0f});
-            auto backgroundLayout = CreateVerticalLayoutGroup(this);
-            auto horizontalBackgroundLayout = CreateHorizontalLayoutGroup(backgroundLayout);
-            auto layoutElem = horizontalBackgroundLayout->get_gameObject()->GetComponent<UnityEngine::UI::LayoutElement*>();
-            layoutElem->set_preferredWidth(75.0f);
-            layoutElem->set_preferredHeight(50.0f);
-
-            auto bg = horizontalBackgroundLayout->get_gameObject()->AddComponent<QuestUI::Backgroundable*>();
-            bg->ApplyBackgroundWithAlpha("title-gradient", 1.0f);
-
-            auto imageView = bg->get_gameObject()->GetComponent<HMUI::ImageView*>();
+            auto parser = BSML::parse_and_construct(IncludedAssets::PreviewView_bsml, get_transform(), this);
+            auto params = parser->parserParams.get();
+            auto objectBG = params->GetObjectsWithTag("objectBG").at(0)->GetComponent<BSML::Backgroundable*>();
+            auto imageView = objectBG->background;
+            imageView->skew = 0;
             imageView->set_gradient(true);
             imageView->gradientDirection = 1;
             imageView->set_color(Sombrero::FastColor::white());
@@ -56,7 +59,6 @@ namespace Qosmetics::Sabers
             imageView->set_color1(color);
             imageView->curvedCanvasSettingsHelper->Reset();
 
-            loadingIndicator = Qosmetics::Core::UIUtils::CreateLoadingIndicator(get_transform());
             ShowLoading(true);
             UpdatePreview(true);
         }
@@ -73,6 +75,9 @@ namespace Qosmetics::Sabers
 
     void PreviewViewController::SetTitleText(StringW text)
     {
+        if (!(title && title->m_CachedPtr.m_value))
+            return;
+
         if (Qosmetics::Core::DateUtils::isMonth(6))
         {
             text = "<i>" + Qosmetics::Core::RainbowUtils::gayify(static_cast<std::string>(text)) + "</i>";
@@ -84,11 +89,12 @@ namespace Qosmetics::Sabers
 
     void PreviewViewController::ShowLoading(bool isLoading)
     {
-        loadingIndicator->SetActive(isLoading);
+        if (!(loadingIndicator && loadingIndicator->m_CachedPtr.m_value))
+            return;
+
+        loadingIndicator->get_gameObject()->SetActive(isLoading);
         if (isLoading)
-        {
-            SetTitleText(Diglett::Localization::get_instance()->get("QosmeticsCore:Misc:Loading") + u"...");
-        }
+            SetTitleText("Loading...");
     }
     void PreviewViewController::UpdatePreview(bool reinstantiate)
     {
@@ -103,16 +109,15 @@ namespace Qosmetics::Sabers
         if (!currentPrefab)
         {
             DEBUG("No prefab found, must be default!");
-            SetTitleText(Diglett::Localization::get_instance()->get("QosmeticsWhackers:Preview:Default"));
+            SetTitleText("Default Whacker (no preview)");
             return;
         }
 
         DEBUG("Getting variables");
-        auto noteModelContainer = SaberModelContainer::get_instance();
-        auto config = noteModelContainer->GetSaberConfig();
+        auto config = saberModelContainer->GetSaberConfig();
         auto& globalConfig = Config::get_config();
 
-        auto& descriptor = noteModelContainer->GetDescriptor();
+        auto& descriptor = saberModelContainer->GetDescriptor();
         auto name = descriptor.get_name();
         SetTitleText(name);
 
@@ -129,15 +134,15 @@ namespace Qosmetics::Sabers
         auto rightSaber = t->Find("RightSaber");
 
         Sombrero::FastVector3 saberSize(globalConfig.saberWidth, globalConfig.saberWidth, globalConfig.saberLength);
-        leftSaber->set_localPosition({0.0f, .25f, 0.0f});
-        rightSaber->set_localPosition({0.0f, -.25f, 0.0f});
+        saberSize *= 2;
+        leftSaber->set_localPosition({0.0f, .25f, -0.5f});
+        rightSaber->set_localPosition({0.0f, -.25f, -0.5f});
 
         leftSaber->set_localScale(saberSize);
         rightSaber->set_localScale(saberSize);
     }
     void PreviewViewController::InstantiatePrefab()
     {
-        auto saberModelContainer = SaberModelContainer::get_instance();
         if (saberModelContainer->currentSaberObject)
         {
             DEBUG("Found a new saber object, instantiating it! name: {}", saberModelContainer->currentSaberObject->get_name());

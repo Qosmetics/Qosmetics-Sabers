@@ -10,12 +10,14 @@
 #include "CustomTypes/TrailTransform.hpp"
 #include "CustomTypes/WhackerColorHandler.hpp"
 
+#include "private_field.hpp"
+
 DECLARE_CLASS_CODEGEN(Qosmetics::Sabers, WhackerHandler, UnityEngine::MonoBehaviour,
-                      DECLARE_INSTANCE_FIELD(WhackerColorHandler*, colorHandler);
-                      DECLARE_INSTANCE_FIELD(ArrayW<TrailHandler*>, trailHandlers);
-                      DECLARE_INSTANCE_FIELD(ArrayW<TrailTransform*>, trailTransforms);
-                      DECLARE_INSTANCE_FIELD(GlobalNamespace::SaberModelController*, saberModelController);
-                      DECLARE_INSTANCE_FIELD(GlobalNamespace::SaberType, saberType);
+                      DECLARE_INSTANCE_PRIVATE_FIELD(WhackerColorHandler*, colorHandler);
+                      DECLARE_INSTANCE_PRIVATE_FIELD(ArrayW<TrailHandler*>, trailHandlers);
+                      DECLARE_INSTANCE_PRIVATE_FIELD(ArrayW<TrailTransform*>, trailTransforms);
+                      DECLARE_INSTANCE_PRIVATE_FIELD(GlobalNamespace::SaberModelController*, saberModelController);
+                      DECLARE_INSTANCE_PRIVATE_FIELD(GlobalNamespace::SaberType, saberType);
 
                       DECLARE_INSTANCE_METHOD(void, GetTrailHandlers);
                       DECLARE_INSTANCE_METHOD(void, SetupTrails);

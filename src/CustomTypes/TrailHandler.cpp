@@ -35,6 +35,7 @@ namespace Qosmetics::Sabers
         auto renderer = GetComponent<UnityEngine::Renderer*>();
         auto material = renderer ? renderer->get_material() : nullptr;
 
+        DEBUG("Trail ptr: {}", fmt::ptr(trail));
         if (trail)
         {
             // 3 + length or overridelength due to length 0, 1, 2, 3 being invisible,

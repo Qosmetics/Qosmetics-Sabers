@@ -146,11 +146,7 @@ namespace Qosmetics::Sabers
     SaberModelContainer* SaberModelContainer::instance = nullptr;
     SaberModelContainer* SaberModelContainer::get_instance()
     {
-        if (instance)
-            return instance;
-        auto go = UnityEngine::GameObject::New_ctor(StringW(___TypeRegistration::get()->name()));
-        UnityEngine::Object::DontDestroyOnLoad(go);
-        return go->AddComponent<SaberModelContainer*>();
+        return instance;
     }
 
     void SaberModelContainer::ctor()
@@ -221,10 +217,7 @@ namespace Qosmetics::Sabers
     custom_types::Helpers::Coroutine SaberModelContainer::LoadBundleRoutine(std::function<void(SaberModelContainer*)> onFinished)
     {
         isLoading = true;
-        if (currentSaberObject)
-            Object::DestroyImmediate(currentSaberObject);
-        if (bundle)
-            bundle->Unload(true);
+        Unload();
 
         DEBUG("Loading file {} from whacker {}", currentManifest.get_fileName(), currentManifest.get_filePath());
         co_yield custom_types::Helpers::CoroutineHelper::New(Qosmetics::Core::BundleUtils::LoadBundleFromZipAsync(currentManifest.get_filePath(), currentManifest.get_fileName(), bundle));
@@ -280,35 +273,18 @@ namespace Qosmetics::Sabers
     {
         if (isLoading)
             return false;
-        if (currentSaberObject)
-        {
-            Object::DestroyImmediate(currentSaberObject);
-            currentSaberObject = nullptr;
-        }
-        if (bundle)
-        {
-            bundle->Unload(true);
-            bundle = nullptr;
-        }
-
+        Unload();
         currentManifest = decltype(currentManifest)();
         return true;
     }
 
-    void SaberModelContainer::OnDestroy()
+    void SaberModelContainer::Dispose()
     {
         instance = nullptr;
-        UnloadBundle();
+        Unload();
     }
 
-    void SaberModelContainer::UnloadBundle()
-    {
-        if (bundle)
-            bundle->Unload(false);
-        bundle = nullptr;
-    }
-
-    void SaberModelContainer::OnGameRestart()
+    void SaberModelContainer::Unload()
     {
         if (currentSaberObject && currentSaberObject->m_CachedPtr.m_value)
             Object::DestroyImmediate(currentSaberObject);
@@ -316,8 +292,5 @@ namespace Qosmetics::Sabers
         if (bundle && bundle->m_CachedPtr.m_value)
             bundle->Unload(true);
         bundle = nullptr;
-
-        instance = nullptr;
-        UnityEngine::Object::DestroyImmediate(this->get_gameObject());
     }
 }

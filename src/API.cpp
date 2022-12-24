@@ -8,7 +8,6 @@
 #include <fmt/core.h>
 
 #include "CustomTypes/SaberModelContainer.hpp"
-#include "CustomTypes/SaberModelController.hpp"
 #include "CustomTypes/TrailHandler.hpp"
 #include "CustomTypes/WhackerColorHandler.hpp"
 #include "UnityEngine/GameObject.hpp"
@@ -57,7 +56,7 @@ EXPOSE_API(GetSaberIsCustom, bool)
 {
     return SABERMODELCONTAINER->currentSaberObject != nullptr;
 }
-
+/*
 EXPOSE_API(GetInUseSaberClone, UnityEngine::GameObject*, int saberType)
 {
     auto saberModelControllers = UnityEngine::Resources::FindObjectsOfTypeAll<Qosmetics::Sabers::SaberModelController*>();
@@ -74,7 +73,7 @@ EXPOSE_API(GetInUseSaberClone, UnityEngine::GameObject*, int saberType)
     }
     return nullptr;
 }
-
+*/
 EXPOSE_API(GetSaber, UnityEngine::GameObject*, int saberType)
 {
     GET_SABERMODELCONTAINER();

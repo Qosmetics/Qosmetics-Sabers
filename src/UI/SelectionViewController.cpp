@@ -2,32 +2,38 @@
 #include "CustomTypes/SaberModelContainer.hpp"
 #include "assets.hpp"
 #include "config.hpp"
-#include "diglett/shared/Localization.hpp"
-#include "diglett/shared/Util.hpp"
 #include "logging.hpp"
 #include "qosmetics-core/shared/ConfigRegister.hpp"
 #include "qosmetics-core/shared/Utils/FileUtils.hpp"
 #include "qosmetics-core/shared/Utils/ZipUtils.hpp"
-#include "questui/shared/BeatSaberUI.hpp"
-#include "questui/shared/CustomTypes/Components/List/QuestUITableView.hpp"
 #include "static-defines.hpp"
 
 #include "HMUI/TableView.hpp"
 #include "HMUI/TableView_ScrollPositionType.hpp"
 
+#include "bsml/shared/BSML.hpp"
+#include "bsml/shared/Helpers/utilities.hpp"
+
 #include "QsaberConversion.hpp"
+#include "System/Collections/Generic/HashSet_1.hpp"
 #include <algorithm>
 
 DEFINE_TYPE(Qosmetics::Sabers, SelectionViewController);
 
-using namespace QuestUI::BeatSaberUI;
-
 namespace Qosmetics::Sabers
 {
+    void SelectionViewController::Inject(PreviewViewController* previewViewController, SaberModelContainer* saberModelContainer)
+    {
+        this->previewViewController = previewViewController;
+        this->saberModelContainer = saberModelContainer;
+    }
+
     void SelectionViewController::DidActivate(bool firstActivation, bool addedToHierarchy, bool screenSystemEnabling)
     {
         if (firstActivation)
         {
+            BSML::parse_and_construct(IncludedAssets::SelectionView_bsml, get_transform(), this);
+            /*
             auto vertical = CreateVerticalLayoutGroup(get_transform());
             auto buttonHorizontal = CreateHorizontalLayoutGroup(vertical->get_transform());
 
@@ -42,8 +48,32 @@ namespace Qosmetics::Sabers
             descriptorList->onSelect = std::bind(reinterpret_cast<void (SelectionViewController::*)(HMUI::TableCell*)>(&SelectionViewController::OnSelectDescriptor), this, std::placeholders::_1);
             descriptorList->onDelete = std::bind(reinterpret_cast<void (SelectionViewController::*)(HMUI::TableCell*)>(&SelectionViewController::OnDeleteCell), this, std::placeholders::_1);
             descriptorList->defaultSprite = ArrayToSprite(IncludedAssets::PlaceholderIcon_png);
+            */
         }
 
+        Refresh();
+    }
+
+    void SelectionViewController::PostParse()
+    {
+        deletionConfirmationModal = Qosmetics::Core::DeletionConfirmationModal::Create(get_transform());
+
+        auto tableView = descriptorListTableData->tableView;
+        auto go = descriptorListTableData->get_gameObject();
+        Object::DestroyImmediate(descriptorListTableData);
+        descriptorListTableData = nullptr;
+        descriptorList = go->AddComponent<Qosmetics::Core::QosmeticObjectTableData*>();
+        descriptorList->tableView = tableView;
+        tableView->SetDataSource(reinterpret_cast<HMUI::TableView::IDataSource*>(descriptorList), false);
+
+        descriptorList->deletionConfirmationModal = deletionConfirmationModal;
+        descriptorList->onSelect = std::bind(reinterpret_cast<void (SelectionViewController::*)(HMUI::TableCell*)>(&SelectionViewController::OnSelectDescriptor), this, std::placeholders::_1);
+        descriptorList->onDelete = std::bind(reinterpret_cast<void (SelectionViewController::*)(HMUI::TableCell*)>(&SelectionViewController::OnDeleteCell), this, std::placeholders::_1);
+        descriptorList->defaultSprite = BSML::Utilities::LoadSpriteRaw(IncludedAssets::PlaceholderIcon_png);
+    }
+
+    void SelectionViewController::Refresh()
+    {
         QsaberConversion::ConvertOldQsabers(std::bind(&SelectionViewController::RefreshAfterSaberConversion, this));
     }
 
@@ -56,19 +86,27 @@ namespace Qosmetics::Sabers
         ReloadDescriptorList();
     }
 
+    int SelectionViewController::GetSelectedCellIdx()
+    {
+        if (!descriptorList || !descriptorList->m_CachedPtr.m_value)
+            return -1;
+        auto tableView = descriptorList->tableView;
+        auto enumerator = tableView->selectedCellIdxs->GetEnumerator();
+        int result = -1;
+        if (enumerator.MoveNext())
+            result = enumerator.get_Current();
+        enumerator.Dispose();
+        return result;
+    }
+
     void SelectionViewController::ReloadDescriptorList()
     {
         std::vector<std::string> whackers = {};
         Qosmetics::Core::FileUtils::GetFilesInFolderPath("whacker", whacker_path, whackers);
-        auto tableView = reinterpret_cast<QuestUI::TableView*>(descriptorList->tableView);
-        int scrolledRow = tableView->get_scrolledRow();
-
         auto& descriptorSet = descriptorList->objectDescriptors;
-        int current = 0;
+        int row = GetSelectedCellIdx();
         for (auto& whacker : whackers)
         {
-            current++;
-
             std::string filePath = fmt::format("{}/{}", whacker_path, whacker);
             auto orig = std::find_if(descriptorSet.begin(), descriptorSet.end(), [filePath](auto& d)
                                      { return d.get_filePath() == filePath; });
@@ -105,21 +143,20 @@ namespace Qosmetics::Sabers
                 it++;
         }
 
+        auto tableView = descriptorList->tableView;
         tableView->ReloadData();
         tableView->RefreshCells(true, true);
+        tableView->ScrollToCellWithIdx(std::clamp(row, 0, (int)descriptorSet.size() - 1), HMUI::TableView::ScrollPositionType::Center, true);
         tableView->ClearSelection();
     }
 
-    void SelectionViewController::OnSelectDefault()
+    void SelectionViewController::Default()
     {
-        auto saberModelContainer = SaberModelContainer::get_instance();
-
         // if we do not PROPERLY switch to default, don't clear the preview
         if (saberModelContainer->Default())
         {
             OnObjectLoadFinished();
-            auto tableView = reinterpret_cast<QuestUI::TableView*>(descriptorList->tableView);
-            tableView->ClearSelection();
+            descriptorList->tableView->ClearSelection();
         }
     }
 
@@ -134,7 +171,7 @@ namespace Qosmetics::Sabers
                 return;
             }
 
-            if (SaberModelContainer::get_instance()->LoadObject(descriptor, std::bind(&SelectionViewController::OnObjectLoadFinished, this)))
+            if (saberModelContainer->LoadObject(descriptor, std::bind(&SelectionViewController::OnObjectLoadFinished, this)))
             {
                 previewViewController->ClearPrefab();
                 previewViewController->ShowLoading(true);
@@ -150,8 +187,8 @@ namespace Qosmetics::Sabers
             return;
         }
 
-        if (descriptor.get_filePath() == SaberModelContainer::get_instance()->GetDescriptor().get_filePath())
-            OnSelectDefault();
+        if (descriptor.get_filePath() == saberModelContainer->GetDescriptor().get_filePath())
+            Default();
 
         deletefile(descriptor.get_filePath());
         ReloadDescriptorList();
@@ -160,8 +197,6 @@ namespace Qosmetics::Sabers
     void SelectionViewController::OnObjectLoadFinished()
     {
         // something to do after we changed the object, like update preview
-        auto saberModelContainer = SaberModelContainer::get_instance();
-
         Qosmetics::Sabers::Config::get_config().lastUsedWhacker = saberModelContainer->GetSaberConfig().get_isDefault() ? "" : Qosmetics::Core::FileUtils::GetFileName(saberModelContainer->GetDescriptor().get_filePath(), true);
         Qosmetics::Core::Config::SaveConfig();
         previewViewController->UpdatePreview(true);

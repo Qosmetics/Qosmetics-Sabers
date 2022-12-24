@@ -44,8 +44,11 @@ struct IncludedAsset {
 namespace IncludedAssets {
 
 	DECLARE_FILE(PlaceholderIcon_png)
+	DECLARE_FILE(PreviewView_bsml)
 	DECLARE_FILE(SaberIcon_png)
 	DECLARE_FILE(SaberIconSelected_png)
+	DECLARE_FILE(SelectionView_bsml)
+	DECLARE_FILE(SettingsView_bsml)
 	DECLARE_FILE(de_xml)
 	DECLARE_FILE(en_xml)
 	DECLARE_FILE(es_xml)
