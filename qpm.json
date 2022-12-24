@@ -7,14 +7,14 @@
     "version": "0.0.1",
     "url": "https://github.com/Qosmetics/Qosmetics-Sabers",
     "additionalData": {
-      "overrideSoName": "libqosmetics-sabers.so",
-      "headersOnly": true
+      "headersOnly": true,
+      "overrideSoName": "libqosmetics-sabers.so"
     }
   },
   "dependencies": [
     {
       "id": "beatsaber-hook",
-      "versionRange": "^3.12.0",
+      "versionRange": "^3.14.0",
       "additionalData": {
         "extraFiles": [
           "src/inline-hook"
@@ -23,19 +23,12 @@
     },
     {
       "id": "codegen",
-      "versionRange": "^0.25.0",
+      "versionRange": "^0.28.0",
       "additionalData": {}
     },
     {
       "id": "custom-types",
-      "versionRange": "^0.15.18",
-      "additionalData": {
-        "private": true
-      }
-    },
-    {
-      "id": "questui",
-      "versionRange": "^0.16.4",
+      "versionRange": "^0.15.21",
       "additionalData": {
         "private": true
       }
@@ -47,7 +40,7 @@
     },
     {
       "id": "sombrero",
-      "versionRange": "^0.1.35",
+      "versionRange": "^0.1.37",
       "additionalData": {
         "private": true
       }
@@ -72,15 +65,8 @@
       }
     },
     {
-      "id": "diglett",
-      "versionRange": "^2.0.2",
-      "additionalData": {
-        "private": true
-      }
-    },
-    {
       "id": "qosmetics-core",
-      "versionRange": "^2.0.0",
+      "versionRange": "^0.1.0",
       "additionalData": {
         "private": true
       }
@@ -94,8 +80,17 @@
     },
     {
       "id": "lapiz",
-      "versionRange": "^0.0.8",
-      "additionalData": {}
+      "versionRange": "^0.1.0",
+      "additionalData": {
+        "private": true
+      }
+    },
+    {
+      "id": "bsml",
+      "versionRange": "^0.2.3",
+      "additionalData": {
+        "private": true
+      }
     }
   ],
   "additionalData": {}

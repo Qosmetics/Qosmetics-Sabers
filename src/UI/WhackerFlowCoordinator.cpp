@@ -2,7 +2,6 @@
 #include "UI/PreviewViewController.hpp"
 #include "UI/SelectionViewController.hpp"
 #include "UI/SettingsViewController.hpp"
-#include "questui/shared/BeatSaberUI.hpp"
 
 #include "HMUI/TitleViewController.hpp"
 #include "HMUI/ViewController_AnimationDirection.hpp"
@@ -12,12 +11,12 @@
 #include "qosmetics-core/shared/Utils/RainbowUtils.hpp"
 #include "qosmetics-core/shared/Utils/UIUtils.hpp"
 
+#include "bsml/shared/Helpers/utilities.hpp"
+
 #include "assets.hpp"
 #include "logging.hpp"
 
 DEFINE_TYPE(Qosmetics::Sabers, WhackerFlowCoordinator);
-
-using namespace QuestUI::BeatSaberUI;
 
 namespace Qosmetics::Sabers
 {
@@ -27,8 +26,8 @@ namespace Qosmetics::Sabers
         custom_types::InvokeBaseCtor(baseKlass, this);
 
         name = "Whackers";
-        inActiveSprite = ArrayToSprite(IncludedAssets::SaberIcon_png);
-        activeSprite = ArrayToSprite(IncludedAssets::SaberIconSelected_png);
+        inActiveSprite = BSML::Utilities::LoadSpriteRaw(IncludedAssets::SaberIcon_png);
+        activeSprite = BSML::Utilities::LoadSpriteRaw(IncludedAssets::SaberIconSelected_png);
     }
 
     void WhackerFlowCoordinator::Inject(PreviewViewController* previewViewController, SelectionViewController* selectionViewController, SettingsViewController* settingsViewController)

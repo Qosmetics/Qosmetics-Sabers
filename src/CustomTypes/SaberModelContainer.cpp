@@ -217,10 +217,7 @@ namespace Qosmetics::Sabers
     custom_types::Helpers::Coroutine SaberModelContainer::LoadBundleRoutine(std::function<void(SaberModelContainer*)> onFinished)
     {
         isLoading = true;
-        if (currentSaberObject)
-            Object::DestroyImmediate(currentSaberObject);
-        if (bundle)
-            bundle->Unload(true);
+        Unload();
 
         DEBUG("Loading file {} from whacker {}", currentManifest.get_fileName(), currentManifest.get_filePath());
         co_yield custom_types::Helpers::CoroutineHelper::New(Qosmetics::Core::BundleUtils::LoadBundleFromZipAsync(currentManifest.get_filePath(), currentManifest.get_fileName(), bundle));
@@ -276,22 +273,12 @@ namespace Qosmetics::Sabers
     {
         if (isLoading)
             return false;
-        if (currentSaberObject)
-        {
-            Object::DestroyImmediate(currentSaberObject);
-            currentSaberObject = nullptr;
-        }
-        if (bundle)
-        {
-            bundle->Unload(true);
-            bundle = nullptr;
-        }
-
+        Unload();
         currentManifest = decltype(currentManifest)();
         return true;
     }
 
-    void SaberModelContainer::OnDestroy()
+    void SaberModelContainer::Dispose()
     {
         instance = nullptr;
         Unload();

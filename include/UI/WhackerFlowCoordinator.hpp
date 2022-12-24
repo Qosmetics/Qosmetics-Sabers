@@ -16,10 +16,12 @@
     DECLARE_OVERRIDE_METHOD(retval, name, il2cpp_utils::il2cpp_type_check::MetadataGetter<mptr>::get(), __VA_ARGS__)
 #endif
 
+#include "private_field.hpp"
+
 DECLARE_CLASS_CUSTOM(Qosmetics::Sabers, WhackerFlowCoordinator, Qosmetics::Core::QosmeticsBaseFlowCoordinator,
-                     DECLARE_INSTANCE_FIELD(HMUI::ViewController*, settingsViewController);
-                     DECLARE_INSTANCE_FIELD(HMUI::ViewController*, selectionViewController);
-                     DECLARE_INSTANCE_FIELD(HMUI::ViewController*, previewViewController);
+                     DECLARE_INSTANCE_PRIVATE_FIELD(HMUI::ViewController*, settingsViewController);
+                     DECLARE_INSTANCE_PRIVATE_FIELD(HMUI::ViewController*, selectionViewController);
+                     DECLARE_INSTANCE_PRIVATE_FIELD(HMUI::ViewController*, previewViewController);
 
                      DECLARE_INJECT_METHOD(void, Inject, PreviewViewController* previewViewController, SelectionViewController* selectionViewController, SettingsViewController* settingsViewController);
 

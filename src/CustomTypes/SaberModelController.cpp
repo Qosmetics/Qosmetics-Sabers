@@ -136,11 +136,13 @@ namespace Qosmetics::Sabers
         whackerHandler->SetColor(thisColor, thatColor);
         whackerHandler->SetSize(globalConfig.saberWidth, globalConfig.saberLength);
 
+        DEBUG("Custom saber trails:");
         // Make trails work
         switch (globalConfig.trailType)
         {
         case Config::TrailType::CUSTOM:
         {
+            DEBUG("Custom Trails");
             if (!config.get_hasTrail())
                 CreateDefaultTrailCopy(customSaberT, whackerHandler);
 
@@ -152,10 +154,12 @@ namespace Qosmetics::Sabers
             break;
         }
         case Config::TrailType::NONE:
+            DEBUG("None Trails");
             break;
         case Config::TrailType::BASEGAME:
         default:
         {
+            DEBUG("Base Game Trails");
             CreateDefaultTrailCopy(customSaberT, whackerHandler);
             whackerHandler->SetupTrails();
             for (auto trail : whackerHandler->trailHandlers)
@@ -213,12 +217,14 @@ namespace Qosmetics::Sabers
 
         TrailComponent::trailIntensity = playerSpecificSettings->saberTrailIntensity;
 
+        DEBUG("Default saber trails:");
         switch (globalConfig.trailType)
         {
         case Config::TrailType::CUSTOM:
         case Config::TrailType::BASEGAME:
         default:
         {
+            DEBUG("Base Game Trails");
             auto whackerHandler = basicSaberModel->get_gameObject()->AddComponent<WhackerHandler*>();
             // TODO: disable default trail again
             CreateDefaultTrailCopy(basicSaberModel, whackerHandler);

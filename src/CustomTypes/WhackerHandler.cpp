@@ -19,6 +19,9 @@ namespace Qosmetics::Sabers
         if (!trailHandlers)
             GetTrailHandlers();
 
+        DEBUG("trailTransforms size: {}", trailTransforms.size());
+        DEBUG("trailHandlers size: {}", trailHandlers.size());
+
         for (auto t : trailTransforms)
             t->Init();
 

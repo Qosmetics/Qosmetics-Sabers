@@ -15,6 +15,7 @@
 
 #include <vector>
 
+#include "private_field.hpp"
 namespace Qosmetics::Sabers
 {
     class TrailComponent;
@@ -23,14 +24,14 @@ namespace Qosmetics::Sabers
 
 DECLARE_CLASS_CODEGEN(Qosmetics::Sabers, VertexPool, Il2CppObject,
 
-                      DECLARE_INSTANCE_FIELD(ArrayW<Sombrero::FastVector3>, Vertices);
-                      DECLARE_INSTANCE_FIELD(ArrayW<int>, Indices);
-                      DECLARE_INSTANCE_FIELD(ArrayW<Sombrero::FastVector2>, UVs);
-                      DECLARE_INSTANCE_FIELD(ArrayW<Sombrero::FastColor>, Colors);
+                      DECLARE_INSTANCE_PRIVATE_FIELD(ArrayW<Sombrero::FastVector3>, Vertices);
+                      DECLARE_INSTANCE_PRIVATE_FIELD(ArrayW<int>, Indices);
+                      DECLARE_INSTANCE_PRIVATE_FIELD(ArrayW<Sombrero::FastVector2>, UVs);
+                      DECLARE_INSTANCE_PRIVATE_FIELD(ArrayW<Sombrero::FastColor>, Colors);
 
-                      DECLARE_INSTANCE_FIELD(UnityEngine::MeshFilter*, _meshFilter);
-                      DECLARE_INSTANCE_FIELD(UnityEngine::Material*, _material);
-                      DECLARE_INSTANCE_FIELD(UnityEngine::GameObject*, _gameObject);
+                      DECLARE_INSTANCE_PRIVATE_FIELD(UnityEngine::MeshFilter*, _meshFilter);
+                      DECLARE_INSTANCE_PRIVATE_FIELD(UnityEngine::Material*, _material);
+                      DECLARE_INSTANCE_PRIVATE_FIELD(UnityEngine::GameObject*, _gameObject);
 
                       DECLARE_CTOR(ctor, UnityEngine::Material* material, TrailComponent* owner);
                       DECLARE_SIMPLE_DTOR();
