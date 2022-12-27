@@ -52,57 +52,7 @@ namespace Qosmetics::Sabers
     void SettingsViewController::DidActivate(bool firstActivation, bool addedToHierarchy, bool screenSystemEnabling)
     {
         if (firstActivation)
-        {
             BSML::parse_and_construct(IncludedAssets::SettingsView_bsml, get_transform(), this);
-            /*
-            auto localization = Diglett::Localization::get_instance();
-            if (Qosmetics::Core::DateUtils::isMonth(6))
-            {
-                Qosmetics::Core::UIUtils::AddHeader(get_transform(), Qosmetics::Core::RainbowUtils::gayify(static_cast<std::string>(localization->get("QosmeticsWhackers:Settings:Settings"))), Sombrero::FastColor::red());
-            }
-            else
-                Qosmetics::Core::UIUtils::AddHeader(get_transform(), localization->get("QosmeticsWhackers:Settings:Settings"), Sombrero::FastColor::red());
-
-            auto container = CreateScrollableSettingsContainer(this);
-
-            auto externalComponents = container->GetComponent<QuestUI::ExternalComponents*>();
-            auto scrollTransform = externalComponents->Get<UnityEngine::RectTransform*>();
-            scrollTransform->set_sizeDelta(Sombrero::FastVector2::zero());
-
-            auto containerT = container->get_transform();
-            auto wText = CreateText(containerT, localization->get("QosmeticsWhackers:Settings:WhackerSpecificSettings"));
-            wText->set_alignment(TMPro::TextAlignmentOptions::Center);
-            SLIDER(saberLength, "QosmeticsWhackers:Settings:SaberLength", 0.05f, globalConfig.saberLength, 0.05f, 2.0f, 0.2f);
-            SLIDER(saberWidth, "QosmeticsWhackers:Settings:SaberWidth", 0.05f, globalConfig.saberWidth, 0.05f, 2.0f, 0.2f);
-            CreateText(containerT, localization->get("QosmeticsWhackers:Settings:RemovedMenuPointers"));
-
-            auto tText = CreateText(containerT, localization->get("QosmeticsWhackers:Settings:TrailSpecificSettings"));
-            tText->set_alignment(TMPro::TextAlignmentOptions::Center);
-            TOGGLE(overrideTrailLength, "QosmeticsWhackers:Settings:OverrideTrailLength");
-            SLIDER(trailLength, "QosmeticsWhackers:Settings:TrailLength", 1.0f, globalConfig.trailLength, 0.0f, 50.0f, 0.2f);
-            trailLengthSlider->FormatString = [](auto v) -> std::string
-            { return std::to_string((int)v); };
-
-            TOGGLE(whiteTrail, "QosmeticsWhackers:Settings:WhiteTrail");
-            TOGGLE(overrideWhiteStep, "QosmeticsWhackers:Settings:OverrideWhiteStep");
-            SLIDER(whiteStep, "QosmeticsWhackers:Settings:WhiteStep", 0.05f, globalConfig.whiteStep, 0.0f, 1.0f, 0.2f);
-            TOGGLE(overrideTrailWidth, "QosmeticsWhackers:Settings:OverrideTrailWidth");
-            SLIDER(trailWidth, "QosmeticsWhackers:Settings:TrailWidth", 0.05f, globalConfig.trailWidth, 0.0f, 1.0f, 0.2f);
-
-            auto list = List<StringW>::New_ctor();
-            list->Add(localization->get(localizationKeys[0]));
-            list->Add(localization->get(localizationKeys[1]));
-            list->Add(localization->get(localizationKeys[2]));
-
-            trailTypeDropdown = CreateDropdownInternal(containerT, localization->get("QosmeticsWhackers:Settings:TrailType"), globalConfig.trailType, list, [&](auto _, int index)
-                                                       {
-                Config::get_config().trailType = (Config::TrailType)index;
-                Qosmetics::Core::Config::SaveConfig();
-                previewViewController->UpdatePreview(false); });
-
-            AddHoverHint(trailTypeDropdown, localization->get("QosmeticsWhackers:Settings:TrailTypeHoverHint"));
-            */
-        }
         else if (justChangedProfile)
         {
             justChangedProfile = false;
@@ -110,9 +60,7 @@ namespace Qosmetics::Sabers
             auto settings = GetComponentsInChildren<BSML::BaseSetting*>(true);
 
             for (auto setting : settings)
-            {
                 il2cpp_utils::RunMethod(setting, "ReceiveValue");
-            }
         }
     }
 
@@ -145,8 +93,8 @@ namespace Qosmetics::Sabers
         previewViewController->UpdatePreview(false);
     }
 
-    float SettingsViewController::get_trailLength() { return Config::get_config().trailLength; }
-    void SettingsViewController::set_trailLength(float value)
+    int SettingsViewController::get_trailLength() { return Config::get_config().trailLength; }
+    void SettingsViewController::set_trailLength(int value)
     {
         Config::get_config().trailLength = value;
         Qosmetics::Core::Config::SaveConfig();

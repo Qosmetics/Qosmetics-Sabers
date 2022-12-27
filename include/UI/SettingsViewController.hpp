@@ -29,7 +29,7 @@ DECLARE_CLASS_CODEGEN(Qosmetics::Sabers, SettingsViewController, HMUI::ViewContr
                       DECLARE_BSML_PROPERTY(float, saberLength);
                       DECLARE_BSML_PROPERTY(float, saberWidth);
                       DECLARE_BSML_PROPERTY(bool, overrideTrailLength);
-                      DECLARE_BSML_PROPERTY(float, trailLength);
+                      DECLARE_BSML_PROPERTY(int, trailLength);
                       DECLARE_BSML_PROPERTY(bool, whiteTrail);
                       DECLARE_BSML_PROPERTY(bool, overrideWhiteStep);
                       DECLARE_BSML_PROPERTY(float, whiteStep);
