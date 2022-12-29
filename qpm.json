@@ -23,7 +23,7 @@
     },
     {
       "id": "codegen",
-      "versionRange": "^0.31.0",
+      "versionRange": "^0.32.0",
       "additionalData": {}
     },
     {
@@ -66,7 +66,7 @@
     },
     {
       "id": "qosmetics-core",
-      "versionRange": "^2.1.1",
+      "versionRange": "^2.1.2",
       "additionalData": {
         "private": true
       }
@@ -80,14 +80,14 @@
     },
     {
       "id": "lapiz",
-      "versionRange": "^0.1.8",
+      "versionRange": "^0.1.9",
       "additionalData": {
         "private": true
       }
     },
     {
       "id": "bsml",
-      "versionRange": "^0.2.5",
+      "versionRange": "^0.2.9",
       "additionalData": {
         "private": true
       }

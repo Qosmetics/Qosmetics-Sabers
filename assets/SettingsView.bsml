@@ -9,7 +9,14 @@
             <text text='Whacker Settings' align="Center" font-size="8" />
         </macro.if>
         <macro.if value='gay'>
-            <text text='Whacker Settings' align="Center" font-size="8" />
+            <gradient-text
+                gradient='~gaydient'
+                gradient-scroll-speed='0.2'
+                gradient-fixed-step='true'
+                gradient-step-size='2'
+                text='Whacker Settings'
+                align="Center"
+                font-size="8" />
         </macro.if>
     </stack>
     <scrollable-settings-container size-delta-y="0">

@@ -39,16 +39,36 @@ namespace Qosmetics::Sabers
 
     void WhackerFlowCoordinator::DidActivate(bool firstActivation, bool addedToHierarchy, bool screenSystemEnabling)
     {
+        HMUI::TitleViewController* titleView = Object::FindObjectOfType<HMUI::TitleViewController*>();
         if (firstActivation)
         {
             ProvideInitialViewControllers(selectionViewController, settingsViewController, previewViewController, nullptr, nullptr);
 
             set_showBackButton(true);
-            SetTitle(Qosmetics::Core::DateUtils::isMonth(6) ? Qosmetics::Core::RainbowUtils::gayify("Whacker") : "Whacker", HMUI::ViewController::AnimationType::In);
+            SetTitle("Whacker", HMUI::ViewController::AnimationType::In);
+
+            if (Qosmetics::Core::DateUtils::isMonth(6))
+            {
+                titleGradientUpdater = get_gameObject()->AddComponent<BSML::TextGradientUpdater*>();
+                titleGradientUpdater->set_gradient(BSML::Gradient::Parse(Qosmetics::Core::RainbowUtils::randomGradient()));
+                titleGradientUpdater->text = titleView->text;
+                titleGradientUpdater->scrollSpeed = 0.2;
+                titleGradientUpdater->fixedStep = true;
+                titleGradientUpdater->stepSize = 2;
+            }
         }
 
-        HMUI::TitleViewController* titleView = Object::FindObjectOfType<HMUI::TitleViewController*>();
+        if (titleGradientUpdater && titleGradientUpdater->m_CachedPtr.m_value)
+            titleGradientUpdater->set_enabled(true);
+
         Qosmetics::Core::UIUtils::SetTitleColor(titleView, UnityEngine::Color::get_red());
+    }
+
+    void WhackerFlowCoordinator::DidDeactivate(bool removedFromHierarchy, bool screenSystemDisabling)
+    {
+        if (!titleGradientUpdater || !titleGradientUpdater->m_CachedPtr.m_value)
+            return;
+        titleGradientUpdater->set_enabled(false);
     }
 
     void WhackerFlowCoordinator::BackButtonWasPressed(HMUI::ViewController* topViewController)

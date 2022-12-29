@@ -25,6 +25,7 @@ DECLARE_CLASS_CODEGEN(Qosmetics::Sabers, PreviewViewController, HMUI::ViewContro
                       DECLARE_INSTANCE_PRIVATE_FIELD(UnityEngine::GameObject*, currentPrefab);
                       DECLARE_INSTANCE_METHOD(void, SetTitleText, StringW text);
 
+                      DECLARE_INSTANCE_METHOD(StringW, get_gaydient);
                       DECLARE_INSTANCE_METHOD(bool, get_gay);
                       DECLARE_INJECT_METHOD(void, Inject, SaberModelContainer* saberModelContainer, GlobalNamespace::PlayerDataModel* playerDataModel);
                       DECLARE_OVERRIDE_METHOD_MATCH(void, DidActivate, &HMUI::ViewController::DidActivate, bool firstActivation, bool addedToHierarchy, bool screenSystemEnabling);

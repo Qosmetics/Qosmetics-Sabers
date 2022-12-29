@@ -24,6 +24,7 @@ DECLARE_CLASS_CODEGEN(Qosmetics::Sabers, SettingsViewController, HMUI::ViewContr
 
                       DECLARE_INJECT_METHOD(void, Inject, PreviewViewController* previewViewController);
                       DECLARE_OVERRIDE_METHOD_MATCH(void, DidActivate, &HMUI::ViewController::DidActivate, bool firstActivation, bool addedToHierarchy, bool screenSystemEnabling);
+                      DECLARE_INSTANCE_METHOD(StringW, get_gaydient);
                       DECLARE_INSTANCE_METHOD(bool, get_gay);
 
                       DECLARE_BSML_PROPERTY(float, saberLength);

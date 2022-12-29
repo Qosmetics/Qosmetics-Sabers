@@ -9,7 +9,15 @@
             <text id='title' text='Placeholder' align="Center" font-size="8" />
         </macro.if>
         <macro.if value='gay'>
-            <text id='title' text='Placeholder' align="Center" font-size="8" />
+            <gradient-text
+                id='title'
+                gradient='~gaydient'
+                gradient-scroll-speed='0.2'
+                gradient-fixed-step='true'
+                gradient-step-size='2'
+                text='Placeholder'
+                align="Center"
+                font-size="8" />
         </macro.if>
     </stack>
     <vertical tags='objectBG' pref-width="100" background="title-gradient">
