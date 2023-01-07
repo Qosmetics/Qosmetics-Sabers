@@ -49,11 +49,5 @@ namespace IncludedAssets {
 	DECLARE_FILE(SaberIconSelected_png)
 	DECLARE_FILE(SelectionView_bsml)
 	DECLARE_FILE(SettingsView_bsml)
-	DECLARE_FILE(de_xml)
-	DECLARE_FILE(en_xml)
-	DECLARE_FILE(es_xml)
-	DECLARE_FILE(fr_xml)
-	DECLARE_FILE(ja_xml)
-	DECLARE_FILE(ko_xml)
 
 }

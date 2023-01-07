@@ -35,10 +35,8 @@ namespace Qosmetics::Sabers
             currentPrefab->SetActive(false);
     }
 
-    bool PreviewViewController::get_gay()
-    {
-        return Qosmetics::Core::DateUtils::isMonth(6);
-    }
+    StringW PreviewViewController::get_gaydient() { return Qosmetics::Core::RainbowUtils::randomGradient(); }
+    bool PreviewViewController::get_gay() { return Qosmetics::Core::DateUtils::isMonth(6); }
 
     void PreviewViewController::DidActivate(bool firstActivation, bool addedToHierarchy, bool screenSystemEnabling)
     {
