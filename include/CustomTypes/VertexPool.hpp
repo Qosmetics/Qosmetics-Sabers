@@ -33,7 +33,7 @@ DECLARE_CLASS_CODEGEN(Qosmetics::Sabers, VertexPool, Il2CppObject,
                       DECLARE_INSTANCE_PRIVATE_FIELD(UnityEngine::Material*, _material);
                       DECLARE_INSTANCE_PRIVATE_FIELD(UnityEngine::GameObject*, _gameObject);
 
-                      DECLARE_CTOR(ctor, UnityEngine::Material* material, TrailComponent* owner);
+                      DECLARE_CTOR(ctor);
                       DECLARE_SIMPLE_DTOR();
 
                       public
@@ -59,6 +59,7 @@ DECLARE_CLASS_CODEGEN(Qosmetics::Sabers, VertexPool, Il2CppObject,
                       void EnlargeArrays(int count, int icount);
                       void LateUpdate();
                       void SetMaterial(UnityEngine::Material* material);
+                      void Init(UnityEngine::Material* material, TrailComponent* owner);
 
                       private
                       :

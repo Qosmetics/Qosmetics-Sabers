@@ -20,6 +20,7 @@ namespace Qosmetics::Sabers
     {
         INVOKE_CTOR();
         INFO("ctor");
+        vertexPool = VertexPool::New_ctor();
     }
 
     bool TrailComponent::get_inited() const
@@ -61,8 +62,7 @@ namespace Qosmetics::Sabers
             spline.Reserve(TrailLength);
         snapshotList.reserve(TrailLength);
 
-        if (!vertexPool)
-            vertexPool = VertexPool::New_ctor(MyMaterial, this);
+        vertexPool->Init(MyMaterial, this);
         snapshotList.reserve(TrailLength);
 
         vertexPool->SetMeshObjectActive(false);

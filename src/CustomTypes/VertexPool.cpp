@@ -16,16 +16,22 @@ using namespace Sombrero;
 
 namespace Qosmetics::Sabers
 {
-    void VertexPool::ctor(Material* material, TrailComponent* owner)
+    void VertexPool::ctor()
     {
         INVOKE_CTOR();
+    }
+
+    void VertexPool::Init(Material* material, TrailComponent* owner)
+    {
+        if (!material || !owner)
+            return;
         vertexTotal = vertexUsed = indexUsed = indexTotal = 0;
         vertCountChanged = false;
         this->owner = owner;
-        CreateMeshObj(owner, material);
-        _material = material;
         InitArrays();
         IndiceChanged = ColorChanged = UVChanged = UV2Changed = VertChanged = true;
+        CreateMeshObj(owner, material);
+        _material = material;
     }
 
     void VertexPool::RecalculateBounds()
