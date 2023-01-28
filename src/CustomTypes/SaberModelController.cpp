@@ -87,6 +87,7 @@ namespace Qosmetics::Sabers
         */
         bool left = saber->get_saberType() == GlobalNamespace::SaberType::SaberA;
         get_transform()->set_localPosition({0, 0, 0});
+        get_transform()->set_localRotation(UnityEngine::Quaternion::get_identity());
 
         if (!_saberModelContainer || !_saberModelContainer->currentSaberObject)
         {
