@@ -8,7 +8,11 @@
     "url": "https://github.com/Qosmetics/Qosmetics-Sabers",
     "additionalData": {
       "headersOnly": true,
-      "overrideSoName": "libqosmetics-sabers.so"
+      "soLink": "https://github.com/Qosmetics/Qosmetics-Sabers/releases/download/v0.1.6/libqosmetics-sabers.so",
+      "debugSoLink": "https://github.com/Qosmetics/Qosmetics-Sabers/releases/download/v0.1.6/debug_libqosmetics-sabers.so",
+      "overrideSoName": "libqosmetics-sabers.so",
+      "modLink": "https://github.com/Qosmetics/Qosmetics-Sabers/releases/download/v0.1.6/QosmeticsWhackers.qmod",
+      "branchName": "version-v0.1.6"
     }
   },
   "dependencies": [
@@ -100,22 +104,22 @@
   ],
   "workspace": {
     "scripts": {
-      "build": [
-        "pwsh ./scripts/build.ps1"
-      ],
-      "log": [
-        "pwsh ./scripts/log.ps1"
-      ],
       "copy": [
         "pwsh ./scripts/copy.ps1"
-      ],
-      "clean": [
-        "pwsh ./scripts/build.ps1 -clean"
       ],
       "qmod": [
         "pwsh ./scripts/build.ps1 -clean",
         "qpm-rust qmod build",
         "pwsh ./scripts/createqmod.ps1 QosmeticsWhackers -clean"
+      ],
+      "log": [
+        "pwsh ./scripts/log.ps1"
+      ],
+      "clean": [
+        "pwsh ./scripts/build.ps1 -clean"
+      ],
+      "build": [
+        "pwsh ./scripts/build.ps1"
       ]
     }
   }
