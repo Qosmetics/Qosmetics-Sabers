@@ -38,12 +38,16 @@ jobs:
           workflow: cargo-build.yml
           name: linux-qpm-rust
           path: QPM
-          repo: RedBrumbler/QuestPackageManager-Rust
+          repo: QuestPackageManager/QPM.CLI
+
+      - name: Put QPM on path
+        run: |
+          chmod +x ./QPM/qpm-rust
+          echo "${GITHUB_WORKSPACE}/QPM" >> $GITHUB_PATH
 
       - name: QPM Collapse
         run: |
-          chmod +x ./QPM/qpm-rust
-          ./QPM/qpm-rust collapse
+          qpm-rust collapse
 
       - name: QPM Dependencies Cache
         id: cache-qpm-deps
@@ -82,15 +86,10 @@ jobs:
         run: |
           ./QPM/qpm-rust package edit --version "${{ steps.get_tag_version.outputs.VERSION }}"
 
-      - name: Build
+      - name: Build & Create Qmod
         run: |
           cd ${GITHUB_WORKSPACE}
-          ./QPM/qpm-rust qmod build
-          pwsh -Command ./build.ps1
-
-      - name: Create Qmod
-        run: |
-          pwsh -Command ./createqmod.ps1 ${{env.qmodName}}
+          qpm-rust s qmod
 
       - name: Configure commit
         run: |
@@ -99,7 +98,7 @@ jobs:
 
       - name: Commit Edit Version
         run: |
-          git add ./qpm.json
+          git add qpm.json qpm.shared.json
           git commit -m "Update Version and post restore" --allow-empty
 
       - name: Get Commit ID
@@ -187,8 +186,8 @@ jobs:
 
       - name: Commit Changed package info
         run: |
-          git add qpm.json
-          git commit -m "Updated qpm.json"
+          git add qpm.json qpm.shared.json
+          git commit -m "Updated qpm.json" --allow-empty
 
       - name: Get Commit ID
         id: get_created_commit_id
