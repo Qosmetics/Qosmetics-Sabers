@@ -14,32 +14,6 @@
 
 DEFINE_TYPE(Qosmetics::Sabers, SettingsViewController);
 
-#define TOGGLE(name, key)                                                              \
-    name##Toggle = CreateToggle(containerT, localization->get(key), globalConfig.name, \
-                                [&](auto v)                                            \
-                                {                                                      \
-                                    Config::get_config().name = v;                     \
-                                    Qosmetics::Core::Config::SaveConfig();             \
-                                    previewViewController->UpdatePreview(false);       \
-                                });                                                    \
-    AddHoverHint(name##Toggle, localization->get(key "HoverHint"))
-
-#define SLIDER(name, key, ...)                                                                             \
-    name##Slider = CreateSliderSetting(containerT, localization->get(key), __VA_ARGS__, globalConfig.name, \
-                                       [&](auto v)                                                         \
-                                       {                                                                   \
-                                           Config::get_config().name = v;                                  \
-                                           Qosmetics::Core::Config::SaveConfig();                          \
-                                           previewViewController->UpdatePreview(false);                    \
-                                       });                                                                 \
-    name##Slider->FormatString = [](auto v) -> std::string { return std::to_string(v).substr(0, 4); };     \
-    AddHoverHint(name##Slider, localization->get(key "HoverHint"))
-
-const char* localizationKeys[] = {
-    "QosmeticsWhackers:Settings:TrailType:CUSTOM",
-    "QosmeticsWhackers:Settings:TrailType:BASEGAME",
-    "QosmeticsWhackers:Settings:TrailType:NONE"};
-
 namespace Qosmetics::Sabers
 {
     bool SettingsViewController::justChangedProfile = false;

@@ -13,6 +13,11 @@
   },
   "dependencies": [
     {
+      "id": "libil2cpp",
+      "versionRange": "^0.2.3",
+      "additionalData": {}
+    },
+    {
       "id": "beatsaber-hook",
       "versionRange": "^3.14.0",
       "additionalData": {
@@ -93,5 +98,26 @@
       }
     }
   ],
+  "workspace": {
+    "scripts": {
+      "build": [
+        "pwsh ./scripts/build.ps1"
+      ],
+      "clean": [
+        "pwsh ./scripts/build.ps1 -clean"
+      ],
+      "copy": [
+        "pwsh ./scripts/copy.ps1"
+      ],
+      "log": [
+        "pwsh ./scripts/log.ps1"
+      ],
+      "qmod": [
+        "pwsh ./scripts/build.ps1 -clean",
+        "qpm-rust qmod build",
+        "pwsh ./scripts/createqmod.ps1 QosmeticsWhackers -clean"
+      ]
+    }
+  },
   "additionalData": {}
 }
