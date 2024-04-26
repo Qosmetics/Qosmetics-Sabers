@@ -28,7 +28,7 @@ on:
       - master
 
 env:
-  module_id: qosmetics-whackers
+  module_id: qosmetics-sabers
   qmod_name: QosmeticsWhackers
 
 jobs:
