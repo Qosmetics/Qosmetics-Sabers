@@ -9,9 +9,8 @@
     "coverImage": "cover.png",
     "description": "Qosmetics module that adds Whacker capabilities",
     "dependencies": [],
-    "modFiles": [],
     "lateModFiles": [
-        "${binary}"
+        "libqosmetics-sabers.so"
     ],
     "libraryFiles": [],
     "fileCopies": []
