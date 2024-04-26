@@ -16,7 +16,7 @@ DEFINE_TYPE(Qosmetics::Sabers, WhackerParent);
 namespace Qosmetics::Sabers
 {
     static std::map<GlobalNamespace::SaberModelController*, WhackerParent*> saberModelControllerToWhackerParentMap = {};
-    void WhackerParent::set_defaultSaber(bool value)
+    void WhackerParent::set_DefaultSaber(bool value)
     {
         defaultSaber = value;
 #ifdef HAS_CHROMA
@@ -53,19 +53,21 @@ namespace Qosmetics::Sabers
 
     void WhackerParent::ColorizeSpecific(int saberType, const Sombrero::FastColor& saberTypeColor)
     {
-        const auto& thisColor = saberType == whackerHandler->saberType.value ? saberTypeColor : whackerHandler->colorHandler->lastThisColor;
-        const auto& thatColor = saberType == whackerHandler->saberType.value ? whackerHandler->colorHandler->lastThatColor : saberTypeColor;
+        auto thisColor = saberType == whackerHandler->SaberType.value__ ? saberTypeColor : whackerHandler->ColorHandler->LastThisColor;
+        auto thatColor = saberType == whackerHandler->SaberType.value__ ? whackerHandler->ColorHandler->LastThatColor : saberTypeColor;
         // if the types are the same, the color being set is THIS color
         whackerHandler->SetColor(thisColor, thatColor);
 
-        switch (whackerHandler->saberType.value)
+        switch (whackerHandler->SaberType)
         {
-        case 0:
-            for (auto trail : whackerHandler->trailHandlers)
+        case GlobalNamespace::SaberType::SaberA:
+            for (auto trail : whackerHandler->TrailHandlers)
                 trail->SetColor(thisColor, thatColor);
-        case 1:
-            for (auto trail : whackerHandler->trailHandlers)
+            break;
+        case GlobalNamespace::SaberType::SaberB:
+            for (auto trail : whackerHandler->TrailHandlers)
                 trail->SetColor(thatColor, thisColor);
+            break;
         default:
             break;
         }
@@ -78,4 +80,8 @@ namespace Qosmetics::Sabers
         if (whackerItr != saberModelControllerToWhackerParentMap.end())
             whackerItr->second->ColorizeSpecific(saberType, saberTypeColor);
     }
+
+    class WhackerHandler* WhackerParent::get_WhackerHandler() const { return whackerHandler; }
+    void WhackerParent::set_WhackerHandler(class WhackerHandler* whackerHandler) { this->whackerHandler = whackerHandler; }
+
 }

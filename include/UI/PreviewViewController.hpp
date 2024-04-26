@@ -10,19 +10,12 @@
 #include "custom-types/shared/macros.hpp"
 #include "lapiz/shared/macros.hpp"
 
-#ifndef DECLARE_OVERRIDE_METHOD_MATCH
-#define DECLARE_OVERRIDE_METHOD_MATCH(retval, name, mptr, ...) \
-    DECLARE_OVERRIDE_METHOD(retval, name, il2cpp_utils::il2cpp_type_check::MetadataGetter<mptr>::get(), __VA_ARGS__)
-#endif
-
-#include "private_field.hpp"
-
 DECLARE_CLASS_CODEGEN(Qosmetics::Sabers, PreviewViewController, HMUI::ViewController,
-                      DECLARE_INSTANCE_PRIVATE_FIELD(SaberModelContainer*, saberModelContainer);
-                      DECLARE_INSTANCE_PRIVATE_FIELD(GlobalNamespace::PlayerDataModel*, playerDataModel);
-                      DECLARE_INSTANCE_PRIVATE_FIELD(TMPro::TextMeshProUGUI*, title);
-                      DECLARE_INSTANCE_PRIVATE_FIELD(HMUI::ImageView*, loadingIndicator);
-                      DECLARE_INSTANCE_PRIVATE_FIELD(UnityEngine::GameObject*, currentPrefab);
+                      DECLARE_INSTANCE_FIELD_PRIVATE(SaberModelContainer*, saberModelContainer);
+                      DECLARE_INSTANCE_FIELD_PRIVATE(GlobalNamespace::PlayerDataModel*, playerDataModel);
+                      DECLARE_INSTANCE_FIELD_PRIVATE(TMPro::TextMeshProUGUI*, title);
+                      DECLARE_INSTANCE_FIELD_PRIVATE(HMUI::ImageView*, loadingIndicator);
+                      DECLARE_INSTANCE_FIELD_PRIVATE(UnityEngine::GameObject*, currentPrefab);
                       DECLARE_INSTANCE_METHOD(void, SetTitleText, StringW text);
 
                       DECLARE_INSTANCE_METHOD(StringW, get_gaydient);

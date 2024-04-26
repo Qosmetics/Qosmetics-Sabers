@@ -5,12 +5,10 @@
 #include "custom-types/shared/macros.hpp"
 #include "sombrero/shared/FastColor.hpp"
 
-#include "private_field.hpp"
-
 DECLARE_CLASS_CODEGEN(Qosmetics::Sabers, WhackerColorHandler, UnityEngine::MonoBehaviour,
-                      DECLARE_INSTANCE_PRIVATE_FIELD(Sombrero::FastColor, lastThisColor);
-                      DECLARE_INSTANCE_PRIVATE_FIELD(Sombrero::FastColor, lastThatColor);
-                      DECLARE_INSTANCE_PRIVATE_FIELD(ArrayW<UnityEngine::Material*>, customColorMaterials);
+                      DECLARE_INSTANCE_FIELD_PRIVATE(Sombrero::FastColor, lastThisColor);
+                      DECLARE_INSTANCE_FIELD_PRIVATE(Sombrero::FastColor, lastThatColor);
+                      DECLARE_INSTANCE_FIELD_PRIVATE(ArrayW<UnityEngine::Material*>, customColorMaterials);
 
                       DECLARE_INSTANCE_METHOD(void, Awake);
                       DECLARE_INSTANCE_METHOD(void, FetchCCMaterials);
@@ -18,6 +16,12 @@ DECLARE_CLASS_CODEGEN(Qosmetics::Sabers, WhackerColorHandler, UnityEngine::MonoB
 
                       public
                       :
+
+                      __declspec(property(get = get_LastThisColor)) Sombrero::FastColor LastThisColor;
+                      Sombrero::FastColor get_LastThisColor();
+
+                      __declspec(property(get = get_LastThatColor)) Sombrero::FastColor LastThatColor;
+                      Sombrero::FastColor get_LastThatColor();
 
                       void SetColor(const Sombrero::FastColor& thisColor, const Sombrero::FastColor& thatColor);
 

@@ -26,7 +26,7 @@ namespace Qosmetics::Sabers
     void SettingsViewController::DidActivate(bool firstActivation, bool addedToHierarchy, bool screenSystemEnabling)
     {
         if (firstActivation)
-            BSML::parse_and_construct(IncludedAssets::SettingsView_bsml, get_transform(), this);
+            BSML::parse_and_construct(Assets::Views::SettingsView_bsml, get_transform(), this);
         else if (justChangedProfile)
         {
             justChangedProfile = false;

@@ -9,6 +9,12 @@ DEFINE_TYPE(Qosmetics::Sabers, TrailHandler);
 
 namespace Qosmetics::Sabers
 {
+    void TrailHandler::InitTransforms(UnityEngine::Transform* topTransform, UnityEngine::Transform* botTransform)
+    {
+        this->topTransform = topTransform;
+        this->botTransform = botTransform;
+    }
+
     void TrailHandler::InitData()
     {
         trail = GetComponent<TrailComponent*>();
@@ -44,8 +50,8 @@ namespace Qosmetics::Sabers
                                         config.overrideWhiteStep ? float(config.whiteStep) : whiteStep,
                                         (config.whiteTrail ? Sombrero::FastColor::white() : trailColor) * multiplierColor);
             trail->Setup(trailInitData,
-                         config.overrideTrailWidth ? get_customBotTransform() : get_botTransform(),
-                         get_topTransform(),
+                         config.overrideTrailWidth ? CustomBotTransform : BotTransform,
+                         TopTransform,
                          material,
                          false);
         }
@@ -78,7 +84,7 @@ namespace Qosmetics::Sabers
             trail->set_enabled(active);
     }
 
-    UnityEngine::Transform* TrailHandler::get_topTransform()
+    UnityEngine::Transform* TrailHandler::get_TopTransform()
     {
         if (topTransform)
             return topTransform;
@@ -91,7 +97,7 @@ namespace Qosmetics::Sabers
         return topTransform;
     }
 
-    UnityEngine::Transform* TrailHandler::get_botTransform()
+    UnityEngine::Transform* TrailHandler::get_BotTransform()
     {
         if (botTransform)
             return botTransform;
@@ -104,7 +110,7 @@ namespace Qosmetics::Sabers
         return botTransform;
     }
 
-    UnityEngine::Transform* TrailHandler::get_customBotTransform()
+    UnityEngine::Transform* TrailHandler::get_CustomBotTransform()
     {
         if (customBotTransform)
             return customBotTransform;
@@ -113,13 +119,15 @@ namespace Qosmetics::Sabers
         customBotTransform = UnityEngine::GameObject::New_ctor(ConstStrings::CustomTrailStart())->get_transform();
         customBotTransform->SetParent(get_transform(), false);
 
-        auto topPos = get_topTransform()->get_position();
-        auto botPos = get_botTransform()->get_position();
+        auto topPos = TopTransform->get_position();
+        auto botPos = BotTransform->get_position();
 
         DEBUG("Lerping between positions:\n\t{}, {}, {}\n\t{}, {}, {}", topPos.x, topPos.y, topPos.z, botPos.x, botPos.y, botPos.z);
         customBotTransform->set_position(Sombrero::FastVector3::Lerp(topPos, botPos, config.trailWidth));
 
         return customBotTransform;
     }
+
+    int TrailHandler::get_TrailID() const { return trailId; }
 
 }

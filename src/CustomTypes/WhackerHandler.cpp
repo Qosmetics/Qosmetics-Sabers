@@ -32,9 +32,9 @@ namespace Qosmetics::Sabers
 
             for (auto t : trailTransforms)
             {
-                if (t->trailId == handler->trailId)
+                if (t->TrailID == handler->TrailID)
                 {
-                    if (t->get_isTop())
+                    if (t->IsTop)
                         top = t;
                     else
                         bot = t;
@@ -43,9 +43,7 @@ namespace Qosmetics::Sabers
                 }
             }
 
-            handler->topTransform = top->get_transform();
-            handler->botTransform = bot->get_transform();
-
+            handler->InitTransforms(top->transform, bot->transform);
             handler->InitTrail();
         }
     }
@@ -60,4 +58,16 @@ namespace Qosmetics::Sabers
     {
         get_transform()->set_localScale({width, width, length});
     }
+
+    void WhackerHandler::set_ColorHandler(WhackerColorHandler* colorHandler) { this->colorHandler = colorHandler; }
+    WhackerColorHandler* WhackerHandler::get_ColorHandler() const { return colorHandler; }
+
+    void WhackerHandler::set_SaberType(GlobalNamespace::SaberType saberType) { this->saberType = saberType; }
+    GlobalNamespace::SaberType WhackerHandler::get_SaberType() const { return saberType; }
+
+    ArrayW<TrailHandler*> WhackerHandler::get_TrailHandlers() const { return trailHandlers; }
+    void WhackerHandler::set_TrailHandlers(ArrayW<TrailHandler*> trailHandlers) { this->trailHandlers = trailHandlers; }
+    ArrayW<TrailTransform*> WhackerHandler::get_TrailTransforms() const { return trailTransforms; }
+    void WhackerHandler::set_TrailTransforms(ArrayW<TrailTransform*> trailTransforms) { this->trailTransforms = trailTransforms; }
+
 }

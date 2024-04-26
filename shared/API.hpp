@@ -1,7 +1,9 @@
 #pragma once
+
 #include "SabersConfig.hpp"
 #include "UnityEngine/GameObject.hpp"
 #include "conditional-dependencies/shared/main.hpp"
+#include "scotland2/shared/loader.hpp"
 
 #if __has_include("qosmetics-core/shared/Data/Descriptor.hpp")
 #include "qosmetics-core/shared/Data/Descriptor.hpp"
@@ -131,18 +133,18 @@ namespace Qosmetics::Sabers::API
 
     /// @brief Unregister your mod as disabling Saber editing
     /// @param info your mod info
-    void UnregisterSaberDisablingInfo(ModInfo info)
+    void UnregisterSaberDisablingInfo(modloader::ModInfo info)
     {
-        static auto function = CondDeps::Find<void, ModInfo>(QOSMETICS_SABERS, "UnregisterSaberDisablingInfo");
+        static auto function = CondDeps::Find<void, modloader::ModInfo>(QOSMETICS_SABERS, "UnregisterSaberDisablingInfo");
         if (function)
             function.value()(info);
     }
 
     /// @brief register your mod as disabling Saber editing
     /// @param info your mod info
-    void RegisterSaberDisablingInfo(ModInfo info)
+    void RegisterSaberDisablingInfo(modloader::ModInfo info)
     {
-        static auto function = CondDeps::Find<void, ModInfo>(QOSMETICS_SABERS, "RegisterSaberDisablingInfo");
+        static auto function = CondDeps::Find<void, modloader::ModInfo>(QOSMETICS_SABERS, "RegisterSaberDisablingInfo");
         if (function)
             function.value()(info);
     }

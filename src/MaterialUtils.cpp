@@ -28,7 +28,7 @@ namespace Qosmetics::Sabers::MaterialUtils
     {
         if (!object)
             return;
-        ArrayW<UnityEngine::Renderer*> renderers = object->GetComponentsInChildren<UnityEngine::Renderer*>(true);
+        auto renderers = object->GetComponentsInChildren<UnityEngine::Renderer*>(true);
 
         // all shader variant stuff is stripped so resolve icall
         static auto createFunc = reinterpret_cast<function_ptr_t<void, Il2CppObject*>>(il2cpp_functions::resolve_icall("UnityEngine.ShaderVariantCollection::Internal_Create"));
@@ -38,10 +38,9 @@ namespace Qosmetics::Sabers::MaterialUtils
         createFunc(obj);
         for (auto renderer : renderers)
         {
-            ArrayW<UnityEngine::Material*> materials = renderer->get_materials();
-            for (auto material : materials)
+            for (auto material : renderer->materials)
             {
-                addFunc(obj, material->get_shader(), 0, material->get_shaderKeywords());
+                addFunc(obj, material->shader, 0, material->shaderKeywords);
             }
         }
 

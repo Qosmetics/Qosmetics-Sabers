@@ -14,22 +14,22 @@ SplineControlPoint* SplineControlPoint::PreviousControlPoint() const
     return spline->PreviousControlPoint(*this);
 }
 
-const FastVector3& SplineControlPoint::NextPosition() const
+FastVector3 SplineControlPoint::NextPosition() const
 {
     return spline->NextPosition(*this);
 }
 
-const FastVector3& SplineControlPoint::PreviousPosition() const
+FastVector3 SplineControlPoint::PreviousPosition() const
 {
     return spline->PreviousPosition(*this);
 }
 
-const FastVector3& SplineControlPoint::NextNormal() const
+FastVector3 SplineControlPoint::NextNormal() const
 {
     return spline->NextNormal(*this);
 }
 
-const FastVector3& SplineControlPoint::PreviousNormal() const
+FastVector3 SplineControlPoint::PreviousNormal() const
 {
     return spline->PreviousNormal(*this);
 }
@@ -39,7 +39,7 @@ bool SplineControlPoint::IsValid() const
     return NextControlPoint();
 }
 
-const FastVector3& SplineControlPoint::GetNext2Position() const
+FastVector3 SplineControlPoint::GetNext2Position() const
 {
     auto cp = NextControlPoint();
     if (cp)
@@ -47,7 +47,7 @@ const FastVector3& SplineControlPoint::GetNext2Position() const
     return NextPosition();
 }
 
-const FastVector3& SplineControlPoint::GetNext2Normal() const
+FastVector3 SplineControlPoint::GetNext2Normal() const
 {
     auto cp = NextControlPoint();
     if (cp)

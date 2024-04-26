@@ -8,12 +8,13 @@
 #include "custom-types/shared/coroutine.hpp"
 #include "custom-types/shared/macros.hpp"
 
+
 #include "qosmetics-core/shared/Data/Descriptor.hpp"
 #include "qosmetics-core/shared/Data/Manifest.hpp"
 
 DECLARE_CLASS_CODEGEN_INTERFACES(Qosmetics::Sabers, SaberModelContainer, UnityEngine::MonoBehaviour, classof(::System::IDisposable*),
                                  DECLARE_INSTANCE_METHOD(void, Start);
-                                 DECLARE_OVERRIDE_METHOD(void, Dispose, il2cpp_utils::il2cpp_type_check::MetadataGetter<&::System::IDisposable::Dispose>::get());
+                                 DECLARE_OVERRIDE_METHOD_MATCH(void, Dispose, &::System::IDisposable::Dispose);
                                  DECLARE_INSTANCE_FIELD(UnityEngine::AssetBundle*, bundle);
                                  DECLARE_INSTANCE_FIELD(bool, isLoading);
                                  DECLARE_INSTANCE_FIELD(UnityEngine::GameObject*, currentSaberObject);

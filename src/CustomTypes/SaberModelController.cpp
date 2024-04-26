@@ -15,7 +15,6 @@
 #include "sombrero/shared/FastColor.hpp"
 #include "sombrero/shared/FastQuaternion.hpp"
 
-#include "GlobalNamespace/AvatarPoseController.hpp"
 #include "GlobalNamespace/ConditionalMaterialSwitcher.hpp"
 #include "GlobalNamespace/GameplayCoreSceneSetupData.hpp"
 #include "GlobalNamespace/PlayerSpecificSettings.hpp"
@@ -34,6 +33,12 @@ extern std::string JsonValueToString(const rapidjson::Value& val);
 
 namespace Qosmetics::Sabers
 {
+    void SaberModelController::ctor()
+    {
+        INVOKE_BASE_CTOR(classof(GlobalNamespace::SaberModelController*));
+        DEBUG("SaberModelController");
+    }
+
     void SaberModelController::Inject(GlobalNamespace::ColorManager* colorManager, SaberModelContainer* saberModelContainer, Lapiz::Sabers::SaberModelProvider* modelProvider, ::Zenject::DiContainer* container, GlobalNamespace::GameplayCoreSceneSetupData* gameplayCoreSceneSetupData)
     {
         DEBUG("Inject");
@@ -51,24 +56,24 @@ namespace Qosmetics::Sabers
             return;
         auto& config = _saberModelContainer->GetSaberConfig();
         auto& globalConfig = Config::get_config();
-        int saberType = saber->get_saberType().value;
+        int saberType = saber->saberType.value__;
 
         HideDefaultSaberElements();
         auto whackerParent = get_gameObject()->GetComponentInChildren<WhackerParent*>();
         auto whackerHandler = get_gameObject()->GetComponentInChildren<WhackerHandler*>();
-        whackerHandler->saberType = saberType;
-        whackerParent->set_defaultSaber(!get_transform()->Find(saberType == 0 ? ConstStrings::LeftSaber() : ConstStrings::RightSaber()));
-        whackerParent->whackerHandler = whackerHandler;
+        whackerHandler->SaberType = saberType;
+        whackerParent->DefaultSaber = (!get_transform()->Find(saberType == 0 ? ConstStrings::LeftSaber() : ConstStrings::RightSaber()));
+        whackerParent->WhackerHandler = whackerHandler;
 
-        const Sombrero::FastColor leftColor(colorManager->ColorForSaberType(0));
-        const Sombrero::FastColor rightColor(colorManager->ColorForSaberType(1));
+        const Sombrero::FastColor leftColor(_colorManager->ColorForSaberType(0));
+        const Sombrero::FastColor rightColor(_colorManager->ColorForSaberType(1));
 
         const Sombrero::FastColor& thisColor = saberType == 0 ? leftColor : rightColor;
         const Sombrero::FastColor& thatColor = saberType == 1 ? leftColor : rightColor;
 
-        whackerHandler->colorHandler = whackerHandler->get_gameObject()->GetComponentsInChildren<Qosmetics::Sabers::WhackerColorHandler*>().FirstOrDefault();
+        whackerHandler->ColorHandler = whackerHandler->gameObject->GetComponentsInChildren<Qosmetics::Sabers::WhackerColorHandler*>()->FirstOrDefault();
         whackerHandler->SetupTrails();
-        for (auto trailHandler : whackerHandler->trailHandlers)
+        for (auto trailHandler : whackerHandler->TrailHandlers)
             trailHandler->SetColor(leftColor, rightColor);
     }
 
@@ -77,14 +82,7 @@ namespace Qosmetics::Sabers
         DEBUG("InitOverride");
         this->saber = saber;
         get_transform()->SetParent(parent);
-        /*
-        // don't do anything on multiplayer avatars, just locally for this user
-        if (GetComponentInParent<GlobalNamespace::AvatarPoseController*>())
-        {
-            UnityEngine::Object::Destroy(this);
-            return;
-        }
-        */
+
         bool left = saber->get_saberType() == GlobalNamespace::SaberType::SaberA;
         get_transform()->set_localPosition({0, 0, 0});
         get_transform()->set_localRotation(UnityEngine::Quaternion::get_identity());
@@ -102,9 +100,9 @@ namespace Qosmetics::Sabers
 
         auto& config = _saberModelContainer->GetSaberConfig();
         auto& globalConfig = Config::get_config();
-        int saberType = saber->get_saberType().value;
+        auto saberType = saber->saberType;
 
-        StringW saberName(saberType == 0 ? ConstStrings::LeftSaber() : ConstStrings::RightSaber());
+        StringW saberName(saberType == GlobalNamespace::SaberType::SaberA ? ConstStrings::LeftSaber() : ConstStrings::RightSaber());
         DEBUG("Spawning {} prefab", saberName);
         auto prefab = _saberModelContainer->currentSaberObject->get_transform()->Find(saberName)->get_gameObject();
 
@@ -120,20 +118,20 @@ namespace Qosmetics::Sabers
         customSaberT->set_localScale(Sombrero::FastVector3(globalConfig.saberWidth, globalConfig.saberWidth, 1.0f));
         customSaberT->set_localRotation(Sombrero::FastQuaternion::identity());
 
-        const Sombrero::FastColor leftColor(colorManager->ColorForSaberType(0));
-        const Sombrero::FastColor rightColor(colorManager->ColorForSaberType(1));
+        const Sombrero::FastColor leftColor(_colorManager->ColorForSaberType(0));
+        const Sombrero::FastColor rightColor(_colorManager->ColorForSaberType(1));
 
-        const Sombrero::FastColor& thisColor = saberType == 0 ? leftColor : rightColor;
-        const Sombrero::FastColor& thatColor = saberType == 1 ? leftColor : rightColor;
+        const Sombrero::FastColor& thisColor = saberType == GlobalNamespace::SaberType::SaberA ? leftColor : rightColor;
+        const Sombrero::FastColor& thatColor = saberType == GlobalNamespace::SaberType::SaberB ? leftColor : rightColor;
 
         // Make sure all the components on the custom saber are inited
         auto whackerHandler = customSaber->GetComponentInChildren<WhackerHandler*>();
-        whackerHandler->saberType = saberType;
-        whackerParent->whackerHandler = whackerHandler;
-        whackerParent->set_defaultSaber(false);
+        whackerHandler->SaberType = saberType;
+        whackerParent->WhackerHandler = whackerHandler;
+        whackerParent->DefaultSaber = false;
 
-        DEBUG("SaberType: {}", saberType);
-        whackerHandler->colorHandler = whackerHandler->get_gameObject()->GetComponentsInChildren<Qosmetics::Sabers::WhackerColorHandler*>().FirstOrDefault();
+        DEBUG("SaberType: {}", saberType.value__);
+        whackerHandler->ColorHandler = whackerHandler->get_gameObject()->GetComponentsInChildren<Qosmetics::Sabers::WhackerColorHandler*>()->FirstOrDefault();
         whackerHandler->SetColor(thisColor, thatColor);
         whackerHandler->SetSize(globalConfig.saberWidth, globalConfig.saberLength);
 
@@ -148,7 +146,7 @@ namespace Qosmetics::Sabers
                 CreateDefaultTrailCopy(customSaberT, whackerHandler);
 
             whackerHandler->SetupTrails();
-            for (auto trail : whackerHandler->trailHandlers)
+            for (auto trail : whackerHandler->TrailHandlers)
             {
                 trail->SetColor(leftColor, rightColor);
             }
@@ -163,7 +161,7 @@ namespace Qosmetics::Sabers
             DEBUG("Base Game Trails");
             CreateDefaultTrailCopy(customSaberT, whackerHandler);
             whackerHandler->SetupTrails();
-            for (auto trail : whackerHandler->trailHandlers)
+            for (auto trail : whackerHandler->TrailHandlers)
             {
                 trail->SetColor(leftColor, rightColor);
             }
@@ -179,9 +177,9 @@ namespace Qosmetics::Sabers
 
         DEBUG("Removing default trial");
         auto saberModelController = GetComponent<GlobalNamespace::SaberModelController*>();
-        auto trail = saberModelController->saberTrail;
-        trail->set_enabled(false);
-        trail->trailRenderer->set_enabled(false);
+        auto trail = saberModelController->_saberTrail;
+        trail->enabled = false;
+        trail->_trailRenderer->enabled = false;
 
         DEBUG("Removing default mesh objects");
         auto filters = get_gameObject()->GetComponentsInChildren<UnityEngine::MeshFilter*>(true);
@@ -230,24 +228,24 @@ namespace Qosmetics::Sabers
             // TODO: disable default trail again
             CreateDefaultTrailCopy(basicSaberModel, whackerHandler);
             whackerHandler->SetupTrails();
-            for (auto trail : whackerHandler->trailHandlers)
+            for (auto trail : whackerHandler->TrailHandlers)
             {
-                trail->SetColor(colorManager->ColorForSaberType(0), colorManager->ColorForSaberType(1));
+                trail->SetColor(_colorManager->ColorForSaberType(0), _colorManager->ColorForSaberType(1));
             }
 
             auto whackerParent = get_gameObject()->AddComponent<Qosmetics::Sabers::WhackerParent*>();
-            whackerParent->set_defaultSaber(true);
-            whackerParent->whackerHandler = whackerHandler;
+            whackerParent->DefaultSaber = true;
+            whackerParent->WhackerHandler = whackerHandler;
         }
         case Config::TrailType::NONE:
             DEBUG("Removing default trial");
             if (!saberModelController)
                 break;
-            auto trail = saberModelController->saberTrail;
+            auto trail = saberModelController->_saberTrail;
             if (!trail)
                 break;
-            trail->set_enabled(false);
-            trail->trailRenderer->set_enabled(false);
+            trail->enabled = false;
+            trail->_trailRenderer->enabled = false;
         }
     }
 
@@ -273,7 +271,7 @@ namespace Qosmetics::Sabers
         trailEndT->get_transform()->SetParent(trailObjectT, false);
         trailEndT->set_localPosition({0.0f, 0.0f, 1.0f});
 
-        TrailData trailData(100, saber->get_saberType().value, Sombrero::FastColor::white(), Sombrero::FastColor::white(), 20, 0.2f);
+        TrailData trailData(100, saber->saberType.value__, Sombrero::FastColor::white(), Sombrero::FastColor::white(), 20, 0.2f);
         TrailPoint topPoint(100, true);
         TrailPoint bottomPoint(100, false);
 
@@ -293,19 +291,19 @@ namespace Qosmetics::Sabers
         auto trailEndTransform = trailEnd->AddComponent<TrailTransform*>();
         auto trailStartTransform = trailStart->AddComponent<TrailTransform*>();
 
-        handler->trailHandlers = ArrayW<TrailHandler*>({trailHandler});
-        handler->trailTransforms = ArrayW<TrailTransform*>({trailEndTransform, trailStartTransform});
+        handler->TrailHandlers = ArrayW<TrailHandler*>({trailHandler});
+        handler->TrailTransforms = ArrayW<TrailTransform*>({trailEndTransform, trailStartTransform});
 
         auto saberModelController = GetComponent<GlobalNamespace::SaberModelController*>();
-        auto trail = saberModelController->saberTrail;
+        auto trail = saberModelController->_saberTrail;
 
-        auto trailRendererPrefab = trail->trailRendererPrefab;
+        auto trailRendererPrefab = trail->_trailRendererPrefab;
 
-        INFO("trail Renderer prefab name: ", trailRendererPrefab->get_gameObject()->get_name());
-        INFO("trail Renderer name: ", trail->trailRenderer->get_gameObject()->get_name());
+        INFO("trail Renderer prefab name: ", trailRendererPrefab->gameObject->name);
+        INFO("trail Renderer name: ", trail->_trailRenderer->gameObject->name);
 
-        auto materialSwitcher = trailRendererPrefab->get_gameObject()->GetComponent<GlobalNamespace::ConditionalMaterialSwitcher*>();
-        auto material = materialSwitcher->material1;
+        auto materialSwitcher = trailRendererPrefab->gameObject->GetComponent<GlobalNamespace::ConditionalMaterialSwitcher*>();
+        auto material = materialSwitcher->_material1;
 
         auto meshRenderer = trailObject->AddComponent<UnityEngine::MeshRenderer*>();
         meshRenderer->set_material(material);

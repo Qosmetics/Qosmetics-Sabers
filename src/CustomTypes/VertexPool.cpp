@@ -3,9 +3,11 @@
 
 #include "UnityEngine/MeshRenderer.hpp"
 #include "UnityEngine/Object.hpp"
+#include "UnityEngine/Quaternion.hpp"
 #include "UnityEngine/Rendering/ShadowCastingMode.hpp"
 #include "UnityEngine/Time.hpp"
 #include "UnityEngine/Transform.hpp"
+
 
 #include "CustomTypes/TrailComponent.hpp"
 
@@ -31,27 +33,27 @@ namespace Qosmetics::Sabers
     void VertexPool::RecalculateBounds()
     {
         auto mesh = get_MyMesh();
-        if (mesh && mesh->m_CachedPtr.m_value)
+        if (mesh && mesh->m_CachedPtr)
             mesh->RecalculateBounds();
     }
 
     Mesh* VertexPool::get_MyMesh() const
     {
-        if (_meshFilter && _meshFilter->m_CachedPtr.m_value)
+        if (_meshFilter && _meshFilter->m_CachedPtr)
             return _meshFilter->get_sharedMesh();
         return nullptr;
     }
 
     void VertexPool::SetMeshObjectActive(bool flag) const
     {
-        if (!_meshFilter || !_meshFilter->m_CachedPtr.m_value)
+        if (!_meshFilter || !_meshFilter->m_CachedPtr)
             return;
         _meshFilter->get_gameObject()->SetActive(flag);
     }
 
     void VertexPool::Destroy() const
     {
-        if (_gameObject && _gameObject->m_CachedPtr.m_value)
+        if (_gameObject && _gameObject->m_CachedPtr)
             UnityEngine::Object::Destroy(_gameObject);
     }
 
@@ -83,25 +85,25 @@ namespace Qosmetics::Sabers
 
     void VertexPool::EnlargeArrays(int count, int icount)
     {
-        int length = Vertices->Length();
+        int length = Vertices.size();
         auto tempVertices = Vertices;
-        Vertices = ArrayW<Sombrero::FastVector3>(il2cpp_array_size_t(length + icount));
-        memcpy(Vertices.begin(), tempVertices.begin(), tempVertices.Length() * sizeof(Sombrero::FastVector3));
+        _vertices = ArrayW<Sombrero::FastVector3>(il2cpp_array_size_t(length + icount));
+        memcpy(Vertices.begin(), tempVertices.begin(), tempVertices.size() * sizeof(Sombrero::FastVector3));
 
-        length = UVs->Length();
+        length = UVs.size();
         auto tempUVs = UVs;
-        UVs = ArrayW<Sombrero::FastVector2>(il2cpp_array_size_t(length + icount));
-        memcpy(UVs.begin(), tempUVs.begin(), tempUVs.Length() * sizeof(Sombrero::FastVector2));
+        _uvs = ArrayW<Sombrero::FastVector2>(il2cpp_array_size_t(length + icount));
+        memcpy(UVs.begin(), tempUVs.begin(), tempUVs.size() * sizeof(Sombrero::FastVector2));
 
-        length = Colors->Length();
+        length = Colors.size();
         auto tempColors = Colors;
-        Colors = ArrayW<Sombrero::FastColor>(il2cpp_array_size_t(length + icount));
-        memcpy(Colors.begin(), tempColors.begin(), tempColors.Length() * sizeof(Sombrero::FastColor));
+        _colors = ArrayW<Sombrero::FastColor>(il2cpp_array_size_t(length + icount));
+        memcpy(Colors.begin(), tempColors.begin(), tempColors.size() * sizeof(Sombrero::FastColor));
 
-        length = Indices->Length();
+        length = Indices.size();
         auto tempIndices = Indices;
-        Indices = ArrayW<int>(il2cpp_array_size_t(length + icount));
-        memcpy(Indices.begin(), tempIndices.begin(), tempIndices.Length() * sizeof(int));
+        _indices = ArrayW<int>(il2cpp_array_size_t(length + icount));
+        memcpy(Indices.begin(), tempIndices.begin(), tempIndices.size() * sizeof(int));
 
         vertCountChanged = true;
         IndiceChanged = true;
@@ -114,7 +116,7 @@ namespace Qosmetics::Sabers
     void VertexPool::LateUpdate()
     {
         auto mymesh = get_MyMesh();
-        if (!mymesh || !mymesh->m_CachedPtr.m_value)
+        if (!mymesh || !mymesh->m_CachedPtr)
             return;
 
         if (vertCountChanged)
@@ -171,10 +173,10 @@ namespace Qosmetics::Sabers
 
     void VertexPool::InitArrays()
     {
-        Vertices = ArrayW<Sombrero::FastVector3>(il2cpp_array_size_t(4));
-        UVs = ArrayW<Sombrero::FastVector2>(il2cpp_array_size_t(4));
-        Colors = ArrayW<Sombrero::FastColor>(il2cpp_array_size_t(4));
-        Indices = ArrayW<int>(il2cpp_array_size_t(6));
+        _vertices = ArrayW<Sombrero::FastVector3>(il2cpp_array_size_t(4));
+        _uvs = ArrayW<Sombrero::FastVector2>(il2cpp_array_size_t(4));
+        _colors = ArrayW<Sombrero::FastColor>(il2cpp_array_size_t(4));
+        _indices = ArrayW<int>(il2cpp_array_size_t(6));
         vertexTotal = 4;
         indexTotal = 6;
     }
@@ -187,4 +189,10 @@ namespace Qosmetics::Sabers
             _gameObject->GetComponent<Renderer*>()->set_sharedMaterial(material);
         }
     }
+
+    ArrayW<Sombrero::FastVector3> VertexPool::get_Vertices() { return _vertices; };
+    ArrayW<int> VertexPool::get_Indices() { return _indices; };
+    ArrayW<Sombrero::FastVector2> VertexPool::get_UVs() { return _uvs; };
+    ArrayW<Sombrero::FastColor> VertexPool::get_Colors() { return _colors; };
+
 }

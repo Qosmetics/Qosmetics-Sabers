@@ -19,23 +19,30 @@
 
 #define SABERMODELCONTAINER Qosmetics::Sabers::SaberModelContainer::get_instance()
 #define GET_SABERMODELCONTAINER() auto saberModelContainer = SABERMODELCONTAINER
+#define VISIBLE_API(name, retVal, ...)                                                   \
+    retVal name(__VA_ARGS__);                                                            \
+    extern "C" __attribute__((visibility("default"))) ::CondDeps::CondDepsRet __##name() \
+    {                                                                                    \
+        return ::CondDeps::CondDepConverter<decltype(&name)>::get(&name);                \
+    }                                                                                    \
+    retVal name(__VA_ARGS__)
 
-EXPOSE_API(GetActiveDescriptor, Qosmetics::Core::Descriptor)
+VISIBLE_API(GetActiveDescriptor, Qosmetics::Core::Descriptor)
 {
     return SABERMODELCONTAINER->GetDescriptor();
 }
 
-EXPOSE_API(GetConfig, Qosmetics::Sabers::SabersConfig*)
+VISIBLE_API(GetConfig, Qosmetics::Sabers::SabersConfig*)
 {
     return reinterpret_cast<Qosmetics::Sabers::SabersConfig*>(&Qosmetics::Sabers::Config::get_config());
 }
 
-EXPOSE_API(SetDefault, void)
+VISIBLE_API(SetDefault, void)
 {
     SABERMODELCONTAINER->Default();
 }
 
-EXPOSE_API(SetActiveFromFilePath, bool, std::string filePath)
+VISIBLE_API(SetActiveFromFilePath, bool, std::string filePath)
 {
     if (!fileexists(filePath))
         return false;
@@ -43,7 +50,7 @@ EXPOSE_API(SetActiveFromFilePath, bool, std::string filePath)
     return Qosmetics::Sabers::SaberModelContainer::get_instance()->LoadObject(manifest, nullptr);
 }
 
-EXPOSE_API(SetActive, bool, std::string fileName)
+VISIBLE_API(SetActive, bool, std::string fileName)
 {
     std::string filePath = fmt::format("{}/{}", whacker_path, fileName);
     if (!fileexists(filePath))
@@ -52,12 +59,12 @@ EXPOSE_API(SetActive, bool, std::string fileName)
     return Qosmetics::Sabers::SaberModelContainer::get_instance()->LoadObject(manifest, nullptr);
 }
 
-EXPOSE_API(GetSaberIsCustom, bool)
+VISIBLE_API(GetSaberIsCustom, bool)
 {
     return SABERMODELCONTAINER->currentSaberObject != nullptr;
 }
 /*
-EXPOSE_API(GetInUseSaberClone, UnityEngine::GameObject*, int saberType)
+VISIBLE_API(GetInUseSaberClone, UnityEngine::GameObject*, int saberType)
 {
     auto saberModelControllers = UnityEngine::Resources::FindObjectsOfTypeAll<Qosmetics::Sabers::SaberModelController*>();
     for (auto saberModelController : saberModelControllers)
@@ -74,7 +81,7 @@ EXPOSE_API(GetInUseSaberClone, UnityEngine::GameObject*, int saberType)
     return nullptr;
 }
 */
-EXPOSE_API(GetSaber, UnityEngine::GameObject*, int saberType)
+VISIBLE_API(GetSaber, UnityEngine::GameObject*, int saberType)
 {
     GET_SABERMODELCONTAINER();
 
@@ -83,7 +90,7 @@ EXPOSE_API(GetSaber, UnityEngine::GameObject*, int saberType)
     return UnityEngine::Object::Instantiate(saberModelContainer->currentSaberObject->get_transform()->Find(saberType == 0 ? ConstStrings::LeftSaber() : ConstStrings::RightSaber())->get_gameObject());
 }
 
-EXPOSE_API(GetPrefabClone, UnityEngine::GameObject*)
+VISIBLE_API(GetPrefabClone, UnityEngine::GameObject*)
 {
     GET_SABERMODELCONTAINER();
 
@@ -92,49 +99,49 @@ EXPOSE_API(GetPrefabClone, UnityEngine::GameObject*)
     return UnityEngine::Object::Instantiate(saberModelContainer->currentSaberObject);
 }
 
-EXPOSE_API(GetPrefab, UnityEngine::GameObject*)
+VISIBLE_API(GetPrefab, UnityEngine::GameObject*)
 {
     return SABERMODELCONTAINER->currentSaberObject;
 }
 
-EXPOSE_API(GetSabersDisabled, bool)
+VISIBLE_API(GetSabersDisabled, bool)
 {
     return Qosmetics::Sabers::Disabling::GetAnyDisabling();
 }
 
-EXPOSE_API(UnregisterSaberDisablingInfo, void, ModInfo info)
+VISIBLE_API(UnregisterSaberDisablingInfo, void, modloader::ModInfo info)
 {
     Qosmetics::Sabers::Disabling::UnregisterDisablingModInfo(info);
 }
 
-EXPOSE_API(RegisterSaberDisablingInfo, void, ModInfo info)
+VISIBLE_API(RegisterSaberDisablingInfo, void, modloader::ModInfo info)
 {
     Qosmetics::Sabers::Disabling::RegisterDisablingModInfo(info);
 }
 
-EXPOSE_API(GetSaberFolder, std::string)
+VISIBLE_API(GetSaberFolder, std::string)
 {
     return whacker_path;
 }
 
 // Whacker Color Handler
-EXPOSE_API(WhackerColorHandler_SetColor, void, Qosmetics::Sabers::WhackerColorHandler* self, const Sombrero::FastColor& thisColor, const Sombrero::FastColor& thatColor)
+VISIBLE_API(WhackerColorHandler_SetColor, void, Qosmetics::Sabers::WhackerColorHandler* self, const Sombrero::FastColor& thisColor, const Sombrero::FastColor& thatColor)
 {
     self->SetColor(thisColor, thatColor);
 }
 
 // Trail Handler
-EXPOSE_API(TrailHandler_SetColor, void, Qosmetics::Sabers::TrailHandler* self, const Sombrero::FastColor& leftColor, const Sombrero::FastColor& rightColor)
+VISIBLE_API(TrailHandler_SetColor, void, Qosmetics::Sabers::TrailHandler* self, const Sombrero::FastColor& leftColor, const Sombrero::FastColor& rightColor)
 {
     self->SetColor(leftColor, rightColor);
 }
 
-EXPOSE_API(TrailHandler_SetTrailActive, void, Qosmetics::Sabers::TrailHandler* self, bool active)
+VISIBLE_API(TrailHandler_SetTrailActive, void, Qosmetics::Sabers::TrailHandler* self, bool active)
 {
     self->SetTrailActive(active);
 }
 
-EXPOSE_API(TrailComponent_Reset, void, Qosmetics::Sabers::TrailComponent* self)
+VISIBLE_API(TrailComponent_Reset, void, Qosmetics::Sabers::TrailComponent* self)
 {
     self->Reset();
 }

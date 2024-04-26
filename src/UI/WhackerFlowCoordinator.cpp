@@ -4,8 +4,6 @@
 #include "UI/SettingsViewController.hpp"
 
 #include "HMUI/TitleViewController.hpp"
-#include "HMUI/ViewController_AnimationDirection.hpp"
-#include "HMUI/ViewController_AnimationType.hpp"
 
 #include "qosmetics-core/shared/Utils/DateUtils.hpp"
 #include "qosmetics-core/shared/Utils/RainbowUtils.hpp"
@@ -26,8 +24,12 @@ namespace Qosmetics::Sabers
         custom_types::InvokeBaseCtor(baseKlass, this);
 
         name = "Whackers";
-        inActiveSprite = BSML::Utilities::LoadSpriteRaw(IncludedAssets::SaberIcon_png);
-        activeSprite = BSML::Utilities::LoadSpriteRaw(IncludedAssets::SaberIconSelected_png);
+    }
+
+    void WhackerFlowCoordinator::Awake()
+    {
+        inActiveSprite = BSML::Utilities::LoadSpriteRaw(Assets::Icons::SaberIcon_png);
+        activeSprite = BSML::Utilities::LoadSpriteRaw(Assets::Icons::SaberIconSelected_png);
     }
 
     void WhackerFlowCoordinator::Inject(PreviewViewController* previewViewController, SelectionViewController* selectionViewController, SettingsViewController* settingsViewController)
@@ -51,14 +53,14 @@ namespace Qosmetics::Sabers
             {
                 titleGradientUpdater = get_gameObject()->AddComponent<BSML::TextGradientUpdater*>();
                 titleGradientUpdater->set_gradient(BSML::Gradient::Parse(Qosmetics::Core::RainbowUtils::randomGradient()));
-                titleGradientUpdater->text = titleView->text;
+                titleGradientUpdater->text = titleView->_text;
                 titleGradientUpdater->scrollSpeed = 0.2;
                 titleGradientUpdater->fixedStep = true;
                 titleGradientUpdater->stepSize = 2;
             }
         }
 
-        if (titleGradientUpdater && titleGradientUpdater->m_CachedPtr.m_value)
+        if (titleGradientUpdater && titleGradientUpdater->m_CachedPtr)
             titleGradientUpdater->set_enabled(true);
 
         Qosmetics::Core::UIUtils::SetTitleColor(titleView, UnityEngine::Color::get_red());
@@ -66,14 +68,14 @@ namespace Qosmetics::Sabers
 
     void WhackerFlowCoordinator::DidDeactivate(bool removedFromHierarchy, bool screenSystemDisabling)
     {
-        if (!titleGradientUpdater || !titleGradientUpdater->m_CachedPtr.m_value)
+        if (!titleGradientUpdater || !titleGradientUpdater->m_CachedPtr)
             return;
         titleGradientUpdater->set_enabled(false);
     }
 
     void WhackerFlowCoordinator::BackButtonWasPressed(HMUI::ViewController* topViewController)
     {
-        this->parentFlowCoordinator->DismissFlowCoordinator(this, HMUI::ViewController::AnimationDirection::Horizontal, nullptr, false);
+        this->_parentFlowCoordinator->DismissFlowCoordinator(this, HMUI::ViewController::AnimationDirection::Horizontal, nullptr, false);
     }
 
 }

@@ -13,15 +13,13 @@
 
 #include "sombrero/shared/ColorUtils.hpp"
 
-#include "private_field.hpp"
-
 DECLARE_CLASS_CODEGEN(Qosmetics::Sabers, TrailComponent, UnityEngine::MonoBehaviour,
-                      DECLARE_INSTANCE_PRIVATE_FIELD(StringW, SortingLayerName);
-                      DECLARE_INSTANCE_PRIVATE_FIELD(UnityEngine::Transform*, PointStart);
-                      DECLARE_INSTANCE_PRIVATE_FIELD(UnityEngine::Transform*, PointEnd);
-                      DECLARE_INSTANCE_PRIVATE_FIELD(UnityEngine::Material*, MyMaterial);
+                      DECLARE_INSTANCE_FIELD_PRIVATE(StringW, SortingLayerName);
+                      DECLARE_INSTANCE_FIELD_PRIVATE(UnityEngine::Transform*, PointStart);
+                      DECLARE_INSTANCE_FIELD_PRIVATE(UnityEngine::Transform*, PointEnd);
+                      DECLARE_INSTANCE_FIELD_PRIVATE(UnityEngine::Material*, MyMaterial);
 
-                      DECLARE_INSTANCE_PRIVATE_FIELD(Qosmetics::Sabers::VertexPool*, vertexPool);
+                      DECLARE_INSTANCE_FIELD_PRIVATE(Qosmetics::Sabers::VertexPool*, vertexPool);
 
                       DECLARE_INSTANCE_METHOD(void, OnDestroy);
                       DECLARE_INSTANCE_METHOD(void, LateUpdate);

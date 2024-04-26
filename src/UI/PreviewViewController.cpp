@@ -42,20 +42,20 @@ namespace Qosmetics::Sabers
     {
         if (firstActivation)
         {
-            auto parser = BSML::parse_and_construct(IncludedAssets::PreviewView_bsml, get_transform(), this);
+            auto parser = BSML::parse_and_construct(Assets::Views::PreviewView_bsml, transform, this);
             auto params = parser->parserParams.get();
             auto objectBG = params->GetObjectsWithTag("objectBG").at(0)->GetComponent<BSML::Backgroundable*>();
             auto imageView = objectBG->background;
-            imageView->skew = 0;
-            imageView->set_gradient(true);
-            imageView->gradientDirection = 1;
-            imageView->set_color(Sombrero::FastColor::white());
+            imageView->_skew = 0;
+            imageView->gradient = true;
+            imageView->_gradientDirection = HMUI::ImageView::GradientDirection::Vertical;
+            imageView->color = Sombrero::FastColor::white();
             auto color = Sombrero::FastColor::get_black();
             color.a = 0.3f;
-            imageView->set_color0(color);
+            imageView->color0 = color;
             color.a = 0.7f;
-            imageView->set_color1(color);
-            imageView->curvedCanvasSettingsHelper->Reset();
+            imageView->color1 = color;
+            imageView->_curvedCanvasSettingsHelper->Reset();
 
             ShowLoading(true);
             UpdatePreview(true);
@@ -73,7 +73,7 @@ namespace Qosmetics::Sabers
 
     void PreviewViewController::SetTitleText(StringW text)
     {
-        if (!(title && title->m_CachedPtr.m_value))
+        if (!(title && title->m_CachedPtr))
             return;
 
         if (Qosmetics::Core::DateUtils::isMonth(6))
@@ -87,7 +87,7 @@ namespace Qosmetics::Sabers
 
     void PreviewViewController::ShowLoading(bool isLoading)
     {
-        if (!(loadingIndicator && loadingIndicator->m_CachedPtr.m_value))
+        if (!(loadingIndicator && loadingIndicator->m_CachedPtr))
             return;
 
         loadingIndicator->get_gameObject()->SetActive(isLoading);

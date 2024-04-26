@@ -1,5 +1,6 @@
 #include "CustomTypes/TrailComponent.hpp"
 
+#include "CustomTypes/VertexPool.hpp"
 #include "UnityEngine/GameObject.hpp"
 #include "UnityEngine/Time.hpp"
 #include "logging.hpp"
@@ -19,7 +20,6 @@ namespace Qosmetics::Sabers
     void TrailComponent::ctor()
     {
         INVOKE_CTOR();
-        INFO("ctor");
     }
 
     bool TrailComponent::get_inited() const
@@ -240,20 +240,20 @@ namespace Qosmetics::Sabers
 
             int iidx = vertexSegment.IndexStart + i * 12;
             // triangle left
-            pool->Indices->values[iidx + 0] = nextBaseIdx;
-            pool->Indices->values[iidx + 1] = nextBaseIdx + 1;
-            pool->Indices->values[iidx + 2] = baseIdx;
-            pool->Indices->values[iidx + 3] = nextBaseIdx + 1;
-            pool->Indices->values[iidx + 4] = baseIdx + 1;
-            pool->Indices->values[iidx + 5] = baseIdx;
+            pool->Indices[iidx + 0] = nextBaseIdx;
+            pool->Indices[iidx + 1] = nextBaseIdx + 1;
+            pool->Indices[iidx + 2] = baseIdx;
+            pool->Indices[iidx + 3] = nextBaseIdx + 1;
+            pool->Indices[iidx + 4] = baseIdx + 1;
+            pool->Indices[iidx + 5] = baseIdx;
 
             // triangle right
-            pool->Indices->values[iidx + 6] = nextBaseIdx + 1;
-            pool->Indices->values[iidx + 7] = nextBaseIdx + 2;
-            pool->Indices->values[iidx + 8] = baseIdx + 1;
-            pool->Indices->values[iidx + 9] = nextBaseIdx + 2;
-            pool->Indices->values[iidx + 10] = baseIdx + 2;
-            pool->Indices->values[iidx + 11] = baseIdx + 1;
+            pool->Indices[iidx + 6] = nextBaseIdx + 1;
+            pool->Indices[iidx + 7] = nextBaseIdx + 2;
+            pool->Indices[iidx + 8] = baseIdx + 1;
+            pool->Indices[iidx + 9] = nextBaseIdx + 2;
+            pool->Indices[iidx + 10] = baseIdx + 2;
+            pool->Indices[iidx + 11] = baseIdx + 1;
         }
 
         pool->IndiceChanged = true;

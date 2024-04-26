@@ -1,7 +1,8 @@
 #include "UI/WhackerFlowCoordinator.hpp"
+#include "_config.h"
 #include "hooking.hpp"
 #include "logging.hpp"
-#include "modloader/shared/modloader.hpp"
+#include "scotland2/shared/modloader.h"
 #include "static-defines.hpp"
 
 #include "assets.hpp"
@@ -12,20 +13,21 @@
 #include "lapiz/shared/AttributeRegistration.hpp"
 #include "lapiz/shared/zenject/Zenjector.hpp"
 
-ModInfo modInfo = {MOD_ID, VERSION};
+modloader::ModInfo modInfo = {MOD_ID, VERSION, 0};
 
-extern "C" void setup(ModInfo& info)
+QOSMETICS_SABERS_EXPORT_FUNC void setup(CModInfo* info)
 {
-    info = modInfo;
+    info->id = MOD_ID;
+    info->version = VERSION;
+    info->version_long = 0;
 }
 
-extern "C" void load()
+QOSMETICS_SABERS_EXPORT_FUNC void late_load()
 {
     il2cpp_functions::Init();
 
     mkpath(whacker_path);
-    auto& logger = Qosmetics::Sabers::Logging::getLogger();
-    Hooks::InstallHooks(logger);
+    Hooks::InstallHooks();
     custom_types::Register::AutoRegister();
     Lapiz::Attributes::AutoRegister();
 

@@ -24,9 +24,7 @@ namespace Qosmetics::Sabers
         }
     }
 
-    bool TrailTransform::get_isTop()
-    {
-        return isTop;
-    }
+    int TrailTransform::get_TrailID() const { return trailId; }
+    bool TrailTransform::get_IsTop() const { return isTop; }
 
 }

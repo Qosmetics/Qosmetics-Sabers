@@ -15,7 +15,6 @@
 
 #include <vector>
 
-#include "private_field.hpp"
 namespace Qosmetics::Sabers
 {
     class TrailComponent;
@@ -24,14 +23,13 @@ namespace Qosmetics::Sabers
 
 DECLARE_CLASS_CODEGEN(Qosmetics::Sabers, VertexPool, Il2CppObject,
 
-                      DECLARE_INSTANCE_PRIVATE_FIELD(ArrayW<Sombrero::FastVector3>, Vertices);
-                      DECLARE_INSTANCE_PRIVATE_FIELD(ArrayW<int>, Indices);
-                      DECLARE_INSTANCE_PRIVATE_FIELD(ArrayW<Sombrero::FastVector2>, UVs);
-                      DECLARE_INSTANCE_PRIVATE_FIELD(ArrayW<Sombrero::FastColor>, Colors);
-
-                      DECLARE_INSTANCE_PRIVATE_FIELD(UnityEngine::MeshFilter*, _meshFilter);
-                      DECLARE_INSTANCE_PRIVATE_FIELD(UnityEngine::Material*, _material);
-                      DECLARE_INSTANCE_PRIVATE_FIELD(UnityEngine::GameObject*, _gameObject);
+                      DECLARE_INSTANCE_FIELD_PRIVATE(ArrayW<Sombrero::FastVector3>, _vertices);
+                      DECLARE_INSTANCE_FIELD_PRIVATE(ArrayW<int>, _indices);
+                      DECLARE_INSTANCE_FIELD_PRIVATE(ArrayW<Sombrero::FastVector2>, _uvs);
+                      DECLARE_INSTANCE_FIELD_PRIVATE(ArrayW<Sombrero::FastColor>, _colors);
+                      DECLARE_INSTANCE_FIELD_PRIVATE(UnityEngine::MeshFilter*, _meshFilter);
+                      DECLARE_INSTANCE_FIELD_PRIVATE(UnityEngine::Material*, _material);
+                      DECLARE_INSTANCE_FIELD_PRIVATE(UnityEngine::GameObject*, _gameObject);
 
                       DECLARE_CTOR(ctor, UnityEngine::Material* material, TrailComponent* owner);
                       DECLARE_SIMPLE_DTOR();
@@ -59,6 +57,16 @@ DECLARE_CLASS_CODEGEN(Qosmetics::Sabers, VertexPool, Il2CppObject,
                       void EnlargeArrays(int count, int icount);
                       void LateUpdate();
                       void SetMaterial(UnityEngine::Material* material);
+
+                      ArrayW<Sombrero::FastVector3> get_Vertices();
+                      ArrayW<int> get_Indices();
+                      ArrayW<Sombrero::FastVector2> get_UVs();
+                      ArrayW<Sombrero::FastColor> get_Colors();
+
+                      __declspec(property(get = get_Vertices)) ArrayW<Sombrero::FastVector3> Vertices;
+                      __declspec(property(get = get_Indices)) ArrayW<int> Indices;
+                      __declspec(property(get = get_UVs)) ArrayW<Sombrero::FastVector2> UVs;
+                      __declspec(property(get = get_Colors)) ArrayW<Sombrero::FastColor> Colors;
 
                       private
                       :

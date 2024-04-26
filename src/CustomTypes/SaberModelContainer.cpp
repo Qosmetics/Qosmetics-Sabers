@@ -8,7 +8,6 @@
 #include "static-defines.hpp"
 #include <utility>
 
-#include "GlobalNamespace/SharedCoroutineStarter.hpp"
 #include "UnityEngine/Coroutine.hpp"
 #include "UnityEngine/Material.hpp"
 #include "UnityEngine/MeshRenderer.hpp"
@@ -286,10 +285,10 @@ namespace Qosmetics::Sabers
 
     void SaberModelContainer::Unload()
     {
-        if (currentSaberObject && currentSaberObject->m_CachedPtr.m_value)
+        if (currentSaberObject && currentSaberObject->m_CachedPtr)
             Object::DestroyImmediate(currentSaberObject);
         currentSaberObject = nullptr;
-        if (bundle && bundle->m_CachedPtr.m_value)
+        if (bundle && bundle->m_CachedPtr)
             bundle->Unload(true);
         bundle = nullptr;
     }

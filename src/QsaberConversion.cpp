@@ -7,10 +7,10 @@
 #include "qosmetics-core/shared/Utils/FileUtils.hpp"
 #include "static-defines.hpp"
 
-#include "GlobalNamespace/SharedCoroutineStarter.hpp"
 #include "UnityEngine/ImageConversion.hpp"
 #include "UnityEngine/TextAsset.hpp"
 #include "UnityEngine/Texture2D.hpp"
+#include "bsml/shared/BSML/SharedCoroutineStarter.hpp"
 #include "zip/shared/zip.h"
 
 #include "beatsaber-hook/shared/config/rapidjson-utils.hpp"
@@ -25,7 +25,7 @@ namespace Qosmetics::Sabers::QsaberConversion
 {
     void ConvertOldQsabers(std::function<void()> onFinished)
     {
-        GlobalNamespace::SharedCoroutineStarter::get_instance()->StartCoroutine(coro(ConvertAllFoundQsabers(GetNonConverted(GetQsaberFiles()), std::move(onFinished))));
+        BSML::SharedCoroutineStarter::StartCoroutine(coro(ConvertAllFoundQsabers(GetNonConverted(GetQsaberFiles()), std::move(onFinished))));
     }
 
     std::vector<std::string> GetQsaberFiles()
