@@ -1,5 +1,5 @@
 {
-  "version": "0.1.0",
+  "version": "0.3.0",
   "sharedDir": "shared",
   "dependenciesDir": "extern",
   "info": {
@@ -29,7 +29,7 @@
       ],
       "qmod": [
         "pwsh ./scripts/build.ps1 -clean",
-        "qpm-rust qmod build",
+        "qpm-rust qmod manifest",
         "pwsh ./scripts/createqmod.ps1 QosmeticsWhackers -clean"
       ]
     }
