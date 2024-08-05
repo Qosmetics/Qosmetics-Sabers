@@ -285,10 +285,10 @@ namespace Qosmetics::Sabers
 
     void SaberModelContainer::Unload()
     {
-        if (currentSaberObject && currentSaberObject->m_CachedPtr)
+        if (currentSaberObject && currentSaberObject->m_CachedPtr.m_value)
             Object::DestroyImmediate(currentSaberObject);
         currentSaberObject = nullptr;
-        if (bundle && bundle->m_CachedPtr)
+        if (bundle && bundle->m_CachedPtr.m_value)
             bundle->Unload(true);
         bundle = nullptr;
     }
