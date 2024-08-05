@@ -6,7 +6,7 @@
         background-color0="#FF0000FF" background-color1="#FF000000" ignore-layout="true"
         anchor-pos-y="45">
         <macro.if value='!gay'>
-            <text id='title' text='Placeholder' align="Center" font-size="8" />
+            <text id='title' text='Placeholder' align="Center" font-size="8" italics='true' />
         </macro.if>
         <macro.if value='gay'>
             <gradient-text
@@ -17,6 +17,7 @@
                 gradient-step-size='2'
                 text='Placeholder'
                 align="Center"
+                italics='true'
                 font-size="8" />
         </macro.if>
     </stack>

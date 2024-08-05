@@ -71,23 +71,20 @@ namespace Qosmetics::Sabers
         }
     }
 
-    void PreviewViewController::SetTitleText(StringW text)
+    void PreviewViewController::SetTitleText(std::string_view text)
     {
-        if (!(title && title->m_CachedPtr))
+        if (!(title && title->m_CachedPtr.m_value))
             return;
 
         if (Qosmetics::Core::DateUtils::isMonth(6))
-        {
-            text = "<i>" + Qosmetics::Core::RainbowUtils::gayify(static_cast<std::string>(text)) + "</i>";
-            title->set_text(text);
-        }
+            title->set_text(Qosmetics::Core::RainbowUtils::gayify(text));
         else
-            title->set_text(u"<i>" + text + u"</i>");
+            title->set_text(text);
     }
 
     void PreviewViewController::ShowLoading(bool isLoading)
     {
-        if (!(loadingIndicator && loadingIndicator->m_CachedPtr))
+        if (!(loadingIndicator && loadingIndicator->m_CachedPtr.m_value))
             return;
 
         loadingIndicator->get_gameObject()->SetActive(isLoading);

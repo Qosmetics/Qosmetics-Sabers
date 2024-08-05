@@ -16,7 +16,6 @@ DECLARE_CLASS_CODEGEN(Qosmetics::Sabers, PreviewViewController, HMUI::ViewContro
                       DECLARE_INSTANCE_FIELD_PRIVATE(TMPro::TextMeshProUGUI*, title);
                       DECLARE_INSTANCE_FIELD_PRIVATE(HMUI::ImageView*, loadingIndicator);
                       DECLARE_INSTANCE_FIELD_PRIVATE(UnityEngine::GameObject*, currentPrefab);
-                      DECLARE_INSTANCE_METHOD(void, SetTitleText, StringW text);
 
                       DECLARE_INSTANCE_METHOD(StringW, get_gaydient);
                       DECLARE_INSTANCE_METHOD(bool, get_gay);
@@ -33,5 +32,7 @@ DECLARE_CLASS_CODEGEN(Qosmetics::Sabers, PreviewViewController, HMUI::ViewContro
                       void UpdatePreview(bool reinstantiate = false);
                       void InstantiatePrefab();
                       void ClearPrefab();
+
+                      void SetTitleText(std::string_view text);
 
 )

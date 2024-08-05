@@ -8,7 +8,6 @@
 #include "UnityEngine/Time.hpp"
 #include "UnityEngine/Transform.hpp"
 
-
 #include "CustomTypes/TrailComponent.hpp"
 
 DEFINE_TYPE(Qosmetics::Sabers, VertexPool);
@@ -33,27 +32,27 @@ namespace Qosmetics::Sabers
     void VertexPool::RecalculateBounds()
     {
         auto mesh = get_MyMesh();
-        if (mesh && mesh->m_CachedPtr)
+        if (mesh && mesh->m_CachedPtr.m_value)
             mesh->RecalculateBounds();
     }
 
     Mesh* VertexPool::get_MyMesh() const
     {
-        if (_meshFilter && _meshFilter->m_CachedPtr)
+        if (_meshFilter && _meshFilter->m_CachedPtr.m_value)
             return _meshFilter->get_sharedMesh();
         return nullptr;
     }
 
     void VertexPool::SetMeshObjectActive(bool flag) const
     {
-        if (!_meshFilter || !_meshFilter->m_CachedPtr)
+        if (!_meshFilter || !_meshFilter->m_CachedPtr.m_value)
             return;
         _meshFilter->get_gameObject()->SetActive(flag);
     }
 
     void VertexPool::Destroy() const
     {
-        if (_gameObject && _gameObject->m_CachedPtr)
+        if (_gameObject && _gameObject->m_CachedPtr.m_value)
             UnityEngine::Object::Destroy(_gameObject);
     }
 
@@ -116,7 +115,7 @@ namespace Qosmetics::Sabers
     void VertexPool::LateUpdate()
     {
         auto mymesh = get_MyMesh();
-        if (!mymesh || !mymesh->m_CachedPtr)
+        if (!mymesh || !mymesh->m_CachedPtr.m_value)
             return;
 
         if (vertCountChanged)
